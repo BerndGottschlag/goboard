@@ -1,0 +1,6 @@
+goboard-main-backups
+goboard-numpad-backups
+*.swp
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_prl
