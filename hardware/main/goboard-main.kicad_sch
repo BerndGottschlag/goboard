@@ -1,5 +1,299 @@
-(kicad_sch (version 20200310) (host eeschema "unknown")
-(  page "A4")
-  (lib_symbols)
-  (symbol_instances)
+(kicad_sch (version 20201015) (generator eeschema)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (sheet (at 157.2768 34.8488) (size 40.8432 115.0112)
+    (stroke (width 0.001) (type solid) (color 132 0 132 1))
+    (fill (color 255 255 255 0.0000))
+    (uuid d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5)
+    (property "Schaltplanname" "MCU" (id 0) (at 157.2768 34.2129 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Dateiname Blatt" "mcu.kicad_sch" (id 1) (at 157.2768 150.3689 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+  )
+
+  (sheet (at 47.3456 36.3728) (size 29.9212 108.2548)
+    (stroke (width 0.001) (type solid) (color 132 0 132 1))
+    (fill (color 255 255 255 0.0000))
+    (uuid 6ef23857-23de-44e2-ab0d-92ef0bfe30b4)
+    (property "Schaltplanname" "keys" (id 0) (at 47.3456 35.7369 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Dateiname Blatt" "keys.kicad_sch" (id 1) (at 47.3456 145.1365 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/" (page "2"))
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/" (page "3"))
+  )
+
+  (symbol_instances
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/b1e09d7b-dc1a-481a-9d34-41e4b3f10c37"
+      (reference "SW1") (unit 1) (value "Esc") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/5f683298-0741-4f9b-afce-cabb7eb4407d"
+      (reference "SW2") (unit 1) (value "F1") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/67a1367d-4ca8-47cb-b42d-8ba8ebc072f1"
+      (reference "SW3") (unit 1) (value "tilde") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/da55b67f-868c-4a66-88b6-3de05b79d6c6"
+      (reference "SW4") (unit 1) (value "Tab") (footprint "footprints:SW_Cherry_MX_1.50u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/04adb3b8-06b4-405d-9be9-8d1634789437"
+      (reference "SW5") (unit 1) (value "Caps Lock") (footprint "footprints:SW_Cherry_MX_1.75u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/23f92b6a-8a73-49c9-9ea4-97228d201cda"
+      (reference "SW6") (unit 1) (value "Shift") (footprint "footprints:SW_Cherry_MX_1.25u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/336df3ab-b166-4b0a-8301-9d1a69f7f67f"
+      (reference "SW7") (unit 1) (value "Ctrl") (footprint "footprints:SW_Cherry_MX_1.25u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/402c5cbe-0a33-4d5b-9e4c-56dfa5884cb7"
+      (reference "SW8") (unit 1) (value "1") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/0b4faf82-366b-4cb2-93ac-def79a1c826e"
+      (reference "SW9") (unit 1) (value "q") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/c54af29a-9179-476d-94e7-0b5fc27661d7"
+      (reference "SW10") (unit 1) (value "a") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/a3a62deb-4fb7-40df-a052-35625fdbfc91"
+      (reference "SW11") (unit 1) (value "\\") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/d7dd2c38-5fc0-4048-a818-b76a51fa0246"
+      (reference "SW12") (unit 1) (value "Fn") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/a6a0b385-ca0e-418d-80ee-e21ec42e4030"
+      (reference "SW13") (unit 1) (value "F2") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/c2a2b2fe-572c-4af9-a44b-863779de033a"
+      (reference "SW14") (unit 1) (value "2") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e1b9e9fa-4b4b-4d05-806c-dbc2e67acc60"
+      (reference "SW15") (unit 1) (value "w") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/8803b2f1-0342-401d-abdb-639ccc98f7c2"
+      (reference "SW16") (unit 1) (value "s") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/35691278-4414-4b69-a356-573ca9dd8b74"
+      (reference "SW17") (unit 1) (value "z") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/c883e12e-2100-4af7-90e6-78e2625de596"
+      (reference "SW18") (unit 1) (value "Tux") (footprint "footprints:SW_Cherry_MX_1.25u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e814b582-f668-4eaa-8271-f7bdb6da7c62"
+      (reference "SW19") (unit 1) (value "F3") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/56ab30fa-91dd-437c-8dcd-fdba0cbce56d"
+      (reference "SW20") (unit 1) (value "3") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/7533ddb0-1d0a-4bbc-b79f-c06c41ba8e97"
+      (reference "SW21") (unit 1) (value "e") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/6af5ab92-3292-459d-bdeb-19336ef41237"
+      (reference "SW22") (unit 1) (value "d") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/89f22a13-0137-46bf-b9cf-f0d3be10287f"
+      (reference "SW23") (unit 1) (value "c") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/b0f615c3-bc09-43de-bc7f-a05988c5ce22"
+      (reference "SW24") (unit 1) (value "Alt") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/570bd285-0cc2-40ea-be31-34fb8c419f66"
+      (reference "SW25") (unit 1) (value "F4") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/86a85b75-5452-4ebb-8a04-4b81c0daadcf"
+      (reference "SW26") (unit 1) (value "4") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/67a05b1c-d673-4569-9f13-00076bfc5c54"
+      (reference "SW27") (unit 1) (value "r") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f6aa9f32-5606-4c1b-9d6c-6c1f936deaec"
+      (reference "SW28") (unit 1) (value "f") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ed78767c-7a42-47f7-8d10-eb572a1b3c08"
+      (reference "SW29") (unit 1) (value "v") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e790ea77-b967-4693-9558-c88de961dcc4"
+      (reference "SW31") (unit 1) (value "F5") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/51f243b8-1f6f-47d7-a30c-065cf170507c"
+      (reference "SW32") (unit 1) (value "5") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/b5eb30ca-cedd-4467-8027-d388ee7d1403"
+      (reference "SW33") (unit 1) (value "t") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f7fb2f0c-692e-455f-8482-5147a5862a7b"
+      (reference "SW34") (unit 1) (value "g") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/a9def632-4c1c-4b17-9364-0f6f4c7a8b33"
+      (reference "SW35") (unit 1) (value "b") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/eee2d441-3635-4868-a92c-cf5652df687e"
+      (reference "SW36") (unit 1) (value "F6") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/80def62a-23ee-422f-ae16-cd950c56e19c"
+      (reference "SW37") (unit 1) (value "6") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ef768bb3-d3f2-4705-8406-d83ab2183753"
+      (reference "SW38") (unit 1) (value "y") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/41dd5a9f-48a0-4c53-990a-90e503b9102d"
+      (reference "SW39") (unit 1) (value "h") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e11f83d7-5103-43ae-8d7c-763dbbe5972e"
+      (reference "SW40") (unit 1) (value "n") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/6392cdf8-05fa-424e-9ae2-b611e5d3f7d3"
+      (reference "SW41") (unit 1) (value "F7") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/833152a8-8506-41cf-900d-c3e9cdc01592"
+      (reference "SW42") (unit 1) (value "7") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/cb362637-a156-4828-8048-f9a974d34d79"
+      (reference "SW43") (unit 1) (value "u") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/1c1df885-95ee-415a-bdc0-9309e12afcf9"
+      (reference "SW44") (unit 1) (value "j") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f423ea7e-1721-41e5-853d-3972b2dad584"
+      (reference "SW45") (unit 1) (value "m") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/8dd427db-08dd-4240-83f3-29943e34e415"
+      (reference "SW46") (unit 1) (value "Space") (footprint "footprints:SW_Cherry_MX_6.25u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/8c4fffbd-a11a-4e00-9eac-05c3bd58a878"
+      (reference "SW47") (unit 1) (value "F8") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/7257d422-3c32-4af1-a18b-485446af5479"
+      (reference "SW48") (unit 1) (value "8") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/aabdf925-90bb-47bc-866c-1d021cd24728"
+      (reference "SW49") (unit 1) (value "i") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/3a3da2c5-068e-4106-b924-b79e6ccb5f3f"
+      (reference "SW50") (unit 1) (value "k") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/4b4ca1a4-7129-4d19-8d6b-50314b269d6d"
+      (reference "SW51") (unit 1) (value ",") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f104a674-0b81-4743-8532-b482fd604e5d"
+      (reference "SW52") (unit 1) (value "F9") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/84eb2e1f-65e6-4a14-b295-1f82cb75b907"
+      (reference "SW53") (unit 1) (value "9") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ab19fee4-79dd-4da7-abd5-274f20191578"
+      (reference "SW54") (unit 1) (value "o") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/a19a7e56-33a5-4be1-83c0-3858a8a24e96"
+      (reference "SW55") (unit 1) (value "l") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/308ed4ee-0c58-499c-9150-82988f051e37"
+      (reference "SW56") (unit 1) (value ".") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/8b136de5-c228-403f-abf4-320bdf71fd0e"
+      (reference "SW57") (unit 1) (value "F10") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/7adda247-8308-4665-a223-779a17b02986"
+      (reference "SW58") (unit 1) (value "0") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/aa9204cf-f59e-4e02-851b-8dcde3b34ec5"
+      (reference "SW59") (unit 1) (value "p") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/4403a0f2-df5e-4451-9ad7-c4db663ae3f5"
+      (reference "SW60") (unit 1) (value ";") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ffa4fd78-c583-4030-8eaf-d812761e51bf"
+      (reference "SW61") (unit 1) (value "/") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/9a16c70a-0e33-4881-9e0c-218c8294cc90"
+      (reference "SW62") (unit 1) (value "Alt Gr") (footprint "footprints:SW_Cherry_MX_1.25u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/373eb885-d3b9-43db-b344-563e7549b2c1"
+      (reference "SW63") (unit 1) (value "F11") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/9b308622-ab77-4823-83ac-93c5e0b93741"
+      (reference "SW64") (unit 1) (value "-") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/29e34eaf-7332-4b0b-9987-e19db73b2f5d"
+      (reference "SW65") (unit 1) (value "[") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/55900d2d-8bc5-441d-a1c8-a1d320be2d1c"
+      (reference "SW66") (unit 1) (value "'") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ac5acf19-6bc2-407a-8a8d-818f22c9bfcb"
+      (reference "SW67") (unit 1) (value "Menu") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f82d6a6f-5230-4544-ac03-93b5a3044a51"
+      (reference "SW68") (unit 1) (value "F12") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/863292aa-aa41-4c9e-bdab-9cfbaa9a0125"
+      (reference "SW69") (unit 1) (value "=") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/894800ae-dabc-4a05-a5bc-f220fc8c235b"
+      (reference "SW70") (unit 1) (value "]") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e25ef3cd-1f6c-4b7c-bed1-e31fda14e6b3"
+      (reference "SW71") (unit 1) (value "\\") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/372afcae-714d-4719-8e6b-a522733ca097"
+      (reference "SW72") (unit 1) (value "Shift") (footprint "footprints:SW_Cherry_MX_1.75u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/33101199-2245-4847-8898-45a7e7746c03"
+      (reference "SW73") (unit 1) (value "Ctrl") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ac8aea8d-3e23-4a20-a087-72c9265a740e"
+      (reference "SW74") (unit 1) (value "Print") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e01c24d7-a287-4bcb-936d-7e938f37c030"
+      (reference "SW75") (unit 1) (value "Backspace") (footprint "footprints:SW_Cherry_MX_2.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ec67da13-3990-4c14-bada-421b242a1d86"
+      (reference "SW76") (unit 1) (value "Enter") (footprint "footprints:SW_Cherry_MX_ISOEnter_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/b9fd9b82-7608-4c55-9155-da73d356c681"
+      (reference "SW77") (unit 1) (value "Left") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/32b27421-b6b0-43c9-9786-a31027d9faa6"
+      (reference "SW78") (unit 1) (value "Scroll Lock") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/929c620c-8e1e-44b5-aab8-71c57b7ccdda"
+      (reference "SW79") (unit 1) (value "Up") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/8fcb92d8-7a26-497c-99e9-a4b65bcf8cd4"
+      (reference "SW80") (unit 1) (value "Down") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/60c6bd48-1af2-4a55-a604-0f93f8e0784f"
+      (reference "SW81") (unit 1) (value "Pause") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/82beedbb-72a6-4616-b77b-81fbf0a5af17"
+      (reference "SW82") (unit 1) (value "INS") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/b269e128-c413-4f98-a3a9-a9a0f20c44ff"
+      (reference "SW83") (unit 1) (value "DEL") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/23cbaff4-a498-42fa-aecd-e242b2635838"
+      (reference "SW84") (unit 1) (value "Page Up") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/6410999f-d730-4647-8689-dccb0a6277a1"
+      (reference "SW85") (unit 1) (value "Page Down") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/5b01e4fa-6aee-4dd7-8c3a-ede1020de210"
+      (reference "SW86") (unit 1) (value "Right") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/34d2afdc-0ffe-46f6-a407-466d9fcd53fa"
+      (reference "SW87") (unit 1) (value "x") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+    )
+  )
 )

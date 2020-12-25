@@ -1,0 +1,5 @@
+License of these files: CC-BY-SA 4.0
+Source: https://gitlab.com/kicad/libraries/kicad-packages3D.git
+Commit: 363b7d3aac176657d583c7bd913d647a442d6b69 on branch github/fork/ki5libs/CherryMX
+Author: Anton Lysak <antonlysak@gmail.com>
+
