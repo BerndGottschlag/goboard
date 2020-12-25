@@ -372,7 +372,7 @@
   },
   "sheets": [
     [
-      "1a346604-e078-4c88-a11f-b2bebaeb9ccb",
+      "499fe2f2-4684-4008-b0a1-ba1374d4ca09",
       ""
     ],
     [
@@ -382,6 +382,10 @@
     [
       "6ef23857-23de-44e2-ab0d-92ef0bfe30b4",
       "keys"
+    ],
+    [
+      "a2ebbcc0-d455-4794-9fcf-d50cef56d65b",
+      "Power Supply"
     ]
   ],
   "text_variables": {}
