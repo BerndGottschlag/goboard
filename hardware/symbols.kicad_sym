@@ -6,10 +6,10 @@
     (property "Value" "Holyiot-18010-NRF52840" (id 1) (at 13.97 40.64 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "" (id 2) (at -8.89 40.64 0)
+    (property "Footprint" "footprints:Holyiot-18010-NRF52840" (id 2) (at -8.89 40.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "" (id 3) (at -8.89 40.64 0)
+    (property "Datasheet" "http://www.holyiot.com/tp/2019042516322180424.pdf" (id 3) (at -8.89 40.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (symbol "Holyiot-18010-NRF52840_0_1"
