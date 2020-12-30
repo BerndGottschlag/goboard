@@ -3,8 +3,120 @@
   (paper "A4")
 
   (lib_symbols
+    (symbol "Connector:Conn_01x05_Female" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+      (property "Reference" "J" (id 0) (at 0 7.62 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" "Conn_01x05_Female" (id 1) (at 0 -7.62 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (id 2) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "~" (id 3) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "connector" (id 4) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Generic connector, single row, 01x05, script generated (kicad-library-utils/schlib/autogen/connector/)" (id 5) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_fp_filters" "Connector*:*_1x??_*" (id 6) (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "Conn_01x05_Female_1_1"
+        (arc (start 0 -4.572) (end 0 -5.588) (radius (at 0 -5.08) (length 0.508) (angles 90.1 -90.1))
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (arc (start 0 -2.032) (end 0 -3.048) (radius (at 0 -2.54) (length 0.508) (angles 90.1 -90.1))
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (arc (start 0 0.508) (end 0 -0.508) (radius (at 0 0) (length 0.508) (angles 90.1 -90.1))
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (arc (start 0 3.048) (end 0 2.032) (radius (at 0 2.54) (length 0.508) (angles 90.1 -90.1))
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (arc (start 0 5.588) (end 0 4.572) (radius (at 0 5.08) (length 0.508) (angles 90.1 -90.1))
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -1.27 -5.08)
+            (xy -0.508 -5.08)
+          )
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -1.27 -2.54)
+            (xy -0.508 -2.54)
+          )
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -1.27 0)
+            (xy -0.508 0)
+          )
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -1.27 2.54)
+            (xy -0.508 2.54)
+          )
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -1.27 5.08)
+            (xy -0.508 5.08)
+          )
+          (stroke (width 0.1524)) (fill (type none))
+        )
+        (pin passive line (at -5.08 5.08 0) (length 3.81)
+          (name "Pin_1" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at -5.08 2.54 0) (length 3.81)
+          (name "Pin_2" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at -5.08 0 0) (length 3.81)
+          (name "Pin_3" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at -5.08 -2.54 0) (length 3.81)
+          (name "Pin_4" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at -5.08 -5.08 0) (length 3.81)
+          (name "Pin_5" (effects (font (size 1.27 1.27))))
+          (number "5" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
   )
 
+
+  (symbol (lib_id "Connector:Conn_01x05_Female") (at 261.62 101.6 0) (unit 1)
+    (in_bom yes) (on_board yes)
+    (uuid "791bf4bc-b52e-43a7-af69-54454aa52998")
+    (property "Reference" "J?" (id 0) (at 262.89 101.6 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "Conn_01x05_Female" (id 1) (at 262.89 104.14 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "" (id 2) (at 261.62 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (id 3) (at 261.62 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+  )
 
   (sheet (at 100.1268 38.6588) (size 40.8432 115.0112)
     (stroke (width 0.001) (type solid) (color 132 0 132 1))
@@ -40,6 +152,27 @@
     (property "Dateiname Blatt" "keys.kicad_sch" (id 1) (at 161.6456 147.6765 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
+    (pin "VCC_SW" input (at 176.53 38.9128 90)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "SPI_SCK" input (at 161.6456 54.61 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (pin "SPI_MOSI" input (at 161.6456 57.15 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (pin "165_~CE" input (at 161.6456 60.96 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (pin "165_~PL" input (at 161.6456 63.5 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (pin "595_SERIAL_OUT" output (at 191.5668 54.61 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "165_SERIAL_IN" input (at 191.5668 57.15 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
   )
 
   (sheet_instances
@@ -50,6 +183,42 @@
   )
 
   (symbol_instances
+    (path "/791bf4bc-b52e-43a7-af69-54454aa52998"
+      (reference "J?") (unit 1) (value "Conn_01x05_Female") (footprint "")
+    )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/28c8ce99-9074-40f3-bd9b-48b6c7957fa0"
+      (reference "D?") (unit 1) (value "Scroll Lock") (footprint "")
+    )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/65ad0a10-5aa4-47d9-be7a-0521ecdabe84"
+      (reference "D?") (unit 1) (value "Power") (footprint "")
+    )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/f67dadd6-dad2-4607-839c-e26e0dbb5444"
+      (reference "D?") (unit 1) (value "Caps Lock") (footprint "")
+    )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/ce8d2f41-d04c-40e3-bb10-8d13b7a0504a"
+      (reference "U4") (unit 1) (value "Holyiot-18010-NRF52840") (footprint "footprints:Holyiot-18010-NRF52840")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/415e5a81-d53b-4540-bd26-214578d9701e"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/d1e9850a-ee04-45d7-a3f4-2f8d46f4d83e"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ea6a0ac9-9fb1-4de9-a96b-de03f212916c"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/eed92e48-427b-49a9-b5d5-e33ccaca4eac"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/6a93893d-c57b-4ddc-bb76-9b4cd649dbbf"
+      (reference "C?") (unit 1) (value "100nF") (footprint "")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ddaf9607-7357-4202-8c81-9e30a6b78ba4"
+      (reference "C?") (unit 1) (value "100nF") (footprint "")
+    )
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ec74ff31-b340-489c-a0ef-465d7e0a1e59"
+      (reference "C?") (unit 1) (value "100nF") (footprint "")
+    )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/187e24d7-87a7-452e-afe1-e0a94b806893"
       (reference "D1") (unit 1) (value "BAT54C") (footprint "Package_TO_SOT_SMD:SOT-23")
     )
@@ -434,14 +603,14 @@
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/34d2afdc-0ffe-46f6-a407-466d9fcd53fa"
       (reference "SW87") (unit 1) (value "x") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
-    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/96c47e32-5b4a-4e9f-b841-a14a1bfd0d4c"
-      (reference "U1") (unit 1) (value "74LV595") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/5171c6b2-dca1-48dd-b43f-d303f7ee6e30"
+      (reference "U?") (unit 1) (value "74LV165") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
     )
-    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/baef4c0e-08b8-4895-9c18-753f10810b9a"
-      (reference "U2") (unit 1) (value "74LV165") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/71c255af-3715-4d11-87c9-9df79aa675c7"
+      (reference "U?") (unit 1) (value "74LV595") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
     )
-    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/5f52de7c-4ac1-4261-a687-65bf4c626c2a"
-      (reference "U3") (unit 1) (value "74LV165") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
+    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/bd1ecbe1-4f71-49c2-aa4c-b2e67c4ed577"
+      (reference "U?") (unit 1) (value "74LV165") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
     )
   )
 )
