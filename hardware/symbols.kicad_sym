@@ -218,7 +218,7 @@
         (name "P0.16" (effects (font (size 1.27 1.27))))
         (number "55" (effects (font (size 1.27 1.27))))
       )
-      (pin power_in line (at 0 39.37 90) (length 2.54)
+      (pin power_in line (at 0 41.91 270) (length 2.54)
         (name "VDD_nRF" (effects (font (size 1.27 1.27))))
         (number "14" (effects (font (size 1.27 1.27))))
       )
