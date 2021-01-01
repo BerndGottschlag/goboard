@@ -632,13 +632,13 @@
   (junction (at 158.75 101.6) (diameter 1.016) (color 0 0 0 0))
   (junction (at 158.75 152.4) (diameter 1.016) (color 0 0 0 0))
 
-  (no_connect (at 110.49 205.74))
-  (no_connect (at 105.41 205.74))
-  (no_connect (at 67.31 73.66))
-  (no_connect (at 123.19 205.74))
-  (no_connect (at 102.87 205.74))
   (no_connect (at 120.65 231.14))
   (no_connect (at 107.95 205.74))
+  (no_connect (at 110.49 205.74))
+  (no_connect (at 105.41 205.74))
+  (no_connect (at 123.19 205.74))
+  (no_connect (at 67.31 73.66))
+  (no_connect (at 102.87 205.74))
 
   (wire (pts (xy 31.75 55.88) (xy 34.29 55.88))
     (stroke (width 0) (type solid) (color 0 0 0 0))
@@ -1031,6 +1031,10 @@
   (text "TODO:\nConnect ~SRCLR and\n~OE to MCU pins?" (at 21.59 73.66 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
+  (text "TODO: use a simple microcontroller (e.g. ATTINY) instead of the shift registers?"
+    (at 118.11 256.54 0)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+  )
 
   (hierarchical_label "SPI_SCK" (shape input) (at 31.75 55.88 180)
     (effects (font (size 1.27 1.27)) (justify right))
@@ -1053,7 +1057,7 @@
   (hierarchical_label "165_~PL" (shape input) (at 97.79 203.2 90)
     (effects (font (size 1.27 1.27)) (justify left))
   )
-  (hierarchical_label "SPI_MOSI" (shape input) (at 123.19 233.68 270)
+  (hierarchical_label "SPI_MISO" (shape input) (at 123.19 233.68 270)
     (effects (font (size 1.27 1.27)) (justify right))
   )
   (hierarchical_label "VCC_SW" (shape input) (at 130.81 215.9 90)
