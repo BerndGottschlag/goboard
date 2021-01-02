@@ -378,6 +378,8 @@
   (junction (at 110.49 81.28) (diameter 0.9144) (color 0 0 0 0))
   (junction (at 234.95 66.04) (diameter 0.9144) (color 0 0 0 0))
 
+  (no_connect (at 114.3 107.95))
+
   (wire (pts (xy 80.01 66.04) (xy 80.01 69.85))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
@@ -468,9 +470,6 @@
   (wire (pts (xy 114.3 102.87) (xy 116.84 102.87))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
-  (wire (pts (xy 114.3 107.95) (xy 116.84 107.95))
-    (stroke (width 0) (type solid) (color 0 0 0 0))
-  )
   (wire (pts (xy 114.3 110.49) (xy 116.84 110.49))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
@@ -555,9 +554,6 @@
     (effects (font (size 1.27 1.27)) (justify left))
   )
   (hierarchical_label "COLUMN_5" (shape input) (at 116.84 102.87 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-  )
-  (hierarchical_label "UART_RX" (shape input) (at 116.84 107.95 0)
     (effects (font (size 1.27 1.27)) (justify left))
   )
   (hierarchical_label "UART_TX" (shape input) (at 116.84 110.49 0)
