@@ -1861,7 +1861,7 @@
   (hierarchical_label "165_~PL" (shape input) (at 101.6 205.74 90)
     (effects (font (size 1.27 1.27)) (justify left))
   )
-  (hierarchical_label "SPI_MOSI" (shape input) (at 127 236.22 270)
+  (hierarchical_label "SPI_MISO" (shape input) (at 127 236.22 270)
     (effects (font (size 1.27 1.27)) (justify right))
   )
   (hierarchical_label "VCC_SW" (shape input) (at 134.62 218.44 90)
