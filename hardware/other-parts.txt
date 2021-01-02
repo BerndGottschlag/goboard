@@ -1,0 +1,5 @@
+2 Battery-Holders:
+Mouser: 12BH410-GR
+Part Name: 12BH410-GR
+Datasheet: https://www.mouser.de/datasheet/2/209/EPD-200627-1171257.pdf
+
