@@ -775,10 +775,10 @@
   (junction (at 86.36 60.96) (diameter 1.016) (color 0 0 0 0))
 
   (no_connect (at 33.02 170.18))
+  (no_connect (at 41.91 63.5))
   (no_connect (at 41.91 66.04))
   (no_connect (at 33.02 165.1))
   (no_connect (at 45.72 165.1))
-  (no_connect (at 41.91 63.5))
 
   (wire (pts (xy 19.05 73.66) (xy 19.05 76.2))
     (stroke (width 0) (type solid) (color 0 0 0 0))
@@ -1398,7 +1398,7 @@
     (uuid "4449882c-1b7b-492e-9599-d2387f3dd75d")
     (property "Reference" "J2" (id 0) (at 39.37 181.61 0))
     (property "Value" "Conn_02x05_Top_Bottom" (id 1) (at 39.37 179.07 0))
-    (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical" (id 2) (at 38.1 170.18 0)
+    (property "Footprint" "footprints:programming_port_st_link_clone" (id 2) (at 38.1 170.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 38.1 170.18 0)
@@ -1607,7 +1607,7 @@
       (reference "J1") (unit 1) (value "USB_C_Receptacle_USB2.0") (footprint "footprints:USB_C_Receptale_JAE_DX07S016JA1R1500")
     )
     (path "/4449882c-1b7b-492e-9599-d2387f3dd75d"
-      (reference "J2") (unit 1) (value "Conn_02x05_Top_Bottom") (footprint "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical")
+      (reference "J2") (unit 1) (value "Conn_02x05_Top_Bottom") (footprint "footprints:programming_port_st_link_clone")
     )
     (path "/7892ad65-fd39-49a6-8c1b-cd1bc6d8047e"
       (reference "J3") (unit 1) (value "Conn_01x01") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical")

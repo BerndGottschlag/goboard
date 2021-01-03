@@ -601,12 +601,12 @@
   (junction (at 365.76 154.94) (diameter 1.016) (color 0 0 0 0))
   (junction (at 365.76 180.34) (diameter 1.016) (color 0 0 0 0))
 
+  (no_connect (at 60.96 76.2))
   (no_connect (at 266.7 233.68))
-  (no_connect (at 124.46 233.68))
-  (no_connect (at 60.96 68.58))
   (no_connect (at 269.24 208.28))
   (no_connect (at 60.96 71.12))
-  (no_connect (at 60.96 76.2))
+  (no_connect (at 60.96 68.58))
+  (no_connect (at 124.46 233.68))
 
   (wire (pts (xy 25.4 58.42) (xy 27.94 58.42))
     (stroke (width 0) (type solid) (color 0 0 0 0))
