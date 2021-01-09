@@ -781,10 +781,10 @@
   (junction (at 80.01 91.44) (diameter 1.016) (color 0 0 0 0))
   (junction (at 86.36 60.96) (diameter 1.016) (color 0 0 0 0))
 
+  (no_connect (at 41.91 66.04))
   (no_connect (at 45.72 165.1))
   (no_connect (at 41.91 63.5))
   (no_connect (at 33.02 170.18))
-  (no_connect (at 41.91 66.04))
   (no_connect (at 33.02 165.1))
 
   (wire (pts (xy 19.05 73.66) (xy 19.05 76.2))
@@ -1398,7 +1398,7 @@
   (symbol (lib_id "Connector_Generic:Conn_01x04") (at 265.43 134.62 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid "9a9f26e6-288f-47d0-a7cc-10265fd1a76e")
-    (property "Reference" "J?" (id 0) (at 267.4621 134.7914 0)
+    (property "Reference" "J4" (id 0) (at 267.4621 134.7914 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Conn_01x04" (id 1) (at 267.4621 137.0901 0)
@@ -1635,7 +1635,7 @@
       (reference "J3") (unit 1) (value "Conn_01x01") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical")
     )
     (path "/9a9f26e6-288f-47d0-a7cc-10265fd1a76e"
-      (reference "J?") (unit 1) (value "Conn_01x04") (footprint "")
+      (reference "J4") (unit 1) (value "Conn_01x04") (footprint "")
     )
     (path "/70bfc3f4-60ca-4487-a365-ec787e69545b"
       (reference "R1") (unit 1) (value "0") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
@@ -1905,7 +1905,7 @@
       (reference "SW23") (unit 1) (value "c") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/b0f615c3-bc09-43de-bc7f-a05988c5ce22"
-      (reference "SW24") (unit 1) (value "Alt") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW24") (unit 1) (value "Alt") (footprint "footprints:SW_Cherry_MX_1.25u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/570bd285-0cc2-40ea-be31-34fb8c419f66"
       (reference "SW25") (unit 1) (value "F4") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
@@ -2016,7 +2016,7 @@
       (reference "SW61") (unit 1) (value "/") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/9a16c70a-0e33-4881-9e0c-218c8294cc90"
-      (reference "SW62") (unit 1) (value "Alt Gr") (footprint "footprints:SW_Cherry_MX_1.25u_PCB")
+      (reference "SW62") (unit 1) (value "Alt Gr") (footprint "footprints:SW_Cherry_MX_1.50u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/373eb885-d3b9-43db-b344-563e7549b2c1"
       (reference "SW63") (unit 1) (value "F11") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
@@ -2029,9 +2029,6 @@
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/55900d2d-8bc5-441d-a1c8-a1d320be2d1c"
       (reference "SW66") (unit 1) (value "'") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
-    )
-    (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ac5acf19-6bc2-407a-8a8d-818f22c9bfcb"
-      (reference "SW67") (unit 1) (value "Menu") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f82d6a6f-5230-4544-ac03-93b5a3044a51"
       (reference "SW68") (unit 1) (value "F12") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
@@ -2049,7 +2046,7 @@
       (reference "SW72") (unit 1) (value "Shift") (footprint "footprints:SW_Cherry_MX_1.75u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/33101199-2245-4847-8898-45a7e7746c03"
-      (reference "SW73") (unit 1) (value "Ctrl") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW73") (unit 1) (value "Ctrl") (footprint "footprints:SW_Cherry_MX_1.50u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ac8aea8d-3e23-4a20-a087-72c9265a740e"
       (reference "SW74") (unit 1) (value "Print") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
