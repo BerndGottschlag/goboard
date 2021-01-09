@@ -1,4 +1,4 @@
-14480931336112
+16092863659112
 footprints
 Holyiot-18010-NRF52840
 
@@ -61,4 +61,11 @@ USB_C_Receptale_JAE_DX07S016JA1R1500
 
 0
 18
-12
+13
+footprints
+programming_port_st_link_clone
+Through hole straight pin header, 2x05, 2.54mm pitch, double rows
+Through hole pin header THT 2x05 2.54mm double row
+0
+14
+10
