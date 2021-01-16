@@ -866,7 +866,7 @@
     (property "Value" "100nF" (id 1) (at 120.65 34.29 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Capacitor_SMD:C_0201_0603Metric_Pad0.64x0.40mm_HandSolder" (id 2) (at 117.8052 36.83 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" (id 2) (at 117.8052 36.83 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "https://www.mouser.de/datasheet/2/40/X7RDielectric-777024.pdf" (id 3) (at 116.84 33.02 0)
