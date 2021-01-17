@@ -4875,7 +4875,7 @@
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 7f67746f-0dbe-41be-9de6-baf1a7d45113)
     )
-    (fp_text value "\\" (at -2.54 12.954) (layer "F.Fab")
+    (fp_text value "backslash" (at -2.54 12.954) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp b7e94770-b4c7-4413-bed9-0a44db0974a0)
     )

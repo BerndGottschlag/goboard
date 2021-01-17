@@ -2159,7 +2159,7 @@
       (reference "SW70") (unit 1) (value "]") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e25ef3cd-1f6c-4b7c-bed1-e31fda14e6b3"
-      (reference "SW71") (unit 1) (value "\\") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW71") (unit 1) (value "backslash") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/372afcae-714d-4719-8e6b-a522733ca097"
       (reference "SW72") (unit 1) (value "Shift") (footprint "footprints:SW_Cherry_MX_1.75u_PCB")

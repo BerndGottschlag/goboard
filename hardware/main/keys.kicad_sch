@@ -3243,7 +3243,7 @@
     (in_bom yes) (on_board yes)
     (uuid "e25ef3cd-1f6c-4b7c-bed1-e31fda14e6b3")
     (property "Reference" "SW71" (id 0) (at 304.8 119.9958 0))
-    (property "Value" "\\" (id 1) (at 304.8 122.295 0))
+    (property "Value" "backslash" (id 1) (at 304.8 122.295 0))
     (property "Footprint" "footprints:SW_Cherry_MX_1.00u_PCB" (id 2) (at 304.8 127 0)
       (effects (font (size 1.27 1.27)) hide)
     )
