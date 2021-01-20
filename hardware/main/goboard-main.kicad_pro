@@ -359,8 +359,8 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "specctra_dsn": "",
-      "step": "",
+      "specctra_dsn": "goboard-main.dsn",
+      "step": "goboard-main.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""

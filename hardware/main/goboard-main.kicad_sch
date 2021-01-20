@@ -2102,7 +2102,7 @@
       (reference "SW50") (unit 1) (value "k") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/4b4ca1a4-7129-4d19-8d6b-50314b269d6d"
-      (reference "SW51") (unit 1) (value ",") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW51") (unit 1) (value "comma") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f104a674-0b81-4743-8532-b482fd604e5d"
       (reference "SW52") (unit 1) (value "F9") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
@@ -2117,7 +2117,7 @@
       (reference "SW55") (unit 1) (value "l") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/308ed4ee-0c58-499c-9150-82988f051e37"
-      (reference "SW56") (unit 1) (value ".") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW56") (unit 1) (value "dot") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/8b136de5-c228-403f-abf4-320bdf71fd0e"
       (reference "SW57") (unit 1) (value "F10") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
@@ -2129,10 +2129,10 @@
       (reference "SW59") (unit 1) (value "p") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/4403a0f2-df5e-4451-9ad7-c4db663ae3f5"
-      (reference "SW60") (unit 1) (value ";") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW60") (unit 1) (value "semicolon") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/ffa4fd78-c583-4030-8eaf-d812761e51bf"
-      (reference "SW61") (unit 1) (value "/") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW61") (unit 1) (value "slash") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/9a16c70a-0e33-4881-9e0c-218c8294cc90"
       (reference "SW62") (unit 1) (value "Alt Gr") (footprint "footprints:SW_Cherry_MX_1.50u_PCB")
@@ -2141,22 +2141,22 @@
       (reference "SW63") (unit 1) (value "F11") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/9b308622-ab77-4823-83ac-93c5e0b93741"
-      (reference "SW64") (unit 1) (value "-") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW64") (unit 1) (value "minus") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/29e34eaf-7332-4b0b-9987-e19db73b2f5d"
-      (reference "SW65") (unit 1) (value "[") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW65") (unit 1) (value "sq br open") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/55900d2d-8bc5-441d-a1c8-a1d320be2d1c"
-      (reference "SW66") (unit 1) (value "'") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW66") (unit 1) (value "apostrophe") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/f82d6a6f-5230-4544-ac03-93b5a3044a51"
       (reference "SW68") (unit 1) (value "F12") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/863292aa-aa41-4c9e-bdab-9cfbaa9a0125"
-      (reference "SW69") (unit 1) (value "=") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW69") (unit 1) (value "equal") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/894800ae-dabc-4a05-a5bc-f220fc8c235b"
-      (reference "SW70") (unit 1) (value "]") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
+      (reference "SW70") (unit 1) (value "sq br close") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
     )
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/e25ef3cd-1f6c-4b7c-bed1-e31fda14e6b3"
       (reference "SW71") (unit 1) (value "backslash") (footprint "footprints:SW_Cherry_MX_1.00u_PCB")
