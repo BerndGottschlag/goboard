@@ -2230,11 +2230,17 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/fcf91b1c-89df-48d3-a079-670ff776b9bc"
       (reference "#PWR0128") (unit 1) (value "GND") (footprint "")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/0a8d1d2c-8ca0-444c-9bf9-6b122bc86b62"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/aa915fe6-7dac-4f9a-857c-e725e5ef3866"
+      (reference "#PWR?") (unit 1) (value "+BATT") (footprint "")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/210515f0-c0f1-4f80-b920-f3ce9df10676"
-      (reference "BT1") (unit 1) (value "Battery") (footprint "")
+      (reference "BT1") (unit 1) (value "NiMH") (footprint "")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/eda3ac85-180c-4149-a69c-6ee2b133cab0"
-      (reference "BT2") (unit 1) (value "Battery") (footprint "")
+      (reference "BT2") (unit 1) (value "NiMH") (footprint "")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/d97a629e-f5e3-4e10-a29b-be0ad1d5f5ac"
       (reference "D48") (unit 1) (value "DIODE") (footprint "")
@@ -2242,8 +2248,26 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/f0252d66-95ed-4e48-8ba2-5d7673eeffb0"
       (reference "Q1") (unit 1) (value "Q_PMOS_DGS") (footprint "")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/4db612db-af35-48db-a235-6fa2f8862a88"
+      (reference "Q?") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/6d2d8e94-9b52-47a3-82d5-7aad13d197bb"
+      (reference "Q?") (unit 1) (value "BC807") (footprint "Package_TO_SOT_SMD:SOT-23")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94b1480c-21b6-4ef7-b592-3977ba8ffc39"
       (reference "R7") (unit 1) (value "R") (footprint "")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/1526fa3f-0091-4af1-a345-d1d827a8491f"
+      (reference "R?") (unit 1) (value "30") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/2c8f006d-ba7c-4c71-b9c4-c2bdabaa2b7f"
+      (reference "R?") (unit 1) (value "30") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/4e46ac48-fa3e-4083-bb54-f329eaaf2b5c"
+      (reference "R?") (unit 1) (value "1K") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/b2dec339-4fed-4339-bfd9-7be8a1592b01"
+      (reference "R?") (unit 1) (value "1K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
   )
 )
