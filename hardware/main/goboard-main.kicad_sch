@@ -2266,6 +2266,12 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/3165c945-d834-4b10-b055-87732bcc493e"
       (reference "#PWR0139") (unit 1) (value "GND") (footprint "")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/823cf678-f342-46a9-bc13-64c57b402a88"
+      (reference "#PWR?") (unit 1) (value "+3.3V") (footprint "")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/e04f67f3-0845-4fac-a587-d14754b2050a"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/210515f0-c0f1-4f80-b920-f3ce9df10676"
       (reference "BT1") (unit 1) (value "NiMH") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal")
     )
@@ -2311,6 +2317,9 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/4db612db-af35-48db-a235-6fa2f8862a88"
       (reference "Q7") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/c0066439-6f06-4a67-928e-bc8b537c0ae3"
+      (reference "Q?") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94b1480c-21b6-4ef7-b592-3977ba8ffc39"
       (reference "R7") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
@@ -2346,6 +2355,12 @@
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/2c8f006d-ba7c-4c71-b9c4-c2bdabaa2b7f"
       (reference "R18") (unit 1) (value "30") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/0e9703f0-097e-4788-98c6-20d860ee2991"
+      (reference "R?") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/77e371f3-d71f-42e5-8d23-cb2ab25eedc7"
+      (reference "R?") (unit 1) (value "4.7K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/fa148395-83b6-415a-8f1a-6bb3d54e1164"
       (reference "U5") (unit 1) (value "AP2114H-3.3") (footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
