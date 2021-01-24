@@ -1593,10 +1593,16 @@
     (uuid "1873808b-4223-4b68-a2dc-9c41f4922320")
     (property "Reference" "SW11" (id 0) (at 78.74 166.37 0))
     (property "Value" "SW_Push" (id 1) (at 78.74 168.91 0))
-    (property "Footprint" "" (id 2) (at 78.74 168.91 0)
+    (property "Footprint" "Button_Switch_SMD:SW_SPST_CK_RS282G05A3" (id 2) (at 78.74 168.91 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (id 3) (at 78.74 168.91 0)
+    (property "Datasheet" "https://www.mouser.de/datasheet/2/60/pts636-1550567.pdf" (id 3) (at 78.74 168.91 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Part Name" "PTS636 SM25 SMTR LFS" (id 4) (at 78.74 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Mouser" "611-PTS636SM25SMTRLF" (id 6) (at 78.74 173.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
   )
@@ -1621,7 +1627,7 @@
   (symbol (lib_id "Switch:SW_DP3T") (at 250.19 67.31 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid "07aa2529-3e4c-4a04-a5d3-d653722bc7df")
-    (property "Reference" "SW?" (id 0) (at 250.19 60.2296 0))
+    (property "Reference" "SW30" (id 0) (at 250.19 60.2296 0))
     (property "Value" "SW_DP3T" (id 1) (at 250.19 62.5283 0))
     (property "Footprint" "footprints:EG2315A" (id 2) (at 234.315 62.865 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -1899,10 +1905,10 @@
       (reference "R3") (unit 1) (value "5k1") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
     (path "/1873808b-4223-4b68-a2dc-9c41f4922320"
-      (reference "SW11") (unit 1) (value "SW_Push") (footprint "")
+      (reference "SW11") (unit 1) (value "SW_Push") (footprint "Button_Switch_SMD:SW_SPST_CK_RS282G05A3")
     )
     (path "/07aa2529-3e4c-4a04-a5d3-d653722bc7df"
-      (reference "SW?") (unit 1) (value "SW_DP3T") (footprint "footprints:EG2315A")
+      (reference "SW30") (unit 1) (value "SW_DP3T") (footprint "footprints:EG2315A")
     )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/30c2ac1c-8a76-41a0-94de-8ad0d2ee7b5a"
       (reference "#PWR0109") (unit 1) (value "GND") (footprint "")
@@ -2403,10 +2409,10 @@
       (reference "#PWR0139") (unit 1) (value "GND") (footprint "")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/823cf678-f342-46a9-bc13-64c57b402a88"
-      (reference "#PWR?") (unit 1) (value "+3.3V") (footprint "")
+      (reference "#PWR0140") (unit 1) (value "+3.3V") (footprint "")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/e04f67f3-0845-4fac-a587-d14754b2050a"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0141") (unit 1) (value "GND") (footprint "")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/210515f0-c0f1-4f80-b920-f3ce9df10676"
       (reference "BT1") (unit 1) (value "NiMH") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal")
@@ -2454,7 +2460,7 @@
       (reference "Q7") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/c0066439-6f06-4a67-928e-bc8b537c0ae3"
-      (reference "Q?") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
+      (reference "Q8") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94b1480c-21b6-4ef7-b592-3977ba8ffc39"
       (reference "R7") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
@@ -2492,23 +2498,23 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/2c8f006d-ba7c-4c71-b9c4-c2bdabaa2b7f"
       (reference "R18") (unit 1) (value "30") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/0e9703f0-097e-4788-98c6-20d860ee2991"
-      (reference "R?") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/77e371f3-d71f-42e5-8d23-cb2ab25eedc7"
-      (reference "R?") (unit 1) (value "4.7K") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R19") (unit 1) (value "4.7K") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/0e9703f0-097e-4788-98c6-20d860ee2991"
+      (reference "R20") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/fa148395-83b6-415a-8f1a-6bb3d54e1164"
       (reference "U5") (unit 1) (value "AP2114H-3.3") (footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
     )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/b89a0991-25e9-45fe-b07f-26db45fc28b7"
-      (reference "U6") (unit 1) (value "LM358") (footprint "")
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/e2ffbf15-fba8-43c0-b6ec-539da0196b34"
+      (reference "U7") (unit 1) (value "LM358") (footprint "Package_SO:TSSOP-8_4.4x3mm_P0.65mm")
     )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/552bfb64-57f9-46a0-a629-81f468d9b371"
-      (reference "U6") (unit 2) (value "LM358") (footprint "")
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/10e31dc2-45d2-4a3e-a4ba-9834c78d3e07"
+      (reference "U7") (unit 2) (value "LM358") (footprint "")
     )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/61d61a4d-a34a-4e1c-b56c-ee582f064850"
-      (reference "U6") (unit 3) (value "LM358") (footprint "")
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/30919362-c1c2-4f2e-93ad-9dfe5258044c"
+      (reference "U7") (unit 3) (value "LM358") (footprint "")
     )
   )
 )
