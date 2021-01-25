@@ -1,0 +1,15 @@
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+
+set(prefix /usr/bin/arm-none-eabi-)
+set(CMAKE_C_COMPILER ${prefix}gcc)
+set(CMAKE_CXX_COMPILER ${prefix}g++)
+set(CMAKE_ASM-ATT_COMPILER ${prefix}as)
+set(CMAKE_STRIP ${prefix}strip)
+set(CMAKE_OBJCOPY ${prefix}objcopy)
+
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+

@@ -5,3 +5,5 @@ goboard-numpad-backups
 *.kicad_sch-bak
 *.kicad_prl
 _autosave-*
+firmware/3rdparty/nrf5-sdk
+firmware/main/build
