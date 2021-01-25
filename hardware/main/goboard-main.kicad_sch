@@ -996,6 +996,9 @@
   (wire (pts (xy 59.69 43.18) (xy 63.5 43.18))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
+  (wire (pts (xy 62.23 104.14) (xy 62.23 106.68))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+  )
   (wire (pts (xy 64.77 173.99) (xy 71.12 173.99))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
@@ -1014,6 +1017,9 @@
   (wire (pts (xy 72.39 111.76) (xy 120.65 111.76))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
+  (wire (pts (xy 72.39 130.81) (xy 120.65 130.81))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+  )
   (wire (pts (xy 72.39 134.62) (xy 120.65 134.62))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
@@ -1021,6 +1027,9 @@
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
   (wire (pts (xy 72.39 140.97) (xy 120.65 140.97))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+  )
+  (wire (pts (xy 73.66 104.14) (xy 62.23 104.14))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
   (wire (pts (xy 80.01 71.12) (xy 80.01 91.44))
@@ -1086,7 +1095,7 @@
   (wire (pts (xy 196.85 36.83) (xy 196.85 39.37))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
-  (wire (pts (xy 196.85 36.83) (xy 205.74 36.83))
+  (wire (pts (xy 196.85 36.83) (xy 208.28 36.83))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
   (wire (pts (xy 236.22 67.31) (xy 245.11 67.31))
@@ -1131,16 +1140,6 @@
     (at 54.61 196.85 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
-  (text "TODO: switch for pairing" (at 116.84 22.86 180)
-    (effects (font (size 1.27 1.27)) (justify right bottom))
-  )
-  (text "TODO: read the battery voltage with the MCU" (at 137.16 27.94 180)
-    (effects (font (size 1.27 1.27)) (justify right bottom))
-  )
-  (text "TODO: possibility to switch of the\npower supply of the shift registers"
-    (at 215.9 30.48 0)
-    (effects (font (size 1.27 1.27)) (justify right bottom))
-  )
   (text "Switch to choose between\nstandby/usb-connection,\nbluetooth set 1, and\nbluetooth set 2."
     (at 238.76 57.15 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -1166,6 +1165,9 @@
   )
   (label "RESET" (at 64.77 173.99 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+  (label "VCC_KEYS" (at 73.66 104.14 180)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
   )
   (label "USB_D+" (at 89.535 91.44 180)
     (effects (font (size 1.27 1.27)) (justify right bottom))
@@ -1200,7 +1202,7 @@
   (label "UART_TX" (at 170.18 74.93 180)
     (effects (font (size 1.27 1.27)) (justify right bottom))
   )
-  (label "VCC_SW" (at 205.74 36.83 180)
+  (label "VCC_KEYS" (at 208.28 36.83 180)
     (effects (font (size 1.27 1.27)) (justify right bottom))
   )
   (label "VCC_SW" (at 236.22 67.31 0)
@@ -1692,6 +1694,9 @@
     (pin "SWITCH_BT_1" input (at 120.65 87.63 180)
       (effects (font (size 1.27 1.27)) (justify left))
     )
+    (pin "~ENABLE_VCC_KEYS" output (at 120.65 130.81 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
   )
 
   (sheet (at 27.94 106.68) (size 44.45 46.99)
@@ -1717,6 +1722,12 @@
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (pin "BAL_LOW" input (at 72.39 138.43 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "VCC_KEYS" output (at 62.23 106.68 90)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "~ENABLE_VCC_KEYS" input (at 72.39 130.81 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
   )
@@ -1746,7 +1757,7 @@
     (pin "SPI_MISO" output (at 181.61 59.69 180)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (pin "VCC_SW" input (at 196.85 39.37 90)
+    (pin "VCC_KEYS" input (at 196.85 39.37 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
   )
@@ -1842,12 +1853,6 @@
     )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/6aefb866-3f31-45fc-835d-9e0d0ee3041d"
       (reference "#PWR0121") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/ac41e8bc-33f1-480a-9578-3f27442f4e39"
-      (reference "#PWR0122") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/456c5560-5e5c-458e-a7f7-e577da6fbd17"
-      (reference "#PWR0123") (unit 1) (value "GND") (footprint "")
     )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/5d0f01e6-3cac-4a3c-9bd2-0ba422ba5ad9"
       (reference "#PWR0124") (unit 1) (value "GND") (footprint "")
@@ -2335,6 +2340,9 @@
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/bd1ecbe1-4f71-49c2-aa4c-b2e67c4ed577"
       (reference "U4") (unit 1) (value "74LV165") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/c13ba79c-ae64-4b9d-8123-a7ed738a1064"
+      (reference "#PWR0122") (unit 1) (value "GND") (footprint "")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/481ca36e-2d56-4ed3-8c05-f65e606c1b2f"
       (reference "#PWR0125") (unit 1) (value "GND") (footprint "")
     )
@@ -2425,6 +2433,9 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/4db612db-af35-48db-a235-6fa2f8862a88"
       (reference "Q7") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/c2e8ebbb-bf40-443d-9bf3-873700b3381d"
+      (reference "Q8") (unit 1) (value "SSM3J338R") (footprint "Package_TO_SOT_SMD:SOT-23_Handsoldering")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94b1480c-21b6-4ef7-b592-3977ba8ffc39"
       (reference "R7") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
@@ -2460,6 +2471,9 @@
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/2c8f006d-ba7c-4c71-b9c4-c2bdabaa2b7f"
       (reference "R18") (unit 1) (value "30") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/0c97694b-516e-4ec3-b4a1-2fae81dd0262"
+      (reference "R19") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/78c02ca2-aa30-4480-8ca6-63a644f03ebe"
       (reference "R21") (unit 1) (value "0") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
