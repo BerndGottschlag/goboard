@@ -446,7 +446,6 @@
     )
   )
 
-
   (junction (at 139.7 29.21) (diameter 1.016) (color 0 0 0 0))
   (junction (at 139.7 130.81) (diameter 1.016) (color 0 0 0 0))
 
