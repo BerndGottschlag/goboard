@@ -1023,9 +1023,6 @@
   (wire (pts (xy 72.39 140.97) (xy 120.65 140.97))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
-  (wire (pts (xy 72.39 144.78) (xy 120.65 144.78))
-    (stroke (width 0) (type solid) (color 0 0 0 0))
-  )
   (wire (pts (xy 80.01 71.12) (xy 80.01 91.44))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
@@ -1686,9 +1683,6 @@
     (pin "~BAL_HIGH" output (at 120.65 140.97 180)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (pin "~USB_CONN" output (at 120.65 144.78 180)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
     (pin "CHARGE" output (at 120.65 134.62 180)
       (effects (font (size 1.27 1.27)) (justify left))
     )
@@ -1714,9 +1708,6 @@
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (pin "CHARGE" input (at 72.39 134.62 0)
-      (effects (font (size 1.27 1.27)) (justify right))
-    )
-    (pin "~USB_CONN" input (at 72.39 144.78 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (pin "VCC_SW" output (at 50.8 106.68 90)
@@ -1874,7 +1865,7 @@
       (reference "#PWR0148") (unit 1) (value "GND") (footprint "")
     )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/020d5d8f-9949-4018-bf6f-14d0c6edcb95"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0149") (unit 1) (value "GND") (footprint "")
     )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/3b11a76b-0594-44ea-a5af-67b22af13aef"
       (reference "C1") (unit 1) (value "100nF") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
@@ -2389,12 +2380,6 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/3165c945-d834-4b10-b055-87732bcc493e"
       (reference "#PWR0139") (unit 1) (value "GND") (footprint "")
     )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/823cf678-f342-46a9-bc13-64c57b402a88"
-      (reference "#PWR0140") (unit 1) (value "+3.3V") (footprint "")
-    )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/e04f67f3-0845-4fac-a587-d14754b2050a"
-      (reference "#PWR0141") (unit 1) (value "GND") (footprint "")
-    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/210515f0-c0f1-4f80-b920-f3ce9df10676"
       (reference "BT1") (unit 1) (value "NiMH") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal")
     )
@@ -2440,9 +2425,6 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/4db612db-af35-48db-a235-6fa2f8862a88"
       (reference "Q7") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
     )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/c0066439-6f06-4a67-928e-bc8b537c0ae3"
-      (reference "Q8") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
-    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94b1480c-21b6-4ef7-b592-3977ba8ffc39"
       (reference "R7") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
@@ -2478,12 +2460,6 @@
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/2c8f006d-ba7c-4c71-b9c4-c2bdabaa2b7f"
       (reference "R18") (unit 1) (value "30") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/77e371f3-d71f-42e5-8d23-cb2ab25eedc7"
-      (reference "R19") (unit 1) (value "4.7K") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/0e9703f0-097e-4788-98c6-20d860ee2991"
-      (reference "R20") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/78c02ca2-aa30-4480-8ca6-63a644f03ebe"
       (reference "R21") (unit 1) (value "0") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
