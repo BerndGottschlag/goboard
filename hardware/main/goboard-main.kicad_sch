@@ -1857,6 +1857,9 @@
     (path "/07aa2529-3e4c-4a04-a5d3-d653722bc7df"
       (reference "SW30") (unit 1) (value "SW_DP3T") (footprint "footprints:EG2315A")
     )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/82fc6e0d-45ed-45c3-ac3d-7e017097afd2"
+      (reference "#PWR0104") (unit 1) (value "GND") (footprint "")
+    )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/30c2ac1c-8a76-41a0-94de-8ad0d2ee7b5a"
       (reference "#PWR0109") (unit 1) (value "GND") (footprint "")
     )
@@ -1872,6 +1875,9 @@
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/5d0f01e6-3cac-4a3c-9bd2-0ba422ba5ad9"
       (reference "#PWR0124") (unit 1) (value "GND") (footprint "")
     )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/e55dce5a-8219-48f1-8726-9459b3a29655"
+      (reference "#PWR0145") (unit 1) (value "+BATT") (footprint "")
+    )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/2bc4c02f-f267-4fd2-b578-aeec91a0ef1e"
       (reference "C3") (unit 1) (value "100nF") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
@@ -1884,6 +1890,9 @@
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/28c8ce99-9074-40f3-bd9b-48b6c7957fa0"
       (reference "D47") (unit 1) (value "Scroll Lock") (footprint "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
     )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/0210ade5-84df-4dcb-9afd-dec00491bf0c"
+      (reference "Q9") (unit 1) (value "SSM3J338R") (footprint "Package_TO_SOT_SMD:SOT-23_Handsoldering")
+    )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/991528ad-7b63-4928-8197-5c7f779fe0a7"
       (reference "R4") (unit 1) (value "47") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
@@ -1892,6 +1901,15 @@
     )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/cbb8f0b1-30a2-409e-9544-9f1901265dc5"
       (reference "R6") (unit 1) (value "47") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
+    )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/7c93121f-eeeb-486d-b255-45328f847773"
+      (reference "R22") (unit 1) (value "100k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
+    )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/ad0f41b4-f5c4-4482-ae19-5a69901496ba"
+      (reference "R23") (unit 1) (value "100k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
+    )
+    (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/23570ab5-7a89-4aa3-b5bb-8a001558311e"
+      (reference "R24") (unit 1) (value "100k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
     (path "/d1d7b976-c206-4a6a-bf43-9e0a3d3fc0a5/ab5a7c2d-c6f5-4633-a330-435b31021904"
       (reference "U1") (unit 1) (value "Holyiot-18010-NRF52840") (footprint "footprints:Holyiot-18010-NRF52840")
