@@ -6,6 +6,7 @@
 #include "nrf_drv_clock.h"
 #include "nrf_gpio.h"
 #include "nrf_log_ctrl.h"
+#include "nrf_delay.h"
 
 /**
  * Checks whether the system should be placed in "System OFF" mode (because the
@@ -48,6 +49,8 @@ int main(void) {
 	ret = NRF_LOG_INIT(NULL);
 	APP_ERROR_CHECK(ret);
 
+	clock_init();
+
 	/* initialize battery, USB and mode switch - we need to initialize at
 	 * least everything that is required to wake up again */
 	battery_init();
@@ -76,6 +79,8 @@ int main(void) {
 	nrf_gpio_pin_toggle(LED_PIN);   // Toggle state*/
 
 	for (;;) {
-		__WFE();
+		//__WFE();
+		nrf_delay_ms(250);
+		nrf_gpio_pin_toggle(LED_PIN);   // Toggle state
 	}
 }

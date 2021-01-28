@@ -6,13 +6,15 @@ project(goboard-main C ASM)
 set(SDK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/nrf5-sdk")
 set(MDK_PATH "${SDK_PATH}/modules/nrfx/mdk")
 
-add_compile_definitions(NRF52840_XXAA)
+add_compile_definitions(
+	NRF52840_XXAA
+	FLOAT_ABI_HARD
+	SOFTDEVICE_PRESENT
+	S140
+)
 
 # configure the compiler for the Cortex-M4F
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
-
-# enable warnings
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-expansion-to-defined")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb -mabi=aapcs -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
 
 # optimization
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Os -flto")
@@ -21,6 +23,7 @@ set(SDK_SRC
 	${SDK_PATH}/components/libraries/atomic/nrf_atomic.c
 	${SDK_PATH}/components/libraries/atomic_fifo/nrf_atfifo.c
 	${SDK_PATH}/components/libraries/balloc/nrf_balloc.c
+	${SDK_PATH}/components/libraries/experimental_section_vars/nrf_section_iter.c
 #	${SDK_PATH}/components/libraries/log/src/nrf_log_backend_flash.c
 #	${SDK_PATH}/components/libraries/log/src/nrf_log_backend_rtt.c
 #	${SDK_PATH}/components/libraries/log/src/nrf_log_backend_serial.c
@@ -37,6 +40,23 @@ set(SDK_SRC
 	${SDK_PATH}/components/libraries/util/nrf_assert.c
 	${SDK_PATH}/components/libraries/util/sdk_mapped_flags.c
 	${SDK_PATH}/components/libraries/usbd/app_usbd.c
+	${SDK_PATH}/components/libraries/usbd/app_usbd_core.c
+	${SDK_PATH}/components/libraries/usbd/app_usbd_serial_num.c
+	${SDK_PATH}/components/libraries/usbd/app_usbd_string_desc.c
+
+	${SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c
+	${SDK_PATH}/components/softdevice/common/nrf_sdh.c
+	${SDK_PATH}/components/softdevice/common/nrf_sdh_soc.c
+
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_clock.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_power.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_ppi.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_rng.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_spi.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_spis.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_swi.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_twi.c
+	${SDK_PATH}/integration/nrfx/legacy/nrf_drv_uart.c
 
 	${SDK_PATH}/modules/nrfx/drivers/src/nrfx_adc.c
 	${SDK_PATH}/modules/nrfx/drivers/src/nrfx_clock.c
@@ -94,6 +114,7 @@ include_directories(
 	${SDK_PATH}/components/libraries/atomic
 	${SDK_PATH}/components/libraries/atomic_fifo
 	${SDK_PATH}/components/libraries/balloc
+	${SDK_PATH}/components/libraries/delay
 	${SDK_PATH}/components/libraries/experimental_section_vars
 	${SDK_PATH}/components/libraries/log
 	${SDK_PATH}/components/libraries/log/src
@@ -103,9 +124,12 @@ include_directories(
 	${SDK_PATH}/components/libraries/util
 	${SDK_PATH}/components/libraries/usbd
 	${SDK_PATH}/components/libraries/strerror
+	${SDK_PATH}/components/softdevice/common
 	${SDK_PATH}/components/softdevice/s140/headers
+	${SDK_PATH}/components/softdevice/s140/headers/nrf52
 	${SDK_PATH}/components/toolchain/cmsis/include
 	${SDK_PATH}/external/fprintf
+	${SDK_PATH}/external/utf_converter
 	${SDK_PATH}/integration/nrfx
 	${SDK_PATH}/integration/nrfx/legacy
 	${SDK_PATH}/modules/nrfx
@@ -118,5 +142,6 @@ include_directories(
 set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
 link_directories("${MDK_PATH}")
 add_executable(goboard-main ${SRC} ${LINKER_SCRIPT})
+target_compile_options(goboard-main PRIVATE -Wall -Wextra -Wno-unused-parameter -Wno-expansion-to-defined)
 target_link_libraries(goboard-main nrf52_sdk gcc)
 set_target_properties(goboard-main PROPERTIES LINK_FLAGS "-T ${LINKER_SCRIPT}")
