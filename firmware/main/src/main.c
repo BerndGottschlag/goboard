@@ -3,7 +3,9 @@
 #include "mode_switch.h"
 #include "usb.h"
 
+#include "nrf_drv_clock.h"
 #include "nrf_gpio.h"
+#include "nrf_log_ctrl.h"
 
 /**
  * Checks whether the system should be placed in "System OFF" mode (because the
@@ -30,7 +32,22 @@ static void switch_off(void) {
 	for (;;) {}
 }
 
+static void clock_init(void) {
+	ret_code_t ret;
+
+	ret = nrf_drv_clock_init();
+	APP_ERROR_CHECK(ret);
+	nrf_drv_clock_lfclk_request(NULL);
+
+	while (!nrf_drv_clock_lfclk_is_running()) {}
+}
+
 int main(void) {
+	ret_code_t ret;
+
+	ret = NRF_LOG_INIT(NULL);
+	APP_ERROR_CHECK(ret);
+
 	/* initialize battery, USB and mode switch - we need to initialize at
 	 * least everything that is required to wake up again */
 	battery_init();
@@ -59,6 +76,6 @@ int main(void) {
 	nrf_gpio_pin_toggle(LED_PIN);   // Toggle state*/
 
 	for (;;) {
-		/* TODO */
+		__WFE();
 	}
 }

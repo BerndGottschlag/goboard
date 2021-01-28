@@ -1,7 +1,10 @@
 
 #include "usb.h"
 
+#include "app_usbd.h"
+
 void usb_init(void) {
+	app_usbd_power_events_enable();
 	/* TODO */
 }
 
