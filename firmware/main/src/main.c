@@ -79,8 +79,10 @@ int main(void) {
 	nrf_gpio_pin_toggle(LED_PIN);   // Toggle state*/
 
 	for (;;) {
-		//__WFE();
-		nrf_delay_ms(250);
-		nrf_gpio_pin_toggle(LED_PIN);   // Toggle state
+		usb_poll();
+		UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
+		__WFE();
+		/*nrf_delay_ms(250);
+		nrf_gpio_pin_toggle(LED_PIN);   // Toggle state*/
 	}
 }

@@ -6496,7 +6496,7 @@
  
 
 #ifndef APP_USBD_HID_KBD_ENABLED
-#define APP_USBD_HID_KBD_ENABLED 0
+#define APP_USBD_HID_KBD_ENABLED 1
 #endif
 
 // <q> APP_USBD_HID_MOUSE_ENABLED  - app_usbd_hid_mouse - USB HID mouse

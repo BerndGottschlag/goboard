@@ -43,6 +43,8 @@ set(SDK_SRC
 	${SDK_PATH}/components/libraries/usbd/app_usbd_core.c
 	${SDK_PATH}/components/libraries/usbd/app_usbd_serial_num.c
 	${SDK_PATH}/components/libraries/usbd/app_usbd_string_desc.c
+	${SDK_PATH}/components/libraries/usbd/class/hid/app_usbd_hid.c
+	${SDK_PATH}/components/libraries/usbd/class/hid/kbd/app_usbd_hid_kbd.c
 
 	${SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c
 	${SDK_PATH}/components/softdevice/common/nrf_sdh.c
@@ -123,6 +125,8 @@ include_directories(
 	${SDK_PATH}/components/libraries/ringbuf
 	${SDK_PATH}/components/libraries/util
 	${SDK_PATH}/components/libraries/usbd
+	${SDK_PATH}/components/libraries/usbd/class/hid
+	${SDK_PATH}/components/libraries/usbd/class/hid/kbd
 	${SDK_PATH}/components/libraries/strerror
 	${SDK_PATH}/components/softdevice/common
 	${SDK_PATH}/components/softdevice/s140/headers
