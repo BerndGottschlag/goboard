@@ -97,10 +97,13 @@ set(SDK_SRC
 )
 
 add_library(nrf52_sdk STATIC ${SDK_SRC})
+set_property(TARGET nrf52_sdk PROPERTY C_STANDARD 11)
 
 set(SRC
 	src/battery.c
 	src/battery.h
+	src/key_matrix.c
+	src/key_matrix.h
 	src/main.c
 	src/mode_switch.c
 	src/mode_switch.h
@@ -146,6 +149,7 @@ include_directories(
 set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
 link_directories("${MDK_PATH}")
 add_executable(goboard-main ${SRC} ${LINKER_SCRIPT})
+set_property(TARGET goboard-main PROPERTY C_STANDARD 11)
 target_compile_options(goboard-main PRIVATE -Wall -Wextra -Wno-unused-parameter -Wno-expansion-to-defined)
 target_link_libraries(goboard-main nrf52_sdk gcc)
 set_target_properties(goboard-main PROPERTIES LINK_FLAGS "-T ${LINKER_SCRIPT}")

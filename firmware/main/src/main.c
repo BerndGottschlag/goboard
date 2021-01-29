@@ -1,10 +1,10 @@
 
 #include "battery.h"
+#include "key_matrix.h"
 #include "mode_switch.h"
 #include "usb.h"
 
 #include "nrf_drv_clock.h"
-#include "nrf_gpio.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_delay.h"
 
@@ -64,15 +64,11 @@ int main(void) {
 		usb_prepare_system_off();
 		switch_off();
 	}
-	/* TODO */
 
 	/* initialize everything else */
+	key_matrix_init();
 	/* TODO */
 
-	#define LED_PIN NRF_GPIO_PIN_MAP(1, 15)
-	nrf_gpio_cfg_output(LED_PIN);   // Configure pin as output
-
-	nrf_gpio_pin_set(LED_PIN);
 	//nrf_gpio_pin_clear(LED_PIN);    // Set low
 	/*nrf_gpio_pin_set(LED_PIN);      // Set high
 	nrf_gpio_pin_clear(LED_PIN);    // Set low
