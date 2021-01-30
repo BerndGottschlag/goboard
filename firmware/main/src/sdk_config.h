@@ -115,10 +115,38 @@
 #define BLE_RACP_ENABLED 0
 #endif
 
+// <e> NRF_BLE_CONN_PARAMS_ENABLED - ble_conn_params - Initiating and executing a connection parameters negotiation procedure
+//==========================================================
+#ifndef NRF_BLE_CONN_PARAMS_ENABLED
+#define NRF_BLE_CONN_PARAMS_ENABLED 1
+#endif
+// <o> NRF_BLE_CONN_PARAMS_MAX_SLAVE_LATENCY_DEVIATION - The largest acceptable deviation in slave latency. 
+// <i> The largest deviation (+ or -) from the requested slave latency that will not be renegotiated.
+
+#ifndef NRF_BLE_CONN_PARAMS_MAX_SLAVE_LATENCY_DEVIATION
+#define NRF_BLE_CONN_PARAMS_MAX_SLAVE_LATENCY_DEVIATION 499
+#endif
+
+// <o> NRF_BLE_CONN_PARAMS_MAX_SUPERVISION_TIMEOUT_DEVIATION - The largest acceptable deviation (in 10 ms units) in supervision timeout. 
+// <i> The largest deviation (+ or -, in 10 ms units) from the requested supervision timeout that will not be renegotiated.
+
+#ifndef NRF_BLE_CONN_PARAMS_MAX_SUPERVISION_TIMEOUT_DEVIATION
+#define NRF_BLE_CONN_PARAMS_MAX_SUPERVISION_TIMEOUT_DEVIATION 65535
+#endif
+
+// </e>
+
+// <q> NRF_BLE_GATT_ENABLED  - nrf_ble_gatt - GATT module
+ 
+
+#ifndef NRF_BLE_GATT_ENABLED
+#define NRF_BLE_GATT_ENABLED 1
+#endif
+
 // <e> NRF_BLE_QWR_ENABLED - nrf_ble_qwr - Queued writes support module (prepare/execute write)
 //==========================================================
 #ifndef NRF_BLE_QWR_ENABLED
-#define NRF_BLE_QWR_ENABLED 0
+#define NRF_BLE_QWR_ENABLED 1
 #endif
 // <o> NRF_BLE_QWR_MAX_ATTR - Maximum number of attribute handles that can be registered. This number must be adjusted according to the number of attributes for which Queued Writes will be enabled. If it is zero, the module will reject all Queued Write requests. 
 #ifndef NRF_BLE_QWR_MAX_ATTR
@@ -130,7 +158,7 @@
 // <e> PEER_MANAGER_ENABLED - peer_manager - Peer Manager
 //==========================================================
 #ifndef PEER_MANAGER_ENABLED
-#define PEER_MANAGER_ENABLED 0
+#define PEER_MANAGER_ENABLED 1
 #endif
 // <o> PM_MAX_REGISTRANTS - Number of event handlers that can be registered. 
 #ifndef PM_MAX_REGISTRANTS
@@ -249,7 +277,7 @@
 // <e> BLE_BAS_ENABLED - ble_bas - Battery Service
 //==========================================================
 #ifndef BLE_BAS_ENABLED
-#define BLE_BAS_ENABLED 0
+#define BLE_BAS_ENABLED 1
 #endif
 // <e> BLE_BAS_CONFIG_LOG_ENABLED - Enables logging in the module.
 //==========================================================
@@ -3812,13 +3840,13 @@
 // <e> NRFX_TIMER_ENABLED - nrfx_timer - TIMER periperal driver
 //==========================================================
 #ifndef NRFX_TIMER_ENABLED
-#define NRFX_TIMER_ENABLED 0
+#define NRFX_TIMER_ENABLED 1
 #endif
 // <q> NRFX_TIMER0_ENABLED  - Enable TIMER0 instance
  
 
 #ifndef NRFX_TIMER0_ENABLED
-#define NRFX_TIMER0_ENABLED 0
+#define NRFX_TIMER0_ENABLED 1
 #endif
 
 // <q> NRFX_TIMER1_ENABLED  - Enable TIMER1 instance
@@ -4426,11 +4454,11 @@
 // <e> NRFX_UART_ENABLED - nrfx_uart - UART peripheral driver
 //==========================================================
 #ifndef NRFX_UART_ENABLED
-#define NRFX_UART_ENABLED 0
+#define NRFX_UART_ENABLED 1
 #endif
 // <o> NRFX_UART0_ENABLED - Enable UART0 instance 
 #ifndef NRFX_UART0_ENABLED
-#define NRFX_UART0_ENABLED 0
+#define NRFX_UART0_ENABLED 1
 #endif
 
 // <o> NRFX_UART_DEFAULT_CONFIG_HWFC  - Hardware Flow Control
@@ -5531,7 +5559,7 @@
 // <e> TIMER_ENABLED - nrf_drv_timer - TIMER periperal driver - legacy layer
 //==========================================================
 #ifndef TIMER_ENABLED
-#define TIMER_ENABLED 0
+#define TIMER_ENABLED 1
 #endif
 // <o> TIMER_DEFAULT_CONFIG_FREQUENCY  - Timer frequency if in Timer mode
  
@@ -5591,7 +5619,7 @@
  
 
 #ifndef TIMER0_ENABLED
-#define TIMER0_ENABLED 0
+#define TIMER0_ENABLED 1
 #endif
 
 // <q> TIMER1_ENABLED  - Enable TIMER1 instance
@@ -5789,7 +5817,7 @@
 // <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver - legacy layer
 //==========================================================
 #ifndef UART_ENABLED
-#define UART_ENABLED 0
+#define UART_ENABLED 1
 #endif
 // <o> UART_DEFAULT_CONFIG_HWFC  - Hardware Flow Control
  
@@ -5860,13 +5888,13 @@
  
 
 #ifndef UART_LEGACY_SUPPORT
-#define UART_LEGACY_SUPPORT 1
+#define UART_LEGACY_SUPPORT 0
 #endif
 
 // <e> UART0_ENABLED - Enable UART0 instance
 //==========================================================
 #ifndef UART0_ENABLED
-#define UART0_ENABLED 0
+#define UART0_ENABLED 1
 #endif
 // <q> UART0_CONFIG_USE_EASY_DMA  - Default setting for using EasyDMA
  
@@ -6021,7 +6049,7 @@
 // <e> APP_SCHEDULER_ENABLED - app_scheduler - Events scheduler
 //==========================================================
 #ifndef APP_SCHEDULER_ENABLED
-#define APP_SCHEDULER_ENABLED 0
+#define APP_SCHEDULER_ENABLED 1
 #endif
 // <q> APP_SCHEDULER_WITH_PAUSE  - Enabling pause feature
  
@@ -6087,7 +6115,7 @@
 // <e> APP_TIMER_ENABLED - app_timer - Application timer functionality
 //==========================================================
 #ifndef APP_TIMER_ENABLED
-#define APP_TIMER_ENABLED 0
+#define APP_TIMER_ENABLED 1
 #endif
 // <o> APP_TIMER_CONFIG_RTC_FREQUENCY  - Configure RTC prescaler.
  
@@ -6133,7 +6161,7 @@
  
 
 #ifndef APP_TIMER_CONFIG_USE_SCHEDULER
-#define APP_TIMER_CONFIG_USE_SCHEDULER 0
+#define APP_TIMER_CONFIG_USE_SCHEDULER 1
 #endif
 
 // <q> APP_TIMER_KEEPS_RTC_ACTIVE  - Enable RTC always on
@@ -6537,7 +6565,7 @@
 // <e> FDS_ENABLED - fds - Flash data storage module
 //==========================================================
 #ifndef FDS_ENABLED
-#define FDS_ENABLED 0
+#define FDS_ENABLED 1
 #endif
 // <h> Pages - Virtual page settings
 
@@ -6655,7 +6683,7 @@
  
 
 #ifndef HARDFAULT_HANDLER_ENABLED
-#define HARDFAULT_HANDLER_ENABLED 0
+#define HARDFAULT_HANDLER_ENABLED 1
 #endif
 
 // <e> HCI_MEM_POOL_ENABLED - hci_mem_pool - memory pool implementation used by HCI
@@ -7061,7 +7089,7 @@
 // <e> NRF_FSTORAGE_ENABLED - nrf_fstorage - Flash abstraction library
 //==========================================================
 #ifndef NRF_FSTORAGE_ENABLED
-#define NRF_FSTORAGE_ENABLED 0
+#define NRF_FSTORAGE_ENABLED 1
 #endif
 // <h> nrf_fstorage - Common settings
 
@@ -7132,7 +7160,7 @@
 // <e> NRF_PWR_MGMT_ENABLED - nrf_pwr_mgmt - Power management module
 //==========================================================
 #ifndef NRF_PWR_MGMT_ENABLED
-#define NRF_PWR_MGMT_ENABLED 0
+#define NRF_PWR_MGMT_ENABLED 1
 #endif
 // <e> NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED - Enables pin debug in the module.
 
@@ -7240,7 +7268,7 @@
  
 
 #ifndef NRF_PWR_MGMT_CONFIG_USE_SCHEDULER
-#define NRF_PWR_MGMT_CONFIG_USE_SCHEDULER 0
+#define NRF_PWR_MGMT_CONFIG_USE_SCHEDULER 1
 #endif
 
 // <o> NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT - The number of priorities for module handlers. 
@@ -7528,6 +7556,50 @@
 
 // <h> nRF_Log 
 
+// <e> NRF_LOG_BACKEND_UART_ENABLED - nrf_log_backend_uart - Log UART backend
+//==========================================================
+#ifndef NRF_LOG_BACKEND_UART_ENABLED
+#define NRF_LOG_BACKEND_UART_ENABLED 1
+#endif
+// <o> NRF_LOG_BACKEND_UART_TX_PIN - UART TX pin 
+#ifndef NRF_LOG_BACKEND_UART_TX_PIN
+#define NRF_LOG_BACKEND_UART_TX_PIN 25
+#endif
+
+// <o> NRF_LOG_BACKEND_UART_BAUDRATE  - Default Baudrate
+ 
+// <323584=> 1200 baud 
+// <643072=> 2400 baud 
+// <1290240=> 4800 baud 
+// <2576384=> 9600 baud 
+// <3862528=> 14400 baud 
+// <5152768=> 19200 baud 
+// <7716864=> 28800 baud 
+// <10289152=> 38400 baud 
+// <15400960=> 57600 baud 
+// <20615168=> 76800 baud 
+// <30801920=> 115200 baud 
+// <61865984=> 230400 baud 
+// <67108864=> 250000 baud 
+// <121634816=> 460800 baud 
+// <251658240=> 921600 baud 
+// <268435456=> 1000000 baud 
+
+#ifndef NRF_LOG_BACKEND_UART_BAUDRATE
+#define NRF_LOG_BACKEND_UART_BAUDRATE 30801920
+#endif
+
+// <o> NRF_LOG_BACKEND_UART_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
+// <i> Size of the buffer is a trade-off between RAM usage and processing.
+// <i> if buffer is smaller then strings will often be fragmented.
+// <i> It is recommended to use size which will fit typical log and only the
+// <i> longer one will be fragmented.
+
+#ifndef NRF_LOG_BACKEND_UART_TEMP_BUFFER_SIZE
+#define NRF_LOG_BACKEND_UART_TEMP_BUFFER_SIZE 64
+#endif
+
+// </e>
 //==========================================================
 // <e> NRF_LOG_ENABLED - nrf_log - Logger
 //==========================================================
@@ -8301,6 +8373,99 @@
 #ifndef PPI_CONFIG_DEBUG_COLOR
 #define PPI_CONFIG_DEBUG_COLOR 0
 #endif
+
+// </e>
+
+// <e> NRFX_PRS_ENABLED - nrfx_prs - Peripheral Resource Sharing module
+//==========================================================
+#ifndef NRFX_PRS_ENABLED
+#define NRFX_PRS_ENABLED 1
+#endif
+// <q> NRFX_PRS_BOX_0_ENABLED  - Enables box 0 in the module.
+ 
+
+#ifndef NRFX_PRS_BOX_0_ENABLED
+#define NRFX_PRS_BOX_0_ENABLED 0
+#endif
+
+// <q> NRFX_PRS_BOX_1_ENABLED  - Enables box 1 in the module.
+ 
+
+#ifndef NRFX_PRS_BOX_1_ENABLED
+#define NRFX_PRS_BOX_1_ENABLED 0
+#endif
+
+// <q> NRFX_PRS_BOX_2_ENABLED  - Enables box 2 in the module.
+ 
+
+#ifndef NRFX_PRS_BOX_2_ENABLED
+#define NRFX_PRS_BOX_2_ENABLED 1
+#endif
+
+// <q> NRFX_PRS_BOX_3_ENABLED  - Enables box 3 in the module.
+ 
+
+#ifndef NRFX_PRS_BOX_3_ENABLED
+#define NRFX_PRS_BOX_3_ENABLED 0
+#endif
+
+// <q> NRFX_PRS_BOX_4_ENABLED  - Enables box 4 in the module.
+ 
+
+#ifndef NRFX_PRS_BOX_4_ENABLED
+#define NRFX_PRS_BOX_4_ENABLED 1
+#endif
+
+// <e> NRFX_PRS_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_PRS_CONFIG_LOG_ENABLED
+#define NRFX_PRS_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_PRS_CONFIG_LOG_LEVEL  - Default Severity level
+ 
+// <0=> Off 
+// <1=> Error 
+// <2=> Warning 
+// <3=> Info 
+// <4=> Debug 
+
+#ifndef NRFX_PRS_CONFIG_LOG_LEVEL
+#define NRFX_PRS_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_PRS_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_PRS_CONFIG_INFO_COLOR
+#define NRFX_PRS_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_PRS_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+ 
+// <0=> Default 
+// <1=> Black 
+// <2=> Red 
+// <3=> Green 
+// <4=> Yellow 
+// <5=> Blue 
+// <6=> Magenta 
+// <7=> Cyan 
+// <8=> White 
+
+#ifndef NRFX_PRS_CONFIG_DEBUG_COLOR
+#define NRFX_PRS_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
 
 // </e>
 
@@ -11135,7 +11300,7 @@
 // <e> NRF_SDH_BLE_ENABLED - nrf_sdh_ble - SoftDevice BLE event handler
 //==========================================================
 #ifndef NRF_SDH_BLE_ENABLED
-#define NRF_SDH_BLE_ENABLED 0
+#define NRF_SDH_BLE_ENABLED 1
 #endif
 // <h> BLE Stack configuration - Stack configuration parameters
 
@@ -11153,7 +11318,7 @@
 
 // <o> NRF_SDH_BLE_PERIPHERAL_LINK_COUNT - Maximum number of peripheral links. 
 #ifndef NRF_SDH_BLE_PERIPHERAL_LINK_COUNT
-#define NRF_SDH_BLE_PERIPHERAL_LINK_COUNT 0
+#define NRF_SDH_BLE_PERIPHERAL_LINK_COUNT 4
 #endif
 
 // <o> NRF_SDH_BLE_CENTRAL_LINK_COUNT - Maximum number of central links. 
@@ -11165,7 +11330,7 @@
 // <i> Maximum number of total concurrent connections using the default configuration.
 
 #ifndef NRF_SDH_BLE_TOTAL_LINK_COUNT
-#define NRF_SDH_BLE_TOTAL_LINK_COUNT 1
+#define NRF_SDH_BLE_TOTAL_LINK_COUNT 4
 #endif
 
 // <o> NRF_SDH_BLE_GAP_EVENT_LENGTH - GAP event length. 
