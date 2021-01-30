@@ -72,7 +72,7 @@ void key_matrix_init(void) {
 	nrf_gpio_pin_set(DEBUG_LED);
 
 	/* we want to poll the key matrix periodically using a timer */
-	ret = nrf_drv_timer_init(&KEY_TIMER, &timer_cfg, key_timer_handler);
+	/*ret = nrf_drv_timer_init(&KEY_TIMER, &timer_cfg, key_timer_handler);
 	APP_ERROR_CHECK(ret);
 
 	time_ticks = nrf_drv_timer_ms_to_ticks(&KEY_TIMER, KEY_POLL_INTERVAL_MS);
@@ -82,7 +82,7 @@ void key_matrix_init(void) {
 	                               NRF_TIMER_SHORT_COMPARE0_CLEAR_MASK,
 	                               true);
 
-	nrf_drv_timer_enable(&KEY_TIMER);
+	nrf_drv_timer_enable(&KEY_TIMER);*/
 }
 
 size_t key_matrix_read(struct key_event *buffer, size_t length) {

@@ -4,10 +4,16 @@
 #include "mode_switch.h"
 #include "usb.h"
 
+#include "app_scheduler.h"
+#include "app_timer.h"
 #include "nrf_drv_clock.h"
+#include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
-#include "nrf_delay.h"
+#include "nrf_pwr_mgmt.h"
+
+#define SCHED_MAX_EVENT_DATA_SIZE APP_TIMER_SCHED_EVENT_DATA_SIZE
+#define SCHED_QUEUE_SIZE 20
 
 /**
  * Checks whether the system should be placed in "System OFF" mode (because the
@@ -52,6 +58,13 @@ int main(void) {
 	NRF_LOG_DEFAULT_BACKENDS_INIT();
 
 	clock_init();
+	ret = app_timer_init();
+	APP_ERROR_CHECK(ret);
+	ret = nrf_pwr_mgmt_init();
+	APP_ERROR_CHECK(ret);
+	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
+
+	NRF_LOG_INFO("goboard starting...");
 
 	/* initialize battery, USB and mode switch - we need to initialize at
 	 * least everything that is required to wake up again */
@@ -71,16 +84,11 @@ int main(void) {
 	key_matrix_init();
 	/* TODO */
 
-	//nrf_gpio_pin_clear(LED_PIN);    // Set low
-	/*nrf_gpio_pin_set(LED_PIN);      // Set high
-	nrf_gpio_pin_clear(LED_PIN);    // Set low
-	nrf_gpio_pin_toggle(LED_PIN);   // Toggle state*/
-
 	for (;;) {
 		usb_poll();
-		UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
-		__WFE();
-		/*nrf_delay_ms(250);
-		nrf_gpio_pin_toggle(LED_PIN);   // Toggle state*/
+		app_sched_execute();
+		if (NRF_LOG_PROCESS() == false) {
+			nrf_pwr_mgmt_run();
+		}
 	}
 }
