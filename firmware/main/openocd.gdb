@@ -12,7 +12,7 @@ set backtrace limit 32
 
 # detect unhandled exceptions, hard faults and panics
 break DefaultHandler
-break HardFault
+break HardFault_Handler
 
 #break main
 
