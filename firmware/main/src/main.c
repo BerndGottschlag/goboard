@@ -6,6 +6,7 @@
 
 #include "nrf_drv_clock.h"
 #include "nrf_log_ctrl.h"
+#include "nrf_log_default_backends.h"
 #include "nrf_delay.h"
 
 /**
@@ -48,6 +49,7 @@ int main(void) {
 
 	ret = NRF_LOG_INIT(NULL);
 	APP_ERROR_CHECK(ret);
+	NRF_LOG_DEFAULT_BACKENDS_INIT();
 
 	clock_init();
 
