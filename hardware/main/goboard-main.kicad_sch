@@ -1048,6 +1048,9 @@
   (wire (pts (xy 72.39 140.97) (xy 120.65 140.97))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
+  (wire (pts (xy 72.39 144.78) (xy 120.65 144.78))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+  )
   (wire (pts (xy 80.01 71.12) (xy 80.01 91.44))
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
@@ -1897,6 +1900,9 @@
     (pin "~NUMPAD_ID" input (at 161.29 78.74 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
+    (pin "~USB_CONN" input (at 120.65 144.78 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
   )
 
   (sheet (at 27.94 106.68) (size 44.45 46.99)
@@ -1934,6 +1940,9 @@
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (pin "~ENABLE_VCC_NUMPAD" input (at 72.39 128.27 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "~USB_CONN" output (at 72.39 144.78 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
   )
@@ -2612,6 +2621,12 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/ce7ba401-22e4-4966-a710-7f05ae991ef1"
       (reference "#PWR0140") (unit 1) (value "GND") (footprint "")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/5a4b2b5e-200b-4d68-9e34-c2caa68d1a58"
+      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94c3f1f0-9419-428a-a6f7-165b4feb93a2"
+      (reference "#PWR?") (unit 1) (value "+3.3V") (footprint "")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/210515f0-c0f1-4f80-b920-f3ce9df10676"
       (reference "BT1") (unit 1) (value "NiMH") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal")
     )
@@ -2663,6 +2678,9 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/8e792590-bc4e-46f5-bcb8-29d49e952c7e"
       (reference "Q10") (unit 1) (value "SSM3J338R") (footprint "Package_TO_SOT_SMD:SOT-23_Handsoldering")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/c7d4bd51-d701-4c56-9708-a98feca559b8"
+      (reference "Q?") (unit 1) (value "BC817") (footprint "Package_TO_SOT_SMD:SOT-23")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94b1480c-21b6-4ef7-b592-3977ba8ffc39"
       (reference "R7") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
@@ -2707,6 +2725,12 @@
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/a143d090-98da-4a94-b7af-65d7356fe944"
       (reference "R29") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/02993b3e-bd6a-4b6e-8520-b01ae08d0060"
+      (reference "R?") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/f6e90b97-7f06-4011-bca1-7aebee2af537"
+      (reference "R?") (unit 1) (value "4.7K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/fa148395-83b6-415a-8f1a-6bb3d54e1164"
       (reference "U5") (unit 1) (value "AP2114H-3.3") (footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
