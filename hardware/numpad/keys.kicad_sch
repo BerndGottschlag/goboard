@@ -440,6 +440,10 @@
     (stroke (width 0) (type solid) (color 0 0 0 0))
   )
 
+  (text "TODO:\npull-up for each column" (at 106.68 194.31 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
+
   (hierarchical_label "COLUMN_0" (shape input) (at 81.28 27.94 180)
     (effects (font (size 1.27 1.27)) (justify right))
   )
