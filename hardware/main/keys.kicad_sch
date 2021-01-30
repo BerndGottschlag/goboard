@@ -1882,6 +1882,9 @@
   (text "TODO:\nConnect ~SRCLR and\n~OE to MCU pins?" (at 15.24 76.2 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
   )
+  (text "TODO:\npull-ups for each column" (at 97.79 255.27 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+  )
 
   (hierarchical_label "SPI_SCK" (shape input) (at 24.13 58.42 180)
     (effects (font (size 1.27 1.27)) (justify right))
