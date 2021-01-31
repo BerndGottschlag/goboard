@@ -9,7 +9,6 @@
 #define KEY_POLL_INTERVAL_MS 1
 
 #define TEST_KEY NRF_GPIO_PIN_MAP(1, 2)
-#define DEBUG_LED NRF_GPIO_PIN_MAP(1, 15)
 static int test_key_state = 0;
 
 const nrf_drv_timer_t KEY_TIMER = NRF_DRV_TIMER_INSTANCE(0);
@@ -17,12 +16,6 @@ NRF_RINGBUF_DEF(key_events, 512);
 
 static void key_matrix_poll(void) {
 	int new_state = nrf_gpio_pin_read(TEST_KEY);
-	if (new_state) {
-		nrf_gpio_pin_set(DEBUG_LED);
-		//nrf_gpio_pin_clear(DEBUG_LED);
-	} else {
-		nrf_gpio_pin_clear(DEBUG_LED);
-	}
 
 	CRITICAL_REGION_ENTER();
 	if (new_state != test_key_state) {
@@ -68,8 +61,6 @@ void key_matrix_init(void) {
 	/* initialize SPI */
 	/* TODO */
 	nrf_gpio_cfg_input(TEST_KEY, NRF_GPIO_PIN_PULLUP);
-	nrf_gpio_cfg_output(DEBUG_LED);
-	nrf_gpio_pin_set(DEBUG_LED);
 
 	/* we want to poll the key matrix periodically using a timer */
 	/*ret = nrf_drv_timer_init(&KEY_TIMER, &timer_cfg, key_timer_handler);

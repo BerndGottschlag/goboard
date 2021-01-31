@@ -139,6 +139,8 @@ set(SRC
 	src/key_matrix.c
 	src/key_matrix.h
 	src/main.c
+	src/mode_led.c
+	src/mode_led.h
 	src/mode_switch.c
 	src/mode_switch.h
 	src/power_supply.c

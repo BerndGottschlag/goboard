@@ -1,5 +1,6 @@
 
 #include "key_matrix.h"
+#include "mode_led.h"
 #include "mode_switch.h"
 #include "power_supply.h"
 #include "usb.h"
@@ -62,6 +63,7 @@ static void switch_off(void) {
 	NRF_LOG_INFO("switching off");
 	power_supply_prepare_system_off();
 	mode_switch_prepare_system_off();
+	mode_led_prepare_system_off();
 	nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_GOTO_SYSOFF);
 }
 
@@ -90,11 +92,24 @@ static void check_power_off_reset(void) {
 	}
 }
 
+static void update_mode_led(void) {
+	/* TODO: check USB/bluetooth connection and pairing state */
+	if (mode_switch_get() == MODE_SWITCH_BT1 ||
+			mode_switch_get() == MODE_SWITCH_BT2) {
+		mode_led_set(MODE_LED_CONNECTED);
+	} else if (power_supply_get_mode() == POWER_SUPPLY_CHARGING) {
+		mode_led_set(MODE_LED_CHARGING);
+	}
+
+}
+
 static void on_power_supply_state_change(void) {
 	check_power_off_reset();
 
 	/* report the new battery charge via bluetooth */
 	/* TODO */
+
+	update_mode_led();
 }
 
 static void on_mode_switch_change(void) {
@@ -103,6 +118,8 @@ static void on_mode_switch_change(void) {
 	/* if we just switched between the two bluetooth device sets, we need to
 	 * notify the bluetooth keyboard code */
 	/* TODO */
+
+	update_mode_led();
 }
 
 int main(void) {
@@ -119,8 +136,11 @@ int main(void) {
 
 	check_power_off_reset();
 
-#if 0
 	/* initialize everything else */
+	mode_led_init();
+	update_mode_led();
+
+#if 0
 	key_matrix_init();
 	/* TODO */
 

@@ -8,7 +8,7 @@
 
 /* TODO: use the correct pins */
 #define BLUETOOTH1_PIN NRF_GPIO_PIN_MAP(0, 27)
-#define BLUETOOTH2_PIN NRF_GPIO_PIN_MAP(0, 11)
+#define BLUETOOTH2_PIN NRF_GPIO_PIN_MAP(0, 6)
 
 static mode_switch_change_listener_t change_listener;
 
@@ -59,6 +59,7 @@ static void pin_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action) 
 void mode_switch_init(mode_switch_change_listener_t listener) {
 	ret_code_t ret;
 	nrf_drv_gpiote_in_config_t config = GPIOTE_CONFIG_IN_SENSE_TOGGLE(false);
+	config.pull = NRF_GPIO_PIN_NOPULL;
 	ret = nrf_drv_gpiote_in_init(BLUETOOTH1_PIN, &config, pin_handler);
 	APP_ERROR_CHECK(ret);
 	ret = nrf_drv_gpiote_in_init(BLUETOOTH2_PIN, &config, pin_handler);
