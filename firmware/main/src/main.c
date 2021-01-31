@@ -1,12 +1,13 @@
 
-#include "battery.h"
 #include "key_matrix.h"
 #include "mode_switch.h"
+#include "power_supply.h"
 #include "usb.h"
 
 #include "app_scheduler.h"
 #include "app_timer.h"
 #include "nrf_drv_clock.h"
+#include "nrf_drv_gpiote.h"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
@@ -15,18 +16,40 @@
 #define SCHED_MAX_EVENT_DATA_SIZE APP_TIMER_SCHED_EVENT_DATA_SIZE
 #define SCHED_QUEUE_SIZE 20
 
-/**
- * Checks whether the system should be placed in "System OFF" mode (because the
- * battery is low or because the device was switched off via the mode switch).
+/* TODO: mode LED */
+
+/*
+ * mode LED states:
+ * - off: keyboard off
+ * - on: keyboard connected or charging
+ * - slow blinking: not connected
+ * - fast blinking: pairing
  */
-static int should_shut_off(void) {
-	if (battery_is_low() && !usb_is_connected()) {
-		return 1;
-	}
-	if (mode_switch_is_off() && !usb_is_connected()) {
-		return 1;
-	}
-	return 0;
+
+static enum mode_switch_mode current_mode;
+
+static void basic_init(void) {
+	ret_code_t ret;
+
+	ret = NRF_LOG_INIT(NULL);
+	APP_ERROR_CHECK(ret);
+	NRF_LOG_DEFAULT_BACKENDS_INIT();
+
+	ret = nrf_drv_clock_init();
+	APP_ERROR_CHECK(ret);
+	nrf_drv_clock_lfclk_request(NULL);
+	while (!nrf_drv_clock_lfclk_is_running()) {}
+
+	ret = app_timer_init();
+	APP_ERROR_CHECK(ret);
+
+	ret = nrf_pwr_mgmt_init();
+	APP_ERROR_CHECK(ret);
+
+	ret = nrf_drv_gpiote_init();
+	APP_ERROR_CHECK(ret);
+
+	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 }
 
 /**
@@ -36,56 +59,80 @@ static int should_shut_off(void) {
  * can wake the system up again.
  */
 static void switch_off(void) {
-	/* TODO */
-	for (;;) {}
+	NRF_LOG_INFO("switching off");
+	power_supply_prepare_system_off();
+	mode_switch_prepare_system_off();
+	nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_GOTO_SYSOFF);
 }
 
-static void clock_init(void) {
-	ret_code_t ret;
+static void reset(void) {
+	nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_RESET);
+}
 
-	ret = nrf_drv_clock_init();
-	APP_ERROR_CHECK(ret);
-	nrf_drv_clock_lfclk_request(NULL);
+static void check_power_off_reset(void) {
+	enum power_supply_mode ps = power_supply_get_mode();
+	enum mode_switch_mode mode = mode_switch_get();
 
-	while (!nrf_drv_clock_lfclk_is_running()) {}
+	/* we should power off if the battery is low and we are not charging */
+	if (ps == POWER_SUPPLY_LOW) {
+		switch_off();
+	}
+	/* we should power off if the mode is off/USB and USB is not connected */
+	if (mode == MODE_SWITCH_OFF_USB && !usb_is_connected()) {
+		switch_off();
+	}
+	/* we should reset if the mode changed between USB and bluetooth */
+	if (current_mode == MODE_SWITCH_OFF_USB && mode != MODE_SWITCH_OFF_USB) {
+		reset();
+	}
+	if (current_mode != MODE_SWITCH_OFF_USB && mode == MODE_SWITCH_OFF_USB) {
+		reset();
+	}
+}
+
+static void on_power_supply_state_change(void) {
+	check_power_off_reset();
+
+	/* report the new battery charge via bluetooth */
+	/* TODO */
+}
+
+static void on_mode_switch_change(void) {
+	check_power_off_reset();
+
+	/* if we just switched between the two bluetooth device sets, we need to
+	 * notify the bluetooth keyboard code */
+	/* TODO */
 }
 
 int main(void) {
-	ret_code_t ret;
+	basic_init();
+	NRF_LOG_INFO("goboard starting");
 
-	ret = NRF_LOG_INIT(NULL);
-	APP_ERROR_CHECK(ret);
-	NRF_LOG_DEFAULT_BACKENDS_INIT();
+	/* initialize power supply and mode switch - we need to initialize at
+	 * least everything here that is required to wake up again */
+	power_supply_init(on_power_supply_state_change);
+	mode_switch_init(on_mode_switch_change);
+	/* we need the current mode to be valid during check_power_off_reset()
+	 * already */
+	current_mode = mode_switch_get();
 
-	clock_init();
-	ret = app_timer_init();
-	APP_ERROR_CHECK(ret);
-	ret = nrf_pwr_mgmt_init();
-	APP_ERROR_CHECK(ret);
-	APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
+	check_power_off_reset();
 
-	NRF_LOG_INFO("goboard starting...");
-
-	/* initialize battery, USB and mode switch - we need to initialize at
-	 * least everything that is required to wake up again */
-	battery_init();
-	mode_switch_init();
-	usb_init(); /* TODO: required? */
-
-	/* shut down again if the battery is low and USB is not connected */
-	if (should_shut_off()) {
-		battery_prepare_system_off();
-		mode_switch_prepare_system_off();
-		usb_prepare_system_off();
-		switch_off();
-	}
-
+#if 0
 	/* initialize everything else */
 	key_matrix_init();
 	/* TODO */
 
 	for (;;) {
 		usb_poll();
+		app_sched_execute();
+		if (NRF_LOG_PROCESS() == false) {
+			nrf_pwr_mgmt_run();
+		}
+	}
+#endif
+	for (;;) {
 		app_sched_execute();
 		if (NRF_LOG_PROCESS() == false) {
 			nrf_pwr_mgmt_run();

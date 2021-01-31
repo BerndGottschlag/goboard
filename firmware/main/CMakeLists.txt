@@ -136,13 +136,13 @@ add_library(nrf52_sdk STATIC ${SDK_SRC})
 set_property(TARGET nrf52_sdk PROPERTY C_STANDARD 11)
 
 set(SRC
-	src/battery.c
-	src/battery.h
 	src/key_matrix.c
 	src/key_matrix.h
 	src/main.c
 	src/mode_switch.c
 	src/mode_switch.h
+	src/power_supply.c
+	src/power_supply.h
 	src/usb.c
 	src/usb.h
 
@@ -196,7 +196,6 @@ include_directories(
 	${SDK_PATH}/modules/nrfx/mdk
 )
 
-#set(LINKER_SCRIPT "${MDK_PATH}/nrf52840_xxaa.ld")
 set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
 link_directories("${MDK_PATH}")
 add_executable(goboard-main ${SRC} ${LINKER_SCRIPT})
