@@ -3097,10 +3097,10 @@
       (reference "#PWR0150") (unit 1) (value "GND") (footprint "")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/210515f0-c0f1-4f80-b920-f3ce9df10676"
-      (reference "BT1") (unit 1) (value "NiMH") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal")
+      (reference "BT1") (unit 1) (value "NiMH") (footprint "Connector_JST:JST_XH_S2B-XH-A_1x02_P2.50mm_Horizontal")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/eda3ac85-180c-4149-a69c-6ee2b133cab0"
-      (reference "BT2") (unit 1) (value "NiMH") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal")
+      (reference "BT2") (unit 1) (value "NiMH") (footprint "Connector_JST:JST_XH_S2B-XH-A_1x02_P2.50mm_Horizontal")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/93790205-a758-4e90-8406-7e815cb8469c"
       (reference "C8") (unit 1) (value "10uF/6.3V") (footprint "Capacitor_SMD:C_0805_2012Metric")
