@@ -329,6 +329,8 @@
   (junction (at 158.75 127) (diameter 1.016) (color 0 0 0 0))
   (junction (at 158.75 171.45) (diameter 0.9144) (color 0 0 0 0))
 
+  (no_connect (at 146.05 83.82) (uuid ac727485-d4d5-4211-9879-06517280a643))
+
   (wire (pts (xy 71.12 161.29) (xy 71.12 158.75))
     (stroke (width 0) (type solid) (color 0 0 0 0))
     (uuid 3c6bb171-a622-4a12-a45a-e948fb2c9a47)
