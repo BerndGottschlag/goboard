@@ -3039,9 +3039,6 @@
     (path "/6ef23857-23de-44e2-ab0d-92ef0bfe30b4/bd1ecbe1-4f71-49c2-aa4c-b2e67c4ed577"
       (reference "U4") (unit 1) (value "74LV165") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
     )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/c13ba79c-ae64-4b9d-8123-a7ed738a1064"
-      (reference "#PWR0122") (unit 1) (value "GND") (footprint "")
-    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/481ca36e-2d56-4ed3-8c05-f65e606c1b2f"
       (reference "#PWR0125") (unit 1) (value "GND") (footprint "")
     )
@@ -3086,9 +3083,6 @@
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/3165c945-d834-4b10-b055-87732bcc493e"
       (reference "#PWR0139") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/ce7ba401-22e4-4966-a710-7f05ae991ef1"
-      (reference "#PWR0140") (unit 1) (value "GND") (footprint "")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/94c3f1f0-9419-428a-a6f7-165b4feb93a2"
       (reference "#PWR0141") (unit 1) (value "+3.3V") (footprint "")
@@ -3187,13 +3181,13 @@
       (reference "R18") (unit 1) (value "30") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/0c97694b-516e-4ec3-b4a1-2fae81dd0262"
-      (reference "R19") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R19") (unit 1) (value "100K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/78c02ca2-aa30-4480-8ca6-63a644f03ebe"
       (reference "R21") (unit 1) (value "0") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/a143d090-98da-4a94-b7af-65d7356fe944"
-      (reference "R29") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R29") (unit 1) (value "100K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/f6e90b97-7f06-4011-bca1-7aebee2af537"
       (reference "R30") (unit 1) (value "4.7K") (footprint "Resistor_SMD:R_0603_1608Metric")
