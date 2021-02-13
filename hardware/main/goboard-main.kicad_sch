@@ -3111,6 +3111,9 @@
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/5fa904d7-a4b2-4a54-90f3-8b3758db33b7"
       (reference "D48") (unit 1) (value "BAT54C") (footprint "Package_TO_SOT_SMD:SOT-23")
     )
+    (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/da28c1fe-b750-4f2b-8c06-75fe1ae9c55a"
+      (reference "F?") (unit 1) (value "Polyfuse") (footprint "Fuse:Fuse_1210_3225Metric_Pad1.42x2.65mm_HandSolder")
+    )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/5fea4ca1-5eda-4b0d-ad2d-3c4a32e32f6e"
       (reference "JP1") (unit 1) (value "Battery") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal")
     )
