@@ -11,5 +11,7 @@ enum mode_led_status {
 void mode_led_init();
 void mode_led_set(enum mode_led_status status);
 
+void mode_led_prepare_system_off(void);
+
 #endif
 

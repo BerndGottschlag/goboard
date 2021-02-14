@@ -35,7 +35,9 @@ void mode_led_init() {
 
 	nrf_gpio_cfg_output(MODE_LED);
 
-	ret = app_timer_create(&blink_timer, APP_TIMER_MODE_SINGLE_SHOT, blink_timer_handler);
+	ret = app_timer_create(&blink_timer,
+	                       APP_TIMER_MODE_SINGLE_SHOT,
+	                       blink_timer_handler);
 	APP_ERROR_CHECK(ret);
 }
 
