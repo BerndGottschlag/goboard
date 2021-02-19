@@ -14,9 +14,11 @@
 #include "mode_switch.h"
 #include "power_supply.h"
 #include "usb.h"
+#include "unifying.h"
 
 #include "app_scheduler.h"
 #include "app_timer.h"
+#include "nrf_crypto.h"
 #include "nrf_drv_clock.h"
 #include "nrf_drv_gpiote.h"
 #include "nrf_log.h"
@@ -138,6 +140,8 @@ static void on_mode_switch_change(void) {
  * Main entry point of the firmware.
  */
 int main(void) {
+	ret_code_t ret;
+
 	basic_init();
 	NRF_LOG_INFO("goboard starting");
 
@@ -156,6 +160,9 @@ int main(void) {
 	update_mode_led();
 	keys_init();
 
+	ret = nrf_crypto_init();
+	APP_ERROR_CHECK(ret);
+	unifying_init();
 #if 0
 	key_matrix_init();
 	/* TODO */

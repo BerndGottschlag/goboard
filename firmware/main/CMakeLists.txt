@@ -48,6 +48,33 @@ set(SDK_SRC
 	${SDK_PATH}/components/libraries/atomic_fifo/nrf_atfifo.c
 	${SDK_PATH}/components/libraries/atomic_flags/nrf_atflags.c
 	${SDK_PATH}/components/libraries/balloc/nrf_balloc.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_aead.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_aes.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_aes_shared.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_ecc.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_ecdh.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_ecdsa.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_eddsa.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_error.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_hash.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_hkdf.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_hmac.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_init.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_rng.c
+	${SDK_PATH}/components/libraries/crypto/nrf_crypto_shared.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_aes_aead.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_aes.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_chacha_poly_aead.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_ecc.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_ecdh.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_ecdsa.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_eddsa.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_hash.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_hmac.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_init.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_mutex.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_rng.c
+	${SDK_PATH}/components/libraries/crypto/backend/cc310/cc310_backend_shared.c
 	${SDK_PATH}/components/libraries/experimental_section_vars/nrf_section_iter.c
 	${SDK_PATH}/components/libraries/fds/fds.c
 	${SDK_PATH}/components/libraries/fstorage/nrf_fstorage.c
@@ -77,6 +104,7 @@ set(SDK_SRC
 	${SDK_PATH}/components/libraries/usbd/app_usbd_string_desc.c
 	${SDK_PATH}/components/libraries/usbd/class/hid/app_usbd_hid.c
 	${SDK_PATH}/components/libraries/usbd/class/hid/kbd/app_usbd_hid_kbd.c
+	${SDK_PATH}/components/proprietary_rf/esb/nrf_esb.c
 	${SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c
 	${SDK_PATH}/components/softdevice/common/nrf_sdh.c
 	${SDK_PATH}/components/softdevice/common/nrf_sdh_soc.c
@@ -146,6 +174,10 @@ set(SRC
 	src/mode_switch.h
 	src/power_supply.c
 	src/power_supply.h
+	src/unifying.c
+	src/unifying.h
+	src/unifying_radio.c
+	src/unifying_radio.h
 	src/usb.c
 	src/usb.h
 
@@ -167,6 +199,16 @@ include_directories(
 	${SDK_PATH}/components/libraries/atomic_fifo
 	${SDK_PATH}/components/libraries/atomic_flags
 	${SDK_PATH}/components/libraries/balloc
+	${SDK_PATH}/components/libraries/crypto
+	${SDK_PATH}/components/libraries/crypto/backend/cc310
+	${SDK_PATH}/components/libraries/crypto/backend/cc310_bl
+	${SDK_PATH}/components/libraries/crypto/backend/cifra
+	${SDK_PATH}/components/libraries/crypto/backend/mbedtls
+	${SDK_PATH}/components/libraries/crypto/backend/micro_ecc
+	${SDK_PATH}/components/libraries/crypto/backend/nrf_hw
+	${SDK_PATH}/components/libraries/crypto/backend/nrf_sw
+	${SDK_PATH}/components/libraries/crypto/backend/oberon
+	${SDK_PATH}/components/libraries/crypto/backend/optiga
 	${SDK_PATH}/components/libraries/delay
 	${SDK_PATH}/components/libraries/experimental_section_vars
 	${SDK_PATH}/components/libraries/fds
@@ -179,17 +221,21 @@ include_directories(
 	${SDK_PATH}/components/libraries/queue
 	${SDK_PATH}/components/libraries/ringbuf
 	${SDK_PATH}/components/libraries/scheduler
+	${SDK_PATH}/components/libraries/stack_info
 	${SDK_PATH}/components/libraries/timer
 	${SDK_PATH}/components/libraries/util
 	${SDK_PATH}/components/libraries/usbd
 	${SDK_PATH}/components/libraries/usbd/class/hid
 	${SDK_PATH}/components/libraries/usbd/class/hid/kbd
 	${SDK_PATH}/components/libraries/strerror
+	${SDK_PATH}/components/proprietary_rf/esb
 	${SDK_PATH}/components/softdevice/common
 	${SDK_PATH}/components/softdevice/s140/headers
 	${SDK_PATH}/components/softdevice/s140/headers/nrf52
 	${SDK_PATH}/components/toolchain/cmsis/include
 	${SDK_PATH}/external/fprintf
+	${SDK_PATH}/external/mbedtls/include
+	${SDK_PATH}/external/nrf_cc310/include
 	${SDK_PATH}/external/utf_converter
 	${SDK_PATH}/integration/nrfx
 	${SDK_PATH}/integration/nrfx/legacy
@@ -200,9 +246,12 @@ include_directories(
 )
 
 set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/linker.ld")
-link_directories("${MDK_PATH}")
+link_directories(
+	"${MDK_PATH}"
+	"${SDK_PATH}/external/nrf_cc310/lib/cortex-m4/hard-float"
+)
 add_executable(goboard-main ${SRC} ${LINKER_SCRIPT})
 set_property(TARGET goboard-main PROPERTY C_STANDARD 11)
 target_compile_options(goboard-main PRIVATE -Wall -Wextra -Wno-unused-parameter -Wno-expansion-to-defined)
-target_link_libraries(goboard-main nrf52_sdk gcc)
+target_link_libraries(goboard-main nrf52_sdk nrf_cc310_0.9.13 gcc)
 set_target_properties(goboard-main PROPERTIES LINK_FLAGS "-T ${LINKER_SCRIPT}")
