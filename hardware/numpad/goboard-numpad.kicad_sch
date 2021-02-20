@@ -864,7 +864,7 @@
     (uuid 15258cf0-82ec-42ff-b81f-96479422bf94)
     (property "Reference" "J1" (id 0) (at 52.07 111.76 0))
     (property "Value" "Conn_02x05_Top_Bottom" (id 1) (at 52.07 109.22 0))
-    (property "Footprint" "footprints:programming_port_st_link_clone" (id 2) (at 50.8 100.33 0)
+    (property "Footprint" "footprints:programming_port_st_link_clone_without_silkscreen_outline" (id 2) (at 50.8 100.33 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 50.8 100.33 0)
@@ -1036,7 +1036,7 @@
       (reference "C1") (unit 1) (value "0,1u") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
     (path "/15258cf0-82ec-42ff-b81f-96479422bf94"
-      (reference "J1") (unit 1) (value "Conn_02x05_Top_Bottom") (footprint "footprints:programming_port_st_link_clone")
+      (reference "J1") (unit 1) (value "Conn_02x05_Top_Bottom") (footprint "footprints:programming_port_st_link_clone_without_silkscreen_outline")
     )
     (path "/f8d99eaa-eaec-4e45-8350-19b611a4fda8"
       (reference "J2") (unit 1) (value "Conn_01x01") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical")
