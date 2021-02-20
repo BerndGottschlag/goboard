@@ -1168,7 +1168,13 @@
       (reference "C5") (unit 1) (value "10u") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/57b040a2-5a62-4a91-a02e-69a209e228e4"
-      (reference "D11") (unit 1) (value "Numlock") (footprint "Diode_THT:D_DO-34_SOD68_P2.54mm_Vertical_AnodeUp")
+      (reference "D11") (unit 1) (value "Numlock") (footprint "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
+    )
+    (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/9778dd62-698d-4d18-b785-4ec7e16a38fa"
+      (reference "J4") (unit 1) (value "Conn_01x02_Female") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/dec1914b-9f36-41ec-81c2-a153800a9673"
+      (reference "J5") (unit 1) (value "Conn_01x02_Male") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/ee65c483-286d-4c92-b4d5-61811a802997"
       (reference "R1") (unit 1) (value "47") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
