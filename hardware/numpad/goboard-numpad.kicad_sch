@@ -1168,16 +1168,10 @@
       (reference "C5") (unit 1) (value "10u") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/57b040a2-5a62-4a91-a02e-69a209e228e4"
-      (reference "D11") (unit 1) (value "Numlock") (footprint "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
-    )
-    (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/04319d68-96cc-4a9d-9a0f-6d89c740f280"
-      (reference "D12") (unit 1) (value "Power") (footprint "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder")
+      (reference "D11") (unit 1) (value "Numlock") (footprint "Diode_THT:D_DO-34_SOD68_P2.54mm_Vertical_AnodeUp")
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/ee65c483-286d-4c92-b4d5-61811a802997"
       (reference "R1") (unit 1) (value "47") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
-    )
-    (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/716b268e-e394-4e32-92a1-cac68ab41ccc"
-      (reference "R2") (unit 1) (value "47") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/ebd1ec19-50d9-40b1-97f5-3b067e818716"
       (reference "U1") (unit 1) (value "STM32L011F4Px") (footprint "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
