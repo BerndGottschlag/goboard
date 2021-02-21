@@ -1,3 +1,9 @@
+/**
+ * @defgroup key_matrix Key Matrix
+ * @addtogroup key_matrix
+ * Key matrix polling and debouncing.
+ * @{
+ */
 #ifndef KEY_MATRIX_H_INCLUDED
 #define KEY_MATRIX_H_INCLUDED
 
@@ -24,4 +30,7 @@ void key_matrix_reset(void);
 
 
 #endif
+/**
+ * @}
+ */
 

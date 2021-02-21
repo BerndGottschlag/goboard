@@ -1,4 +1,9 @@
-
+/**
+ * @defgroup mode_switch Mode Switch
+ * @addtogroup mode_switch
+ * Switch to switch between the three main modes of the device.
+ * @{
+ */
 #ifndef MODE_SWITCH_H_INCLUDED
 #define MODE_SWITCH_H_INCLUDED
 
@@ -23,5 +28,7 @@ enum mode_switch_mode mode_switch_get(void);
 void mode_switch_prepare_system_off(void);
 
 #endif
-
+/**
+ * @}
+ */
 

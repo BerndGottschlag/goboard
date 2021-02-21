@@ -1,4 +1,9 @@
-
+/**
+ * @defgroup usb USB
+ * @addtogroup usb
+ * USB keyboard implementation.
+ * @{
+ */
 #ifndef USB_H_INCLUDED
 #define USB_H_INCLUDED
 
@@ -9,5 +14,7 @@ void usb_prepare_system_off(void);
 void usb_poll(void);
 
 #endif
-
+/**
+ * @}
+ */
 

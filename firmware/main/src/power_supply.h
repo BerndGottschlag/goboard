@@ -1,3 +1,9 @@
+/**
+ * @defgroup power_supply Power Supply
+ * @addtogroup power_supply
+ * Power supply and battery management.
+ * @{
+ */
 #ifndef POWER_SUPPLY_H_INCLUDED
 #define POWER_SUPPLY_H_INCLUDED
 
@@ -47,4 +53,7 @@ uint8_t battery_charge(void);
 void power_supply_prepare_system_off(void);
 
 #endif
+/**
+ * @}
+ */
 

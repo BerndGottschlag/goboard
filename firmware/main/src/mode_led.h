@@ -1,3 +1,9 @@
+/**
+ * @defgroup mode_led Mode LED
+ * @addtogroup mode_led
+ * LED to display the current state of the device.
+ * @{
+ */
 #ifndef MODE_LED_H_INCLUDED
 #define MODE_LED_H_INCLUDED
 
@@ -14,4 +20,7 @@ void mode_led_set(enum mode_led_status status);
 void mode_led_prepare_system_off(void);
 
 #endif
+/**
+ * @}
+ */
 

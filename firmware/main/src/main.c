@@ -1,3 +1,21 @@
+/**
+ * @mainpage GoBoard USB/Wireless Keyboard
+ *
+ * This project implements the firmware for the main keyboard PCB. The firmware
+ * implements an [USB keyboard](@ref usb) as well as two wireless keyboard
+ * configurations, selectable with a [mode switch](@ref mode_switch).
+ *
+ * See the [list of modules](modules.html) for documentation of the different
+ * parts of the firmware.
+ *
+ * @addtogroup main
+ * Main logic of the keyboard firmware.
+ *
+ * The functions in this file implement global initialization and switching
+ * between the different operating modes (off/USB and two sets of radio
+ * connections).
+ * @{
+ */
 
 #include "key_matrix.h"
 #include "mode_led.h"
@@ -124,6 +142,9 @@ static void on_mode_switch_change(void) {
 	update_mode_led();
 }
 
+/**
+ * Main entry point of the firmware.
+ */
 int main(void) {
 	basic_init();
 	NRF_LOG_INFO("goboard starting");
@@ -161,3 +182,7 @@ int main(void) {
 		}
 	}
 }
+/**
+ * @}
+ */
+
