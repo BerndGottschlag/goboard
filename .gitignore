@@ -7,3 +7,9 @@ goboard-numpad-backups
 _autosave-*
 firmware/3rdparty/nrf5-sdk
 firmware/main/build
+
+# ignore kicad bom files and associated files:
+goboard-numpad.csv
+goboard-numpad.xml
+goboard-main.csv
+goboard-main.xml
