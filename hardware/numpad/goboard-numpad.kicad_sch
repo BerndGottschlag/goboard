@@ -674,7 +674,7 @@
   (symbol (lib_id "power:VCC") (at 41.91 119.38 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 3032a565-1b7e-4c02-98b0-0da7660dc986)
-    (property "Reference" "#PWR?" (id 0) (at 41.91 123.19 0)
+    (property "Reference" "#PWR0115" (id 0) (at 41.91 123.19 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "VCC" (id 1) (at 42.2783 115.0556 0))
@@ -802,7 +802,7 @@
   (symbol (lib_id "Device:R") (at 41.91 125.73 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 11951edf-92e0-4cd6-abcd-c49336e8d01b)
-    (property "Reference" "R?" (id 0) (at 36.6838 125.73 90))
+    (property "Reference" "R2" (id 0) (at 36.6838 125.73 90))
     (property "Value" "10k" (id 1) (at 38.9825 125.73 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (id 2) (at 43.688 125.73 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -1107,7 +1107,7 @@
       (reference "#PWR0113") (unit 1) (value "GND") (footprint "")
     )
     (path "/3032a565-1b7e-4c02-98b0-0da7660dc986"
-      (reference "#PWR?") (unit 1) (value "VCC") (footprint "")
+      (reference "#PWR0115") (unit 1) (value "VCC") (footprint "")
     )
     (path "/07e3d3ae-4259-4c4b-b7e9-b71a69d216b3"
       (reference "C1") (unit 1) (value "0,1u") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
@@ -1121,11 +1121,11 @@
     (path "/2aaa1463-c439-4735-8359-1fc80c6092e7"
       (reference "J3") (unit 1) (value "Conn_01x05") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical")
     )
+    (path "/11951edf-92e0-4cd6-abcd-c49336e8d01b"
+      (reference "R2") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
+    )
     (path "/480f8756-d1de-4a1e-92bf-b0bdd56c4c78"
       (reference "R3") (unit 1) (value "1k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
-    )
-    (path "/11951edf-92e0-4cd6-abcd-c49336e8d01b"
-      (reference "R?") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
     (path "/9efc1083-5914-419f-bcd0-741b18f0726c"
       (reference "SW1") (unit 1) (value "SW_Push") (footprint "Button_Switch_SMD:SW_SPST_CK_RS282G05A3")
@@ -1236,7 +1236,7 @@
       (reference "#PWR0112") (unit 1) (value "GND") (footprint "")
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/29b831ea-d2be-48e7-b752-60c9497c4c1c"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+      (reference "#PWR0116") (unit 1) (value "GND") (footprint "")
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/4e02c9aa-d56e-4c95-8573-62cac8b9c2d5"
       (reference "C2") (unit 1) (value "100n") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
