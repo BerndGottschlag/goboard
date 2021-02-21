@@ -7,14 +7,6 @@
  *
  * See the [list of modules](modules.html) for documentation of the different
  * parts of the firmware.
- *
- * @addtogroup main
- * Main logic of the keyboard firmware.
- *
- * The functions in this file implement global initialization and switching
- * between the different operating modes (off/USB and two sets of radio
- * connections).
- * @{
  */
 
 #include "key_matrix.h"
@@ -182,7 +174,4 @@ int main(void) {
 		}
 	}
 }
-/**
- * @}
- */
 

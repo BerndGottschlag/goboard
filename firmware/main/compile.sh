@@ -10,6 +10,9 @@ then
 fi
 make -j`nproc`
 
+# regenerate the documentation to show documentation warnings
+doxygen > /dev/null
+
 # show the size of the application
 arm-none-eabi-size goboard-main
 
