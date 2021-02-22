@@ -968,7 +968,7 @@
     (property "Reference" "C1" (id 0) (at 42.545 147.32 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "0,1u" (id 1) (at 42.545 149.86 0)
+    (property "Value" "100n" (id 1) (at 42.545 149.86 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" (id 2) (at 39.7002 152.4 0)
@@ -977,7 +977,7 @@
     (property "Datasheet" "~" (id 3) (at 38.735 148.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Mouser" "581-0603YC104MAT4A" (id 4) (at 38.735 148.59 0)
+    (property "Mouser" "581-0603YC104MAT4A " (id 4) (at 38.735 148.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Part Name" "AVX 0603YC104MAT4A" (id 5) (at 38.735 148.59 0)
@@ -1215,7 +1215,7 @@
       (reference "#PWR0115") (unit 1) (value "VCC") (footprint "")
     )
     (path "/07e3d3ae-4259-4c4b-b7e9-b71a69d216b3"
-      (reference "C1") (unit 1) (value "0,1u") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
+      (reference "C1") (unit 1) (value "100n") (footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder")
     )
     (path "/2f5f2715-b384-4980-89ad-44e7d3193b72"
       (reference "J1") (unit 1) (value "Conn_02x05_Odd_Even") (footprint "footprints:programming_port_st_link_clone_without_silkscreen_outline")
