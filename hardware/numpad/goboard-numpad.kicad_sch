@@ -1367,8 +1367,8 @@
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/ee65c483-286d-4c92-b4d5-61811a802997"
       (reference "R1") (unit 1) (value "47") (footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder")
     )
-    (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/ebd1ec19-50d9-40b1-97f5-3b067e818716"
-      (reference "U1") (unit 1) (value "STM32L011F4Px") (footprint "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
+    (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/00b7a2d5-0a36-433a-968f-281b569c4c94"
+      (reference "U1") (unit 1) (value "STM32L031F6Px") (footprint "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
     )
   )
 )
