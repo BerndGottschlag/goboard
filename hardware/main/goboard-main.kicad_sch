@@ -3426,7 +3426,7 @@
       (reference "Q1") (unit 1) (value "SSM3J338R") (footprint "Package_TO_SOT_SMD:SOT-23_Handsoldering")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/d03f882b-5019-401f-b5ae-71bf6964646c"
-      (reference "Q2") (unit 1) (value "BCP53") (footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
+      (reference "Q2") (unit 1) (value "BCP53") (footprint "Package_TO_SOT_SMD:SOT-223")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/873ed614-5cdc-40e1-bb8c-b5c1afeb0140"
       (reference "Q3") (unit 1) (value "SSM3J338R") (footprint "Package_TO_SOT_SMD:SOT-23_Handsoldering")
@@ -3504,7 +3504,7 @@
       (reference "R31") (unit 1) (value "10K") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/8606296f-c159-41ff-8ebc-94124cf15275"
-      (reference "U5") (unit 1) (value "AP2114HA-3.3") (footprint "Package_TO_SOT_SMD:SOT-223")
+      (reference "U5") (unit 1) (value "AP2114HA-3.3") (footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
     )
     (path "/a2ebbcc0-d455-4794-9fcf-d50cef56d65b/e2ffbf15-fba8-43c0-b6ec-539da0196b34"
       (reference "U7") (unit 1) (value "LM358") (footprint "Package_SO:TSSOP-8_4.4x3mm_P0.65mm")
