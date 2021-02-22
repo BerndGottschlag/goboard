@@ -20,6 +20,7 @@ static void power_supply_timer_handler(void *ctx) {
 }
 
 void power_supply_init(power_supply_state_change_listener_t listener) {
+#if 0
 	ret_code_t ret;
 
 	/* the resistor divider to measure battery voltage is power-gated to
@@ -48,6 +49,7 @@ void power_supply_init(power_supply_state_change_listener_t listener) {
 	APP_ERROR_CHECK(ret);
 
 	poll_battery();
+#endif
 }
 
 enum power_supply_mode power_supply_get_mode(void) {

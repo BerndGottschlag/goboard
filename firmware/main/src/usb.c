@@ -4,7 +4,7 @@
 #include "app_usbd.h"
 #include "app_usbd_hid_kbd.h"
 
-static int is_connected = 0;
+static int is_connected = false;
 
 static void keyboard_event_handler(const app_usbd_class_inst_t *inst,
                                    app_usbd_hid_user_event_t event) {
@@ -50,13 +50,13 @@ static void usb_state_event_handler(app_usbd_event_type_t event) {
 			app_usbd_disable();
 			break;
 		case APP_USBD_EVT_POWER_DETECTED:
-			is_connected = 1;
+			is_connected = true;
 			if (!nrf_drv_usbd_is_enabled()) {
 				app_usbd_enable();
 			}
 			break;
 		case APP_USBD_EVT_POWER_REMOVED:
-			is_connected = 0;
+			is_connected = false;
 			app_usbd_stop();
 			break;
 		case APP_USBD_EVT_POWER_READY:
@@ -89,7 +89,7 @@ void usb_init(void) {
 	APP_ERROR_CHECK(ret);
 }
 
-int usb_is_connected(void) {
+bool usb_is_connected(void) {
 	return is_connected;
 }
 

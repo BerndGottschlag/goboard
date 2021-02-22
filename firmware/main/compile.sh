@@ -3,6 +3,7 @@
 set -e
 
 # compile the main application
+mkdir -p build
 cd build
 if [ ! -f Makefile ]
 then
@@ -11,7 +12,10 @@ fi
 make -j`nproc`
 
 # regenerate the documentation to show documentation warnings
-doxygen > /dev/null
+(
+	cd ..
+	doxygen > /dev/null
+)
 
 # show the size of the application
 arm-none-eabi-size goboard-main
