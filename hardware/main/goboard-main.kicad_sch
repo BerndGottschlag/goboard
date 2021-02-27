@@ -3539,5 +3539,50 @@
     (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/3430b525-ffcf-45cb-acba-9e8f7e3f236c"
       (reference "H8") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
     )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/4c15c3f3-b474-4ac1-8483-14cd17cad1d3"
+      (reference "H9") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/ce2df40a-8e48-441c-b60a-916d871e70d9"
+      (reference "H10") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/d63a0bfc-474e-4560-ba01-5de77ab7e1ab"
+      (reference "H11") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/268b86c8-1bcd-42dd-807e-8afc672468ae"
+      (reference "H12") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/be89e350-c2be-47b8-9032-92e0684a5147"
+      (reference "H13") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/5057e365-4280-4ab9-a66f-3be5981e5643"
+      (reference "H14") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/50d4b4da-e8f0-4fa7-b722-f24c3a20faa8"
+      (reference "H15") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/d36e8fb6-1151-41ac-8f8e-841a8016bde3"
+      (reference "H16") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/f265112b-8132-41d1-bd8f-7762d469d113"
+      (reference "H17") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/9e27d7db-d05a-4ab4-b69a-03b69c93b83d"
+      (reference "H18") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/6b3edd09-e1e4-4f13-bce0-1aac2ab30f3b"
+      (reference "H19") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/af58d0f8-b313-4b1b-a99e-cc541982663a"
+      (reference "H20") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/b7108433-48fa-40c9-b101-d07511e1bbfb"
+      (reference "H21") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/255b4c52-abd1-417e-9a4d-e129e06f35df"
+      (reference "H22") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/a22eafd7-adc1-4e86-8a7b-16c80b2b4f7c/736003d3-5819-4064-b8cf-68fc07945a11"
+      (reference "H23") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
   )
 )
