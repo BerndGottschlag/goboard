@@ -9,7 +9,7 @@
  * parts of the firmware.
  */
 
-#include "key_matrix.h"
+#include "keys.h"
 #include "mode_led.h"
 #include "mode_switch.h"
 #include "power_supply.h"
@@ -154,6 +154,7 @@ int main(void) {
 	/* initialize everything else */
 	mode_led_init();
 	update_mode_led();
+	keys_init();
 
 #if 0
 	key_matrix_init();

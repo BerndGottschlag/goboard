@@ -11,6 +11,7 @@ add_compile_definitions(
 	FLOAT_ABI_HARD
 	SOFTDEVICE_PRESENT
 	S140
+	TEST_SETUP
 )
 
 # configure the compiler for the Cortex-M4F
@@ -138,6 +139,8 @@ set_property(TARGET nrf52_sdk PROPERTY C_STANDARD 11)
 set(SRC
 	src/key_matrix.c
 	src/key_matrix.h
+	src/keys.c
+	src/keys.h
 	src/main.c
 	src/mode_led.c
 	src/mode_led.h

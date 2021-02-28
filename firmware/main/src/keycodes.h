@@ -8,7 +8,7 @@
 #define KEYCODES_H_INCLUDED
 
 /**
- * Modifier bits in the HID modified byte.
+ * Modifier bits in the HID modifier byte.
  */
 enum modifier_key {
 	/** Left control key. */
