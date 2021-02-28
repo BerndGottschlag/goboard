@@ -1103,6 +1103,18 @@
     )
   )
 
+  (sheet (at 243.205 21.59) (size 37.465 16.51)
+    (stroke (width 0.001) (type solid) (color 132 0 132 1))
+    (fill (color 255 255 255 0.0000))
+    (uuid 4c67ad73-5e6f-4035-9a7f-f7592c55e47c)
+    (property "Sheet name" "Mounting Holes" (id 0) (at 243.205 20.9541 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "mounting_holes.kicad_sch" (id 1) (at 243.205 38.6089 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+  )
+
   (sheet (at 95.25 25.4) (size 57.15 127)
     (stroke (width 0.001) (type solid) (color 132 0 132 1))
     (fill (color 255 255 255 0.0000))
@@ -1175,6 +1187,7 @@
     (path "/" (page "1"))
     (path "/7cad715e-ebc0-41a5-9955-927ca63abd2f/" (page "2"))
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/" (page "3"))
+    (path "/4c67ad73-5e6f-4035-9a7f-f7592c55e47c/" (page "4"))
   )
 
   (symbol_instances
@@ -1369,6 +1382,21 @@
     )
     (path "/abe4c75b-07ed-49c0-b60b-44793e4dbe28/00b7a2d5-0a36-433a-968f-281b569c4c94"
       (reference "U1") (unit 1) (value "STM32L031F6Px") (footprint "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
+    )
+    (path "/4c67ad73-5e6f-4035-9a7f-f7592c55e47c/686ad52d-175f-4948-a446-6098284ce702"
+      (reference "H1") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/4c67ad73-5e6f-4035-9a7f-f7592c55e47c/0949fb46-5fea-405a-b192-1cadccaec76f"
+      (reference "H2") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/4c67ad73-5e6f-4035-9a7f-f7592c55e47c/51147556-2c4b-47aa-a309-d9d5d9edecb1"
+      (reference "H3") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/4c67ad73-5e6f-4035-9a7f-f7592c55e47c/2fd2ca89-2f68-480e-820c-86f6d116d475"
+      (reference "H4") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
+    )
+    (path "/4c67ad73-5e6f-4035-9a7f-f7592c55e47c/5697db13-10da-4041-8a98-5ca70b1ac21b"
+      (reference "H5") (unit 1) (value "MountingHole") (footprint "MountingHole:MountingHole_2.2mm_M2_Pad")
     )
   )
 )
