@@ -137,8 +137,6 @@ add_library(nrf52_sdk STATIC ${SDK_SRC})
 set_property(TARGET nrf52_sdk PROPERTY C_STANDARD 11)
 
 set(SRC
-	src/key_matrix.c
-	src/key_matrix.h
 	src/keys.c
 	src/keys.h
 	src/main.c
