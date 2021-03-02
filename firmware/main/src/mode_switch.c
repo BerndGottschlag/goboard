@@ -1,6 +1,8 @@
 
 #include "mode_switch.h"
 
+#include "config.h"
+
 #include "app_timer.h"
 #include "nrf_drv_gpiote.h"
 
@@ -20,9 +22,9 @@ APP_TIMER_DEF(debounce_timer);
 
 static enum mode_switch_mode mode_from_pins(bool bt1, bool bt2) {
 	if (bt1) {
-		return MODE_SWITCH_BT1;
+		return CONFIG_FIRST_PROFILE;
 	} else if (bt2) {
-		return MODE_SWITCH_BT2;
+		return CONFIG_FIRST_PROFILE;
 	} else {
 		return MODE_SWITCH_OFF_USB;
 	}
