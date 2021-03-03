@@ -1,6 +1,7 @@
 
 #include "unifying.h"
 #include "unifying_radio.h"
+#include "keycodes.h"
 
 /* TODO: still required? all radio work is done in unifying_radio.c */
 #include "app_error.h"
@@ -478,6 +479,8 @@ static void unifying_calculate_frame_key(uint8_t *frame_key, uint32_t counter_be
 /* TODO: remove */
 #define TEST_KEY NRF_GPIO_PIN_MAP(1, 2)
 static int test_key_state = 0;
+static int prev_test_key_state = 0;
+static int test_key_code = KEY_A;
 
 static void unifying_send_encrypted_keyboard_report(void) {
 	uint8_t plain_report[8] = {0};
@@ -486,7 +489,16 @@ static void unifying_send_encrypted_keyboard_report(void) {
 	uint8_t frame_key[16];
 	int i;
 
-	plain_report[1] = test_key_state ? 0x1b : 0;
+	if (!test_key_state && prev_test_key_state) {
+		/* select the next key */
+		test_key_code = test_key_code + 1;
+		if (test_key_code == KEY_RETURN) {
+			test_key_code = KEY_A;
+		}
+	}
+	prev_test_key_state = test_key_state;
+
+	plain_report[1] = test_key_state ? test_key_code : 0;
 	plain_report[7] = 0xc9;
 
 	encrypted_report[0] = 0;
