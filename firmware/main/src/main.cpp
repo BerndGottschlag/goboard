@@ -1,46 +1,41 @@
-/*
- * Copyright (c) 2016 Intel Corporation
- *
- * SPDX-License-Identifier: Apache-2.0
- */
 
-#include <zephyr.h>
-#include <device.h>
-#include <devicetree.h>
-#include <drivers/gpio.h>
+#include "mode_switch.hpp"
+#include "power_supply.hpp"
 
-/* 1000 msec = 1 sec */
-#define SLEEP_TIME_MS   1000
+#include <init.h>
+#include <power/power.h>
 
-#define LED0_NODE DT_ALIAS(led0)
+/// Disable System OFF - we only ever want to enter it manually.
+static int disable_system_off(const struct device *dev) {
+	(void)dev;
+	pm_ctrl_disable_state(POWER_STATE_DEEP_SLEEP_1);
+	return 0;
+}
+SYS_INIT(disable_system_off, PRE_KERNEL_2, 0);
 
-#if !DT_NODE_HAS_STATUS(LED0_NODE, okay)
-#error "devicetree has no led0 node"
-#endif
 
-#define LED0 DT_GPIO_LABEL(LED0_NODE, gpios)
-#define PIN DT_GPIO_PIN(LED0_NODE, gpios)
-#define FLAGS DT_GPIO_FLAGS(LED0_NODE, gpios)
+/// Main keyboard application.
+///
+/// The function initializes and runs the keyboard code. When the function
+/// exits, the device has been prepared for System OFF mode.
+static void run_keyboard() {
+	PowerSupply power_supply;
+	ModeSwitch mode_switch;
+	// TODO: Check whether we should immediately shut down again because the
+	// battery is low.
+
+	// TODO: Remaining keyboard code.
+}
 
 void main(void) {
-	const struct device *dev;
-	bool led_is_on = true;
-	int ret;
+	// TODO: Catch exceptions and reset the keyboard.
+	run_keyboard();
 
-	dev = device_get_binding(LED0);
-	if (dev == NULL) {
-		return;
-	}
-
-	ret = gpio_pin_configure(dev, PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
-	if (ret < 0) {
-		return;
-	}
-
-	while (1) {
-		gpio_pin_set(dev, PIN, (int)led_is_on);
-		led_is_on = !led_is_on;
-		k_msleep(SLEEP_TIME_MS);
-	}
+	// Enter System OFF.
+	printk("Switching off...\n");
+	pm_power_state_force(POWER_STATE_DEEP_SLEEP_1);
+	k_sleep(K_SECONDS(1));
+	printk("Shutdown failed.\n");
+	while (true);
 }
 
