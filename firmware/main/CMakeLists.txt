@@ -9,6 +9,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 set(SRC
+	src/keys.cpp
+	src/keys.hpp
 	src/mode_switch.cpp
 	src/mode_switch.hpp
 	src/power_supply.cpp
@@ -25,6 +27,8 @@ else()
 	# Device-only files.
 	set(SRC
 		${SRC}
+		src/key_matrix.cpp
+		src/key_matrix.hpp
 		src/main.cpp
 	)
 endif()
