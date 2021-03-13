@@ -19,31 +19,28 @@
 		zephyr,code-partition = &slot0_partition;
 	};
 
+	aliases {
+		caps-lock-led = &led0;
+		scroll-lock-led = &led1;
+		mode-pwm-led = &led2;
+	};
+
+
 	leds {
 		compatible = "gpio-leds";
-		caps_lock_led: led_0 {
+		led0: led_0 {
 			gpios = <&gpio0 33 0>;
 			label = "Caps Lock LED";
 		};
-		scroll_lock_led: led_1 {
+		led1: led_1 {
 			gpios = <&gpio0 34 0>;
 			label = "Scroll Lock LED";
-		};
-		mode_led: led_2 {
-			gpios = <&gpio0 35 0>;
-			label = "Mode LED";
 		};
 	};
 
 	pwmleds {
 		compatible = "pwm-leds";
-		caps_lock_pwm_led: pwm_led_0 {
-			pwms = <&pwm0 33>;
-		};
-		scroll_lock_pwm_led: pwm_led_1 {
-			pwms = <&pwm0 34>;
-		};
-		mode_pwm_led: pwm_led_2 {
+		led2: pwm_led_0 {
 			pwms = <&pwm0 35>;
 		};
 	};
@@ -60,6 +57,11 @@
 
 &gpio1 {
 	status = "okay";
+};
+
+&pwm0 {
+	status = "okay";
+	ch0-pin = <35>;
 };
 
 &uart0 {
