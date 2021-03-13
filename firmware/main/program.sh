@@ -1,2 +1,2 @@
 #!/bin/bash
-gdb -x openocd.gdb build/goboard-main
+arm-none-eabi-gdb -x openocd.gdb build/zephyr/zephyr.elf
