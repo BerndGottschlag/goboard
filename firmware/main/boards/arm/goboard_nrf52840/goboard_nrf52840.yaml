@@ -1,0 +1,12 @@
+identifier: goboard_nrf52840
+name: goboard-main-NRF52840
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+supported:
+  - usb_device
+  - ble
+  - ieee802154
+
