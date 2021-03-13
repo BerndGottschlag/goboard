@@ -8,6 +8,7 @@ _autosave-*
 firmware/3rdparty/nrf5-sdk
 firmware/main/build
 firmware/main/documentation/html
+.gdb_history
 
 # ignore kicad bom files and associated files:
 goboard-numpad.csv
