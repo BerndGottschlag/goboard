@@ -22,6 +22,8 @@ if("${BOARD}" MATCHES "native_posix_64")
 	set(SRC
 		${SRC}
 		src/main_testing.cpp
+		src/tests.cpp
+		src/tests.hpp
 	)
 else()
 	# Device-only files.
