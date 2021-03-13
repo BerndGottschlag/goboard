@@ -11,8 +11,7 @@ set print asm-demangle on
 set backtrace limit 32
 
 # detect unhandled exceptions, hard faults and panics
-break DefaultHandler
-break HardFault_Handler
+break z_arm_fault
 
 #break main
 
