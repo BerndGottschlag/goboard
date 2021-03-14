@@ -15,10 +15,10 @@ public:
 	/// must not assume any specific (serial) value of the shift registers
 	/// and should immediately call `transfer()` and `select_row()` to
 	/// select zero or one rows.
-	bool enable();
+	void enable();
 
 	/// Disables the key matrix and removes power from the shift registers.
-	bool disable();
+	void disable();
 
 	/// Serial-to-parallel operation on the row selection shift register.
 	void select_row();

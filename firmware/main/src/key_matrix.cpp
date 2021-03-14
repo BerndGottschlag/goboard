@@ -8,11 +8,11 @@ KeyMatrix::~KeyMatrix() {
 }
 
 
-bool KeyMatrix::enable() {
+void KeyMatrix::enable() {
 	// TODO
 }
 
-bool KeyMatrix::disable() {
+void KeyMatrix::disable() {
 	// TODO
 }
 
