@@ -1,38 +1,28 @@
-/**
- * @defgroup keycodes Key Codes
- * @addtogroup keycodes
- * Keycodes for USB HID.
- * @{
- */
-#ifndef KEYCODES_H_INCLUDED
-#define KEYCODES_H_INCLUDED
+#ifndef SCAN_CODE_HPP_INCLUDED
+#define SCAN_CODE_HPP_INCLUDED
 
-/**
- * Modifier bits in the HID modifier byte.
- */
-enum modifier_key {
-	/** Left control key. */
+///Modifier bits in the HID modifier byte.
+enum ModifierKey {
+	/// Left control key.
 	KEY_MOD_LCTRL = 0x1,
-	/** Left shift key. */
+	/// Left shift key.
 	KEY_MOD_LSHIFT = 0x2,
-	/** Left alt key. */
+	/// Left alt key.
 	KEY_MOD_LALT = 0x4,
-	/** Left meta key. */
+	/// Left meta key.
 	KEY_MOD_LMETA = 0x8,
-	/** Right control key. */
+	/// Right control key.
 	KEY_MOD_RCTRL = 0x10,
-	/** Right shift key. */
+	/// Right shift key.
 	KEY_MOD_RSHIFT = 0x20,
-	/** Right alt key. */
+	/// Right alt key.
 	KEY_MOD_RALT = 0x40,
-	/** Right meta key. */
+	/// Right meta key.
 	KEY_MOD_RMETA = 0x80
 };
 
-/**
- * HID key scan codes.
- */
-enum key_code {
+/// HID key scan codes.
+enum ScanCode {
 	KEY_A = 0x4,
 	KEY_B = 0x5,
 	KEY_C = 0x6,
@@ -79,7 +69,7 @@ enum key_code {
 	KEY_LEFT_BRACKET = 0x2f,
 	KEY_RIGHT_BRACKET = 0x30,
 	KEY_BACKSLASH = 0x31,
-	KEY_INT2 = 0x32, /* # and ~ */
+	KEY_INT2 = 0x32, // # and ~
 	KEY_SEMICOLON = 0x33,
 	KEY_QUOTE = 0x34,
 	KEY_GRAVE = 0x35,
@@ -164,9 +154,5 @@ enum key_code {
 	KEY_RALT = 0xe6,
 	KEY_RMETA = 0xe7,
 };
-
 #endif
-/**
- * @}
- */
 

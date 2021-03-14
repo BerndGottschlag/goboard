@@ -15,6 +15,7 @@ set(SRC
 	src/mode_switch.hpp
 	src/power_supply.cpp
 	src/power_supply.hpp
+	src/scan_code.hpp
 )
 
 if("${BOARD}" MATCHES "native_posix_64")
