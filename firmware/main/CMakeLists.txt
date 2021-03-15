@@ -37,3 +37,4 @@ else()
 endif()
 
 target_sources(app PRIVATE ${SRC})
+target_compile_options(app PRIVATE -Wno-missing-field-initializers)
