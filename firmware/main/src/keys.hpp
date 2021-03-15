@@ -32,6 +32,15 @@ public:
 		this->keys[word] &= ~(1 << bit);
 	}
 
+	bool bit_is_set(size_t scan_code) {
+		uint32_t word = scan_code >> 5;
+		if (word > ARRAY_SIZE(keys)) {
+			return false;
+		}
+		uint32_t bit = scan_code & 0x1f;
+		return (this->keys[word] & (1 << bit)) != 0;
+	}
+
 	///Bitmap containing the key state.
 	///
 	///A set bit indicates a pressed key.
@@ -45,18 +54,18 @@ public:
 template<class KeyMatrixType> class Keys {
 public:
 	// TODO: Numpad connection.
-	Keys(KeyMatrixType &key_matrix);
+	Keys(KeyMatrixType *key_matrix);
 	~Keys();
 
 	/// Returns the current (debounced) state of all keys.
-	void get_state(KeyBitmap &state);
+	void get_state(KeyBitmap *state);
 
 	/// Polls all keys and applies debouncing.
 	///
 	/// @param interval_ms Milliseconds since the last call to `poll()`.
 	void poll(int interval_ms);
 private:
-	KeyMatrixType &key_matrix;
+	KeyMatrixType *key_matrix;
 };
 
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840

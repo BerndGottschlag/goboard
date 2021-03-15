@@ -23,6 +23,7 @@ enum ModifierKey {
 
 /// HID key scan codes.
 enum ScanCode {
+	KEY_INVALID = 0x0,
 	KEY_A = 0x4,
 	KEY_B = 0x5,
 	KEY_C = 0x6,
