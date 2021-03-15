@@ -158,10 +158,23 @@ namespace tests {
 		}
 
 		void set_single_key(int row, int column) {
+			clear();
+			matrix_state[row] = 1 << column;
+		}
+
+		void set_two_keys(int row1,
+		                  int column1,
+		                  int row2,
+		                  int column2) {
+			clear();
+			matrix_state[row1] = 1 << column1;
+			matrix_state[row2] = 1 << column2;
+		}
+
+		void clear() {
 			for (int i = 0; i < 6; i++) {
 				matrix_state[i] = 0;
 			}
-			matrix_state[row] = 1 << column;
 		}
 
 		void enable() {
@@ -221,7 +234,7 @@ namespace tests {
 		int selected_row = -1;
 	};
 
-	void key_bitmap_test(void) {
+	static void key_bitmap_test(void) {
 		// Test the initial state.
 		KeyBitmap bitmap;
 		for (size_t i = 0; i < ARRAY_SIZE(bitmap.keys); i++) {
@@ -257,7 +270,49 @@ namespace tests {
 		// TODO
 	}
 
-	void key_mapping_test(void) {
+	static void assert_single_key_pressed(KeyBitmap *bitmap,
+	                                      ScanCode scan_code) {
+		for (size_t key = 0; key < sizeof(bitmap->keys) * 8; key++) {
+			if (bitmap->bit_is_set(key)) {
+				zassert_true(key == scan_code,
+				             "%d is pressed (should be %d)",
+				             key,
+				             scan_code);
+			}
+			if (!bitmap->bit_is_set(key)) {
+				zassert_true(key != scan_code,
+				             "%d is not pressed",
+				             scan_code);
+			}
+		}
+	}
+
+	static void assert_two_keys_pressed(KeyBitmap *bitmap,
+	                                    ScanCode scan_code1,
+	                                    ScanCode scan_code2) {
+		for (size_t key = 0; key < sizeof(bitmap->keys) * 8; key++) {
+			if (bitmap->bit_is_set(key)) {
+				zassert_true(key == scan_code1 || key == scan_code2,
+				             "%d is pressed (should be %d or %d)",
+				             key,
+				             scan_code1,
+				             scan_code2);
+			}
+			if (!bitmap->bit_is_set(key)) {
+				zassert_true(key != scan_code1 && key != scan_code2,
+				             "%d or %d is not pressed",
+				             scan_code1, scan_code2);
+			}
+		}
+	}
+
+	static void assert_no_key_pressed(KeyBitmap *bitmap) {
+		for (size_t i = 0; i < ARRAY_SIZE(bitmap->keys); i++) {
+			zassert_true(bitmap->keys[i] == 0, "no keys pressed");
+		}
+	}
+
+	static void key_mapping_test(void) {
 		for (int row = 0; row < 6; row++) {
 			for (int column = 0; column < 16; column++) {
 				ScanCode scan_code = key_matrix_locations[row][column];
@@ -267,29 +322,114 @@ namespace tests {
 				keys.poll(1);
 				KeyBitmap pressed;
 				keys.get_state(&pressed);
-				for (size_t key = 0; key < sizeof(pressed.keys) * 8; key++) {
-					if (pressed.bit_is_set(key)) {
-						zassert_true(key == scan_code,
-						             "%d is pressed (should be %d)",
-						             key,
-						             scan_code);
-					}
-					if (!pressed.bit_is_set(key)) {
-						zassert_true(key != scan_code,
-						             "%d is not pressed",
-						             scan_code);
-					}
-				}
+				assert_single_key_pressed(&pressed, scan_code);
 			}
 		}
-		// TODO
 	}
 
-	void key_debouncing_test(void) {
-		// TODO
+	static void key_debouncing_test(void) {
+		int row = 2;
+		int column = 5;
+		ScanCode scan_code = key_matrix_locations[row][column];
+		int row2 = 3;
+		int column2 = 7;
+		ScanCode scan_code2 = key_matrix_locations[row2][column2];
+
+		KeyBitmap pressed;
+		MockKeyMatrix key_matrix;
+		Keys<MockKeyMatrix> keys(&key_matrix);
+
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
+
+		// Correct timing when keys are changed with more than 5ms
+		// inbetween changes.
+		key_matrix.set_single_key(row, column);
+		for (int i = 0; i < 5; i++) {
+			keys.poll(1);
+			keys.get_state(&pressed);
+			assert_single_key_pressed(&pressed, scan_code);
+		}
+		key_matrix.clear();
+		for (int i = 0; i < 5; i++) {
+			keys.poll(1);
+			keys.get_state(&pressed);
+			assert_no_key_pressed(&pressed);
+		}
+		key_matrix.set_single_key(row, column);
+
+		// Longer intervals.
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code);
+		key_matrix.clear();
+		keys.poll(5);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
+		key_matrix.set_single_key(row, column);
+		keys.poll(6);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code);
+
+		// Test whether bouncing is ignored.
+		key_matrix.clear();
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
+
+		key_matrix.set_single_key(row, column);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
+		key_matrix.clear();
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
+		key_matrix.set_single_key(row, column);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code);
+
+		// Test whether bouncing is ignored for multiple keys.
+		key_matrix.set_two_keys(row, column, row2, column2);
+		keys.poll(2);
+		keys.get_state(&pressed);
+		assert_two_keys_pressed(&pressed, scan_code, scan_code2);
+		key_matrix.clear();
+		keys.poll(2);
+		keys.get_state(&pressed);
+		assert_two_keys_pressed(&pressed, scan_code, scan_code2);
+		keys.poll(2);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code2);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_single_key_pressed(&pressed, scan_code2);
+		keys.poll(1);
+		keys.get_state(&pressed);
+		assert_no_key_pressed(&pressed);
 	}
 
-	void numpad_test(void) {
+	static void numpad_test(void) {
 		// TODO
 	}
 
