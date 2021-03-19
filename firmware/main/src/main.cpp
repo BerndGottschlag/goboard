@@ -1,6 +1,7 @@
 
 #include "mode_switch.hpp"
 #include "power_supply.hpp"
+#include "power_supply_pins.hpp"
 
 #include <init.h>
 #include <power/power.h>
@@ -48,10 +49,12 @@ static void run_keyboard() {
 		k_sleep(K_MSEC(100));
 	}
 
-	PowerSupply power_supply;
+	PowerSupplyPins power_supply_pins;
+	PowerSupply<PowerSupplyPins> power_supply(&power_supply_pins);
 	ModeSwitch mode_switch;
 	// TODO: Check whether we should immediately shut down again because the
 	// battery is low.
+	// TODO: Register power supply change listener.
 
 	// TODO: Remaining keyboard code.
 }
