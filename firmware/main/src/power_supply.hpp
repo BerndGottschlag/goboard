@@ -27,7 +27,14 @@ public:
 	/// Returns the estimated battery charge in percent.
 	uint8_t get_battery_charge();
 
-	// TODO: Callback interface for mode changes.
+	// Sets a callback which is called whenever the state of the power
+	// supply (mode or charge percentage) changes.
+	//
+	// The callback is called from a separate thread, so the code has to be
+	// thread-safe. The previous callback may still be called during the
+	// call to this function, but will never be called after this function
+	// returns. Similarly, the destructor may still call the callback
+	// registered at the time.
 	void set_callback(void (*change_callback)());
 private:
 	PowerSupplyPinType *pins;

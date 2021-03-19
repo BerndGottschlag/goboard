@@ -140,12 +140,6 @@ void Keys<KeyMatrixType>::poll(int interval_ms) {
 template class Keys<KeyMatrix>;
 #endif
 
-// Tests:
-// - Key bitmap
-// - Debouncing
-// - Correct switch/scan code conversion
-//
-
 #ifndef CONFIG_BOARD_GOBOARD_NRF52840
 #include "tests.hpp"
 #include <ztest.h>
@@ -433,7 +427,7 @@ namespace tests {
 		// TODO
 	}
 
-	void keys_tests() {
+	static void keys_tests() {
 		ztest_test_suite(keys,
 			ztest_unit_test(key_bitmap_test),
 			ztest_unit_test(key_mapping_test),
@@ -442,6 +436,6 @@ namespace tests {
 		);
 		ztest_run_test_suite(keys);
 	}
-	RegisterTests tests(keys_tests);
+	RegisterTests keys_tests_(keys_tests);
 }
 #endif
