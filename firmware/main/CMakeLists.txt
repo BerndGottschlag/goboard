@@ -9,6 +9,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 set(SRC
+	src/exception.hpp
 	src/keys.cpp
 	src/keys.hpp
 	src/mode_switch.cpp

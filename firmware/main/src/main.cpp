@@ -118,7 +118,7 @@ static PowerAction run_keyboard() {
 	// Run different initialization and main loop depending on the selected
 	// mode.
 	if (mode_switch.get_mode() == MODE_OFF_USB) {
-		printk("Initializing USB keyboard...");
+		printk("Initializing USB keyboard...\n");
 		// TODO: Pointers to key matrix and mode LED.
 		UsbKeyboard keyboard;
 		return main_loop<UsbKeyboard>(&keyboard,
@@ -126,11 +126,11 @@ static PowerAction run_keyboard() {
 		                              &power_supply,
 		                              &mode_switch);
 	} else if (mode_switch.get_mode() == MODE_BLUETOOTH) {
-		printk("Initializing bluetooth keyboard...");
+		printk("Initializing bluetooth keyboard...\n");
 		// TODO
 		return SHUTDOWN;
 	} else if (mode_switch.get_mode() == MODE_UNIFYING) {
-		printk("Initializing unifying keyboard...");
+		printk("Initializing unifying keyboard...\n");
 		// TODO
 		return SHUTDOWN;
 	} else {
