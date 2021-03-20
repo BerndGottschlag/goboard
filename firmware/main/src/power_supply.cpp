@@ -34,7 +34,7 @@ uint8_t PowerSupply<PowerSupplyPinType>::get_battery_charge() {
 }
 
 template<class PowerSupplyPinType>
-void set_callback(void (*change_callback)()) {
+void PowerSupply<PowerSupplyPinType>::set_callback(void (*change_callback)()) {
 	// TODO
 }
 

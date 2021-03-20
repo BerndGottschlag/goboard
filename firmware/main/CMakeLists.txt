@@ -35,6 +35,8 @@ else()
 		src/main.cpp
 		src/power_supply_pins.hpp
 		src/power_supply_pins.cpp
+		src/usb.hpp
+		src/usb.cpp
 	)
 endif()
 

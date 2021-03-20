@@ -27,6 +27,10 @@ public:
 	/// Returns the estimated battery charge in percent.
 	uint8_t get_battery_charge();
 
+	bool has_usb_connection(void) {
+		return pins->has_usb_connection();
+	}
+
 	// Sets a callback which is called whenever the state of the power
 	// supply (mode or charge percentage) changes.
 	//
