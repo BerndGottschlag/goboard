@@ -9,9 +9,10 @@ UsbKeyboard::~UsbKeyboard() {
 }
 
 KeyboardProfile UsbKeyboard::get_profile() {
-	// TODO
+	return PROFILE_1;
 }
 
 void UsbKeyboard::set_profile(KeyboardProfile profile) {
-	// TODO
+	// There is only one USB connection, nothing to do here.
+	(void)profile;
 }

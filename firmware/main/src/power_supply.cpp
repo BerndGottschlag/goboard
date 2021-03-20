@@ -26,15 +26,18 @@ PowerSupply<PowerSupplyPinType>::~PowerSupply() {
 template<class PowerSupplyPinType>
 PowerSupplyMode PowerSupply<PowerSupplyPinType>::get_mode() {
 	// TODO
+	return POWER_SUPPLY_NORMAL;
 }
 
 template<class PowerSupplyPinType>
 uint8_t PowerSupply<PowerSupplyPinType>::get_battery_charge() {
 	// TODO
+	return 100;
 }
 
 template<class PowerSupplyPinType>
 void PowerSupply<PowerSupplyPinType>::set_callback(void (*change_callback)()) {
+	(void)change_callback;
 	// TODO
 }
 

@@ -126,9 +126,13 @@ static PowerAction run_keyboard() {
 		                              &power_supply,
 		                              &mode_switch);
 	} else if (mode_switch.get_mode() == MODE_BLUETOOTH) {
+		printk("Initializing bluetooth keyboard...");
 		// TODO
+		return SHUTDOWN;
 	} else if (mode_switch.get_mode() == MODE_UNIFYING) {
+		printk("Initializing unifying keyboard...");
 		// TODO
+		return SHUTDOWN;
 	} else {
 		// This must never happen.
 		throw InvalidState("invalid mode");

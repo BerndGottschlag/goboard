@@ -68,13 +68,16 @@ ModeSwitch::~ModeSwitch() {
 
 KeyboardMode ModeSwitch::get_mode() {
 	// TODO
+	return MODE_OFF_USB;
 }
 
 KeyboardProfile ModeSwitch::get_profile() {
 	// TODO
+	return PROFILE_1;
 }
 
 void ModeSwitch::set_callback(void (*change_callback)()) {
+	(void)change_callback;
 	// TODO
 }
 
