@@ -66,6 +66,18 @@ ModeSwitch::~ModeSwitch() {
 	// TODO
 }
 
+KeyboardMode ModeSwitch::get_mode() {
+	// TODO
+}
+
+KeyboardProfile ModeSwitch::get_profile() {
+	// TODO
+}
+
+void ModeSwitch::set_callback(void (*change_callback)()) {
+	// TODO
+}
+
 void ModeSwitch::sw0_gpio_callback(struct device *port, struct gpio_callback *cb, uint32_t pins) {
 	(void)port;
 	(void)pins;
