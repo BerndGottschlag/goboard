@@ -12,33 +12,133 @@
 #define RECOVERY_DURATION K_MSEC(1)
 #endif
 
+#define CHARGE_END_VOLTAGE 1380
+#define DISCHARGED_VOLTAGE 1100
+
 template<class PowerSupplyPinType>
 PowerSupply<PowerSupplyPinType>::PowerSupply(PowerSupplyPinType *pins):
 		pins(pins) {
-	// TODO
+	k_work_init_delayable(&charging_ended, static_on_charging_ended);
+	k_work_init_delayable(&recovery_ended, static_on_recovery_ended);
+
+	// Determine the initial power supply state immediately and start the
+	// cycle.
+	on_recovery_ended();
 }
 
 template<class PowerSupplyPinType>
 PowerSupply<PowerSupplyPinType>::~PowerSupply() {
-	// TODO
+	// Cancel the workqueue entries and wait until they have stopped.
+	atomic_set(&stop, 1);
+	bool stopped;
+	do {
+		k_work_sync sync;
+		k_work_cancel_delayable_sync(&charging_ended, &sync);
+		k_work_cancel_delayable_sync(&recovery_ended, &sync);
+		k_sched_lock();
+		stopped = !k_work_delayable_is_pending(&charging_ended) &&
+				!k_work_delayable_is_pending(&recovery_ended);
+		k_sched_unlock();
+	} while (!stopped);
+
+	pins->configure_charging(false);
+	pins->configure_discharging(false, false);
 }
 
 template<class PowerSupplyPinType>
 PowerSupplyMode PowerSupply<PowerSupplyPinType>::get_mode() {
-	// TODO
-	return POWER_SUPPLY_NORMAL;
+	return (PowerSupplyMode)atomic_get(&mode);
 }
 
 template<class PowerSupplyPinType>
 uint8_t PowerSupply<PowerSupplyPinType>::get_battery_charge() {
-	// TODO
-	return 100;
+	return atomic_get(&charge);
 }
 
 template<class PowerSupplyPinType>
 void PowerSupply<PowerSupplyPinType>::set_callback(void (*change_callback)()) {
 	(void)change_callback;
+
+	// The power supply code is executed on the system workqueue. To prevent
+	// race conditions while setting the callback and to wait for any
+	// invocation of the old callback, we execute the callback change on the
+	// system workqueue.
 	// TODO
+
+	// Wait until the workqueue entry has been executed.
+	// TODO
+}
+
+template<class PowerSupplyPinType>
+void PowerSupply<PowerSupplyPinType>::static_on_charging_ended(struct k_work *work) {
+	PowerSupply<PowerSupplyPinType> *thisptr =
+			CONTAINER_OF(k_work_delayable_from_work(work),
+			             PowerSupply<PowerSupplyPinType>,
+			             charging_ended);
+	thisptr->on_charging_ended();
+}
+
+template<class PowerSupplyPinType>
+void PowerSupply<PowerSupplyPinType>::on_charging_ended() {
+	if (atomic_get(&stop)) {
+		return;
+	}
+
+	// Disable charging/balancing.
+	pins->configure_charging(false);
+	pins->configure_discharging(false, false);
+
+	// Start the recovery period.
+	k_work_schedule(&recovery_ended, RECOVERY_DURATION);
+}
+
+template<class PowerSupplyPinType>
+void PowerSupply<PowerSupplyPinType>::static_on_recovery_ended(struct k_work *work) {
+	PowerSupply<PowerSupplyPinType> *thisptr =
+			CONTAINER_OF(k_work_delayable_from_work(work),
+			             PowerSupply<PowerSupplyPinType>,
+			             recovery_ended);
+	thisptr->on_recovery_ended();
+}
+
+template<class PowerSupplyPinType>
+void PowerSupply<PowerSupplyPinType>::on_recovery_ended() {
+	if (atomic_get(&stop)) {
+		return;
+	}
+
+	// Measure the voltage.
+	uint32_t low_voltage, high_voltage;
+	pins->measure_battery_voltage(&low_voltage, &high_voltage);
+
+	// Start charging or balancing.
+	PowerSupplyMode new_mode = POWER_SUPPLY_NORMAL;
+	if (pins->has_usb_connection()) {
+		if (low_voltage < CHARGE_END_VOLTAGE &&
+				high_voltage < CHARGE_END_VOLTAGE) {
+			pins->configure_charging(true);
+			new_mode = POWER_SUPPLY_CHARGING;
+		}
+		// Balancing counts as "charging", even if one battery is
+		// already full (the other will be charged when possible).
+		if (((int)high_voltage - (int)low_voltage) > 20) {
+			pins->configure_discharging(false, true);
+			new_mode = POWER_SUPPLY_CHARGING;
+		}
+		if (((int)low_voltage - (int)high_voltage) > 20) {
+			pins->configure_discharging(true, false);
+			new_mode = POWER_SUPPLY_CHARGING;
+		}
+	} else {
+		if (low_voltage < DISCHARGED_VOLTAGE ||
+				high_voltage < DISCHARGED_VOLTAGE) {
+			new_mode = POWER_SUPPLY_LOW;
+		}
+	}
+	atomic_set(&mode, (int)new_mode);
+
+	// Start the charging period.
+	k_work_schedule(&charging_ended, RECOVERY_DURATION);
 }
 
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840
@@ -141,6 +241,8 @@ namespace tests {
 		k_sleep(RECOVERY_DURATION);
 		k_sleep(CHARGING_DURATION);
 		k_sleep(RECOVERY_DURATION);
+		k_sleep(CHARGING_DURATION);
+		k_sleep(RECOVERY_DURATION);
 		// Reset the outputs, we only want to test whether outputs are
 		// currently used.
 		pins->reset_output();
@@ -148,16 +250,26 @@ namespace tests {
 		k_sleep(RECOVERY_DURATION);
 		k_sleep(CHARGING_DURATION);
 		k_sleep(RECOVERY_DURATION);
+		k_sleep(CHARGING_DURATION);
+		k_sleep(RECOVERY_DURATION);
 		bool charging, discharging_low, discharging_high;
 		pins->get_output(&charging, &discharging_low, &discharging_high);
 		zassert_true(charging == test.should_charge,
-		             "wrong charging state");
+		             "wrong charging state (expected %d, got %d for %d/%d/%d)",
+		             test.should_charge, charging,
+		             test.low_voltage, test.high_voltage, test.usb_connected);
 		zassert_true(discharging_low == test.should_discharge_low,
-		             "wrong discharging state");
+		             "wrong discharging state (expected %d, got %d for %d/%d/%d)",
+		             test.should_discharge_low, discharging_low,
+		             test.low_voltage, test.high_voltage, test.usb_connected);
 		zassert_true(discharging_high == test.should_discharge_high,
-		             "wrong discharging state");
+		             "wrong discharging state (expected %d, got %d for %d/%d/%d)",
+		             test.should_discharge_high, discharging_high,
+		             test.low_voltage, test.high_voltage, test.usb_connected);
 		zassert_true(ps->get_mode() == test.expected_mode,
-		             "wrong power supply mode");
+		             "wrong power supply mode (expected %d, got %d for %d/%d/%d)",
+		             test.expected_mode, ps->get_mode(),
+		             test.low_voltage, test.high_voltage, test.usb_connected);
 	}
 
 	static void charging_test(void) {
@@ -165,16 +277,16 @@ namespace tests {
 			// Both batteries low.
 			{ 1050, 1050, false, false, false, false, POWER_SUPPLY_LOW },
 			// One battery low.
-			{ 1050, 1350, false, false, false, false, POWER_SUPPLY_LOW },
-			{ 1350, 1050, false, false, false, false, POWER_SUPPLY_LOW },
+			{ 1050, 1400, false, false, false, false, POWER_SUPPLY_LOW },
+			{ 1400, 1050, false, false, false, false, POWER_SUPPLY_LOW },
 			// Both batteries full.
-			{ 1350, 1350, false, false, false, false, POWER_SUPPLY_NORMAL },
+			{ 1400, 1400, false, false, false, false, POWER_SUPPLY_NORMAL },
 			// Both batteries full, USB connected.
-			{ 1350, 1350, true, false, false, false, POWER_SUPPLY_NORMAL },
+			{ 1400, 1400, true, false, false, false, POWER_SUPPLY_NORMAL },
 			// One battery full, USB connected (counts as "charging"
 			// as we are balancing the batteries).
-			{ 1100, 1350, true, false, false, true, POWER_SUPPLY_CHARGING },
-			{ 1350, 1100, true, false, true, false, POWER_SUPPLY_CHARGING },
+			{ 1100, 1400, true, false, false, true, POWER_SUPPLY_CHARGING },
+			{ 1400, 1100, true, false, true, false, POWER_SUPPLY_CHARGING },
 			// USB connected, charging without balancing.
 			{ 1100, 1100, true, true, false, false, POWER_SUPPLY_CHARGING },
 			// USB connected, charging with balancing.
@@ -182,7 +294,7 @@ namespace tests {
 			{ 1200, 1100, true, true, true, false, POWER_SUPPLY_CHARGING },
 			// USB disconnected again - we do not want to discharge
 			// if USB is not connected.
-			{ 1200, 1100, true, false, false, false, POWER_SUPPLY_NORMAL },
+			{ 1200, 1100, false, false, false, false, POWER_SUPPLY_NORMAL },
 		};
 
 		MockPowerSupplyPins pins;
