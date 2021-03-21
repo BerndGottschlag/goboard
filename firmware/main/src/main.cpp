@@ -28,7 +28,7 @@
 /// Disable System OFF - we only ever want to enter it manually.
 static int disable_system_off(const struct device *dev) {
 	(void)dev;
-	pm_ctrl_disable_state(POWER_STATE_DEEP_SLEEP_1);
+	pm_constraint_set(PM_STATE_SOFT_OFF);
 	return 0;
 }
 SYS_INIT(disable_system_off, PRE_KERNEL_2, 0);
@@ -157,7 +157,7 @@ void main(void) {
 	}
 	// Enter System OFF.
 	printk("Switching off...\n");
-	pm_power_state_force(POWER_STATE_DEEP_SLEEP_1);
+	pm_power_state_force((struct pm_state_info){PM_STATE_SOFT_OFF, 0, 0});
 	k_sleep(K_SECONDS(1));
 	printk("Shutdown failed.\n");
 	while (true);
