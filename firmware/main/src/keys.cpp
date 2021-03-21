@@ -200,9 +200,9 @@ namespace tests {
 				zassert_true(false,
 				             "load_input() on inactive matrix");
 			}
-			if (selected_row == 0) {
+			if (selected_row == -1) {
 				zassert_true(false,
-				             "transfer() on inactive matrix");
+				             "load_input(), but no row selected");
 			}
 			input_reg_state = matrix_state[selected_row];
 		}
