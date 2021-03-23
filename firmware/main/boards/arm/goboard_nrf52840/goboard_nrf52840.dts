@@ -45,6 +45,16 @@
 		};
 	};
 
+	powersupply {
+		compatible = "power-supply";
+		io-channels = <&adc 0>, <&adc 7>;
+		vbatt-output-ohms = <100000>;
+		vbatt-full-ohms = <(100000 + 100000)>;
+		vbatt-power-gpios = <&gpio0 30 GPIO_ACTIVE_LOW>;
+		charge-gpios = <&gpio0 28 0>;
+		discharge-low-gpios = <&gpio0 43 0>;
+		discharge-high-gpios = <&gpio0 45 GPIO_ACTIVE_LOW>;
+	};
 };
 
 &gpiote {

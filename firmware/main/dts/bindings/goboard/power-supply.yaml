@@ -1,0 +1,60 @@
+# Copyright (c) 2019, Peter Bigot Consulting, LLC
+# Copyright (c) 2021, Mathias Gottschlag
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+    Goboard power supply circuitry
+
+compatible: "power-supply"
+
+include: base.yaml
+
+properties:
+    io-channels:
+      type: phandle-array
+      required: true
+      description: |
+        Battery voltage - the first array entry is the low-side battery, the
+        second is the high-side battery.
+
+    vbatt-output-ohms:
+      type: int
+      required: true
+      description: |
+        Resistance of the lower leg of the voltage divider
+
+    vbatt-full-ohms:
+      type: int
+      required: true
+      description: |
+        Resistance of the full path through the voltage divider.
+
+        If absent or zero the driver assumes that the upper leg is a
+        resistance-based sensor.
+
+    vbatt-power-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        Control power to the voltage divider inputs.
+
+        If present the corresponding GPIO must be set to an active level
+        to enable the divider input.
+
+    charge-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        Charge the batteries.
+
+    discharge-low-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        Discharge the first (low, connected to GND) battery.
+
+    discharge-high-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        Discharge the second (high, connected to VBATT) battery.
