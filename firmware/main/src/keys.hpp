@@ -10,7 +10,7 @@
 class KeyBitmap {
 public:
 	/// Creates an empty bitmap with no bits set.
-	KeyBitmap(): keys{0} {}
+	KeyBitmap() {}
 
 	/// Marks a single key as pressed.
 	void set_bit(size_t scan_code) {
@@ -44,7 +44,7 @@ public:
 	///Bitmap containing the key state.
 	///
 	///A set bit indicates a pressed key.
-	uint32_t keys[8];
+	uint32_t keys[8] = {0};
 };
 
 /// Key state collection and debouncing.

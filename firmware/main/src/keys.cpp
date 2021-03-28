@@ -121,6 +121,7 @@ template<class KeyMatrixType>
 Keys<KeyMatrixType>::Keys(KeyMatrixType *key_matrix): key_matrix(key_matrix) {
 	// TODO
 	key_matrix->enable();
+	// Pre-select the first row for the next poll() call.
 	key_matrix->transfer(0x1);
 }
 
@@ -143,9 +144,7 @@ void Keys<KeyMatrixType>::poll(int interval_ms) {
 	// TODO: Should poll() return a bool to signal whether any keys have
 	// changed?
 	static uint16_t row_pattern = 0x1;
-	uint16_t temp;
 	KeyBitmap bitmap_temp;
-	uint8_t times_to_shift;
 
 	// Read the matrix:
 	for (uint8_t i = 0; i < ROWS; i++) {
@@ -158,24 +157,21 @@ void Keys<KeyMatrixType>::poll(int interval_ms) {
 
 		key_matrix->select_row();
 		key_matrix->load_input();
-		temp = key_matrix->transfer(row_pattern);
-		printk("Row %d, temp = %x\n", i, temp);
+		uint16_t temp = key_matrix->transfer(row_pattern);
 
-		// Map keys
-		for (uint8_t j = 0; j < 16; j++) {
-			if ((temp & (1 << j)) != false) {
-				printk("set key %x/%x\n", i, j);
+		// Map keys.
+		for (uint16_t j = 0; j < 16; j++) {
+			if ((temp & (1 << j)) != 0) {
 				bitmap_temp.set_bit(key_matrix_locations[i][j]);
-			} else {
-				bitmap_temp.clear_bit(key_matrix_locations[i][j]);
 			}
 		}
 
 	}
 
+	uint8_t times_to_shift;
 	/*
 	// Perform debouncing:
-	// Shift the changes
+	// Shift the changes.
 	if (interval_ms >= 5) {
 		times_to_shift = 4;
 	}
@@ -262,7 +258,6 @@ namespace tests {
 				zassert_true(false,
 				             "load_input() on inactive matrix");
 			}
-			printk("selected_row = 0x%x\n", selected_row);
 			if (selected_row == -1) {
 				zassert_true(false,
 				             "load_input(), but no row selected");
@@ -372,7 +367,6 @@ namespace tests {
 	static void key_mapping_test(void) {
 		for (int row = 0; row < 6; row++) {
 			for (int column = 0; column < 16; column++) {
-				printk("%s: Row: %d, Column: %d\n", __func__, row, column);
 				ScanCode scan_code = key_matrix_locations[row][column];
 				MockKeyMatrix key_matrix;
 				key_matrix.set_single_key(row, column);
@@ -380,7 +374,6 @@ namespace tests {
 				keys.poll(1);
 				KeyBitmap pressed;
 				keys.get_state(&pressed);
-				printk("%s: scan_code = 0x%x\n", __func__, scan_code);
 				assert_single_key_pressed(&pressed, scan_code);
 			}
 		}
