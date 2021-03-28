@@ -1,8 +1,12 @@
 #include "keys.hpp"
 
 #include "scan_code.hpp"
+#include "kernel.h"
 
-static ScanCode key_matrix_locations[6][16] = {
+#define ROWS 6
+#define COLUMNS 16
+
+static ScanCode key_matrix_locations[ROWS][COLUMNS] = {
 	{
 		KEY_PAUSE,
 		KEY_SCROLL_LOCK,
@@ -116,23 +120,81 @@ static ScanCode key_matrix_locations[6][16] = {
 template<class KeyMatrixType>
 Keys<KeyMatrixType>::Keys(KeyMatrixType *key_matrix): key_matrix(key_matrix) {
 	// TODO
+	key_matrix->enable();
+	key_matrix->transfer(0x1);
 }
 
 template<class KeyMatrixType>
 Keys<KeyMatrixType>::~Keys() {
 	// TODO
+	key_matrix->disable();
 }
 
 template<class KeyMatrixType>
 void Keys<KeyMatrixType>::get_state(KeyBitmap *state) {
 	// TODO
+	for (uint8_t i = 0; i < 8; i++) {
+		state->keys[i] = bitmap_debounced.keys[i];
+	}
 }
 
 template<class KeyMatrixType>
 void Keys<KeyMatrixType>::poll(int interval_ms) {
 	// TODO: Should poll() return a bool to signal whether any keys have
 	// changed?
-	// TODO
+	static uint16_t row_pattern = 0x1;
+	uint16_t temp;
+	KeyBitmap bitmap_temp;
+	uint8_t times_to_shift;
+
+	// Read the matrix:
+	for (uint8_t i = 0; i < ROWS; i++) {
+		// Set row_pattern to set the next row in the transfer:
+		if (row_pattern != 0x20) {
+			row_pattern = row_pattern << 1;
+		} else {
+			row_pattern = 0x1;
+		}
+
+		key_matrix->select_row();
+		key_matrix->load_input();
+		temp = key_matrix->transfer(row_pattern);
+		printk("Row %d, temp = %x\n", i, temp);
+
+		// Map keys
+		for (uint8_t j = 0; j < 16; j++) {
+			if ((temp & (1 << j)) != false) {
+				printk("set key %x/%x\n", i, j);
+				bitmap_temp.set_bit(key_matrix_locations[i][j]);
+			} else {
+				bitmap_temp.clear_bit(key_matrix_locations[i][j]);
+			}
+		}
+
+	}
+
+	/*
+	// Perform debouncing:
+	// Shift the changes
+	if (interval_ms >= 5) {
+		times_to_shift = 4;
+	}
+	else {
+		times_to_shift = interval_ms - 1;
+	}
+	for (i = times_to_shift; i > 0; i--)
+	{
+	}
+
+
+	for (i = 0; i < 8; i ++){
+		bitmap_debounced.keys
+	}
+	*/
+
+	for (uint8_t i = 0; i < 8; i++) {
+		bitmap_debounced.keys[i] = bitmap_temp.keys[i];
+	}
 }
 
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840
@@ -200,6 +262,7 @@ namespace tests {
 				zassert_true(false,
 				             "load_input() on inactive matrix");
 			}
+			printk("selected_row = 0x%x\n", selected_row);
 			if (selected_row == -1) {
 				zassert_true(false,
 				             "load_input(), but no row selected");
@@ -269,13 +332,13 @@ namespace tests {
 		for (size_t key = 0; key < sizeof(bitmap->keys) * 8; key++) {
 			if (bitmap->bit_is_set(key)) {
 				zassert_true(key == scan_code,
-				             "%d is pressed (should be %d)",
+				             "0x%x is pressed (should be 0x%x)",
 				             key,
 				             scan_code);
 			}
 			if (!bitmap->bit_is_set(key)) {
 				zassert_true(key != scan_code,
-				             "%d is not pressed",
+				             "0x%x is not pressed",
 				             scan_code);
 			}
 		}
@@ -287,14 +350,14 @@ namespace tests {
 		for (size_t key = 0; key < sizeof(bitmap->keys) * 8; key++) {
 			if (bitmap->bit_is_set(key)) {
 				zassert_true(key == scan_code1 || key == scan_code2,
-				             "%d is pressed (should be %d or %d)",
+				             "0x%x is pressed (should be 0x%x or 0x%x)",
 				             key,
 				             scan_code1,
 				             scan_code2);
 			}
 			if (!bitmap->bit_is_set(key)) {
 				zassert_true(key != scan_code1 && key != scan_code2,
-				             "%d or %d is not pressed",
+				             "0x%x or 0x%x is not pressed",
 				             scan_code1, scan_code2);
 			}
 		}
@@ -309,6 +372,7 @@ namespace tests {
 	static void key_mapping_test(void) {
 		for (int row = 0; row < 6; row++) {
 			for (int column = 0; column < 16; column++) {
+				printk("%s: Row: %d, Column: %d\n", __func__, row, column);
 				ScanCode scan_code = key_matrix_locations[row][column];
 				MockKeyMatrix key_matrix;
 				key_matrix.set_single_key(row, column);
@@ -316,6 +380,7 @@ namespace tests {
 				keys.poll(1);
 				KeyBitmap pressed;
 				keys.get_state(&pressed);
+				printk("%s: scan_code = 0x%x\n", __func__, scan_code);
 				assert_single_key_pressed(&pressed, scan_code);
 			}
 		}

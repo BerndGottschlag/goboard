@@ -66,6 +66,18 @@ public:
 	void poll(int interval_ms);
 private:
 	KeyMatrixType *key_matrix;
+	KeyBitmap bitmap_debounced;
+
+	uint32_t keys_change1[8];
+	uint32_t keys_change2[8];
+	uint32_t keys_change3[8];
+	uint32_t keys_change4[8];
+	uint32_t keys_change5[8];
+	uint32_t * const keys_changes[5] = {keys_change1,
+	                                    keys_change2,
+	                                    keys_change3,
+	                                    keys_change4,
+	                                    keys_change5};
 };
 
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840
