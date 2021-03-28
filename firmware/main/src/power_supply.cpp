@@ -110,6 +110,8 @@ void PowerSupply<PowerSupplyPinType>::on_recovery_ended() {
 	// Measure the voltage.
 	uint32_t low_voltage, high_voltage;
 	pins->measure_battery_voltage(&low_voltage, &high_voltage);
+	printk("battery voltage: %dmV, %dmV\n", low_voltage, high_voltage);
+	// TODO: Derive the state of charge from the lower voltage.
 
 	// Start charging or balancing.
 	PowerSupplyMode new_mode = POWER_SUPPLY_NORMAL;

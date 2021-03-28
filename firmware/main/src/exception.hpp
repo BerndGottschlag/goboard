@@ -41,5 +41,16 @@ private:
 	const char *_message;
 };
 
+class HardwareError: Exception {
+public:
+	HardwareError(const char *message): _message(message) {}
+
+	virtual const char *what() {
+		return _message;
+	}
+private:
+	const char *_message;
+};
+
 #endif
 
