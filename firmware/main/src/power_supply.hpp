@@ -46,6 +46,7 @@ public:
 	uint8_t get_battery_charge();
 
 	bool has_usb_connection(void) {
+		// TODO: Mutex, the GPIOs area also accessed from another thread.
 		return pins->has_usb_connection();
 	}
 
@@ -59,6 +60,8 @@ public:
 	// deadlock.
 	void set_callback(void (*change_callback)());
 private:
+	static void static_set_callback_work(struct k_work *item);
+
 	static void static_on_charging_ended(struct k_work *item);
 	void on_charging_ended();
 	static void static_on_recovery_ended(struct k_work *item);
@@ -66,6 +69,11 @@ private:
 
 
 	PowerSupplyPinType *pins;
+	/// Callback which is called whenever mode, state of charge, or USB
+	/// connection state change.
+	///
+	/// The variable is only accessed from the system workqueue, therefore
+	/// no mutex is required to access it.
 	void (*change_callback)() = NULL;
 
 	atomic_t stop = ATOMIC_INIT(0);
@@ -87,6 +95,10 @@ private:
 	// the compiler does not do anything stupid.
 	atomic_t mode = ATOMIC_INIT(POWER_SUPPLY_NORMAL);
 	atomic_t charge = ATOMIC_INIT(100);
+
+	// We need to memorize the USB connection status so that we can invoke
+	// the callback when it changes.
+	bool usb_was_connected = false;
 };
 
 #endif

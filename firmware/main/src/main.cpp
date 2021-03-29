@@ -44,8 +44,10 @@ void power_supply_mode_switch_handler() {
 bool want_shutdown(PowerSupply<PowerSupplyPins> *power_supply,
                    ModeSwitch *mode_switch) {
 	if (power_supply->get_mode() == POWER_SUPPLY_LOW) {
+		printk("low power, shutting down.");
 		return true;
 	} else if (!power_supply->has_usb_connection() && mode_switch->get_mode() == MODE_OFF_USB) {
+		printk("no USB connection, shutting down.");
 		return true;
 	} else {
 		return false;

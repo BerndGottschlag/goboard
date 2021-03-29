@@ -5,7 +5,7 @@
 #define CHARGING_DURATION K_SECONDS(10)
 // On the real hardware, wait for 1000ms to let the battery voltage recover
 // before measurements.
-#define RECOVERY_DURATION K_SECONDS(1)
+#define RECOVERY_DURATION K_SECONDS(3)
 #else
 // For tests, drastically reduce the times above to reduce test durations.
 #define CHARGING_DURATION K_MSEC(10)
@@ -56,17 +56,43 @@ uint8_t PowerSupply<PowerSupplyPinType>::get_battery_charge() {
 }
 
 template<class PowerSupplyPinType>
-void PowerSupply<PowerSupplyPinType>::set_callback(void (*change_callback)()) {
-	(void)change_callback;
+struct CallbackChange {
+	PowerSupply<PowerSupplyPinType> *thisptr;
+	k_work work;
+	void (*new_callback)();
+	k_sem done;
+};
 
+template<class PowerSupplyPinType>
+void PowerSupply<PowerSupplyPinType>::set_callback(void (*change_callback)()) {
 	// The power supply code is executed on the system workqueue. To prevent
 	// race conditions while setting the callback and to wait for any
 	// invocation of the old callback, we execute the callback change on the
 	// system workqueue.
-	// TODO
+	CallbackChange<PowerSupplyPinType> change = {
+		.thisptr = this,
+		.new_callback = change_callback,
+	};
+	k_sem_init(&change.done, 0, 1);
+	k_work_init(&change.work, static_set_callback_work);
+	k_work_submit(&change.work);
 
 	// Wait until the workqueue entry has been executed.
-	// TODO
+	// TODO: Do we need the semaphore, or does k_work_flush block while the
+	// work is still in the queue?
+	k_sem_take(&change.done, K_FOREVER);
+	struct k_work_sync sync;
+	k_work_flush(&change.work, &sync);
+}
+
+template<class PowerSupplyPinType>
+void PowerSupply<PowerSupplyPinType>::static_set_callback_work(struct k_work *work) {
+	CallbackChange<PowerSupplyPinType> *change =
+			CONTAINER_OF(work,
+			             CallbackChange<PowerSupplyPinType>,
+			             work);
+	change->thisptr->change_callback = change->new_callback;
+	k_sem_give(&change->done);
 }
 
 template<class PowerSupplyPinType>
@@ -108,26 +134,31 @@ void PowerSupply<PowerSupplyPinType>::on_recovery_ended() {
 	}
 
 	// Measure the voltage.
+	bool usb_connected = pins->has_usb_connection();
 	uint32_t low_voltage, high_voltage;
 	pins->measure_battery_voltage(&low_voltage, &high_voltage);
 	printk("battery voltage: %dmV, %dmV\n", low_voltage, high_voltage);
+	printk("usb: %d\n", usb_connected);
 	// TODO: Derive the state of charge from the lower voltage.
 
 	// Start charging or balancing.
 	PowerSupplyMode new_mode = POWER_SUPPLY_NORMAL;
-	if (pins->has_usb_connection()) {
+	if (usb_connected) {
 		if (low_voltage < CHARGE_END_VOLTAGE &&
 				high_voltage < CHARGE_END_VOLTAGE) {
+			printk("charging.\n");
 			pins->configure_charging(true);
 			new_mode = POWER_SUPPLY_CHARGING;
 		}
 		// Balancing counts as "charging", even if one battery is
 		// already full (the other will be charged when possible).
 		if (((int)high_voltage - (int)low_voltage) > 20) {
+			printk("discharging 1.\n");
 			pins->configure_discharging(false, true);
 			new_mode = POWER_SUPPLY_CHARGING;
 		}
 		if (((int)low_voltage - (int)high_voltage) > 20) {
+			printk("discharging 2.\n");
 			pins->configure_discharging(true, false);
 			new_mode = POWER_SUPPLY_CHARGING;
 		}
@@ -137,10 +168,18 @@ void PowerSupply<PowerSupplyPinType>::on_recovery_ended() {
 			new_mode = POWER_SUPPLY_LOW;
 		}
 	}
-	atomic_set(&mode, (int)new_mode);
+	int old_mode = __atomic_exchange_n(&mode, new_mode, __ATOMIC_SEQ_CST);
+	bool usb_changed = usb_was_connected != usb_connected;
+	usb_was_connected = usb_connected;
+	if (old_mode != new_mode || usb_changed) {
+		// TODO: Also check the state of charge.
+		if (change_callback) {
+			change_callback();
+		}
+	}
 
 	// Start the charging period.
-	k_work_schedule(&charging_ended, RECOVERY_DURATION);
+	k_work_schedule(&charging_ended, CHARGING_DURATION);
 }
 
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840
@@ -230,11 +269,19 @@ namespace tests {
 		bool should_discharge_low;
 		bool should_discharge_high;
 		PowerSupplyMode expected_mode;
+		bool expect_callback;
 	};
+
+	static atomic_t callback_called = ATOMIC_INIT(0);
+
+	static void power_supply_callback() {
+		atomic_set(&callback_called, 1);
+	}
 
 	static void single_charging_test(ChargingTest test,
 	                                 MockPowerSupplyPins *pins,
 	                                 PowerSupply<MockPowerSupplyPins> *ps) {
+		atomic_set(&callback_called, 0);
 		pins->set_input(test.low_voltage,
 		                test.high_voltage,
 		                test.usb_connected);
@@ -272,35 +319,42 @@ namespace tests {
 		             "wrong power supply mode (expected %d, got %d for %d/%d/%d)",
 		             test.expected_mode, ps->get_mode(),
 		             test.low_voltage, test.high_voltage, test.usb_connected);
+		int callback = atomic_get(&callback_called);
+		zassert_true(callback == (int)test.expect_callback,
+		             "callback was called: %d, should be %d for %d/%d/%d",
+		             callback, test.expect_callback,
+		             test.low_voltage, test.high_voltage, test.usb_connected);
 	}
 
 	static void charging_test(void) {
 		ChargingTest tests[] = {
 			// Both batteries low.
-			{ 1050, 1050, false, false, false, false, POWER_SUPPLY_LOW },
+			{ 1050, 1050, false, false, false, false, POWER_SUPPLY_LOW, true },
 			// One battery low.
-			{ 1050, 1400, false, false, false, false, POWER_SUPPLY_LOW },
-			{ 1400, 1050, false, false, false, false, POWER_SUPPLY_LOW },
+			{ 1050, 1400, false, false, false, false, POWER_SUPPLY_LOW, false },
+			{ 1400, 1050, false, false, false, false, POWER_SUPPLY_LOW, false },
 			// Both batteries full.
-			{ 1400, 1400, false, false, false, false, POWER_SUPPLY_NORMAL },
+			{ 1400, 1400, false, false, false, false, POWER_SUPPLY_NORMAL, true },
 			// Both batteries full, USB connected.
-			{ 1400, 1400, true, false, false, false, POWER_SUPPLY_NORMAL },
+			{ 1400, 1400, true, false, false, false, POWER_SUPPLY_NORMAL, true },
 			// One battery full, USB connected (counts as "charging"
 			// as we are balancing the batteries).
-			{ 1100, 1400, true, false, false, true, POWER_SUPPLY_CHARGING },
-			{ 1400, 1100, true, false, true, false, POWER_SUPPLY_CHARGING },
+			{ 1100, 1400, true, false, false, true, POWER_SUPPLY_CHARGING, true },
+			{ 1400, 1100, true, false, true, false, POWER_SUPPLY_CHARGING, false },
 			// USB connected, charging without balancing.
-			{ 1100, 1100, true, true, false, false, POWER_SUPPLY_CHARGING },
+			{ 1100, 1100, true, true, false, false, POWER_SUPPLY_CHARGING, false },
 			// USB connected, charging with balancing.
-			{ 1100, 1200, true, true, false, true, POWER_SUPPLY_CHARGING },
-			{ 1200, 1100, true, true, true, false, POWER_SUPPLY_CHARGING },
+			{ 1100, 1200, true, true, false, true, POWER_SUPPLY_CHARGING, false },
+			{ 1200, 1100, true, true, true, false, POWER_SUPPLY_CHARGING, false },
 			// USB disconnected again - we do not want to discharge
 			// if USB is not connected.
-			{ 1200, 1100, false, false, false, false, POWER_SUPPLY_NORMAL },
+			{ 1200, 1100, false, false, false, false, POWER_SUPPLY_NORMAL, true },
 		};
 
 		MockPowerSupplyPins pins;
+		pins.set_input(1200, 1200, false);
 		PowerSupply<MockPowerSupplyPins> ps(&pins);
+		ps.set_callback(power_supply_callback);
 
 		for (size_t i = 0; i < ARRAY_SIZE(tests); i++) {
 			single_charging_test(tests[i], &pins, &ps);
