@@ -45,9 +45,17 @@ public:
 	/// Returns the estimated battery charge in percent.
 	uint8_t get_battery_charge();
 
+	/// Checks whether USB is connected by testing whether 5V is available.
+	///
+	/// This function must not be called from within interrupt handlers.
 	bool has_usb_connection(void) {
-		// TODO: Mutex, the GPIOs area also accessed from another thread.
-		return pins->has_usb_connection();
+		// The power supply loop calls the same function from the system
+		// workqueue thread, so we need to disable preemption to prevent
+		// race conditions.
+		k_sched_lock();
+		bool connected = pins->has_usb_connection();
+		k_sched_unlock();
+		return connected;
 	}
 
 	// Sets a callback which is called whenever the state of the power

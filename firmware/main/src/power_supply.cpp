@@ -133,8 +133,9 @@ void PowerSupply<PowerSupplyPinType>::on_recovery_ended() {
 		return;
 	}
 
+	bool usb_connected = has_usb_connection();
+
 	// Measure the voltage.
-	bool usb_connected = pins->has_usb_connection();
 	uint32_t low_voltage, high_voltage;
 	pins->measure_battery_voltage(&low_voltage, &high_voltage);
 	printk("battery voltage: %dmV, %dmV\n", low_voltage, high_voltage);
