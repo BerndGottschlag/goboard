@@ -19,14 +19,15 @@ public:
 	void configure_discharging(bool low, bool high);
 	bool has_usb_connection(void);
 private:
-	static const struct device *init_gpio(const char *label,
-	                                      gpio_pin_t pin,
-	                                      gpio_flags_t flags);
+	static const struct device *init_output_gpio(const char *label,
+	                                             gpio_pin_t pin,
+	                                             gpio_flags_t flags);
 
 	const struct device *vbatt_power_gpio;
 	const struct device *charge_gpio;
 	const struct device *discharge_low_gpio;
 	const struct device *discharge_high_gpio;
+	const struct device *usb_connected_gpio;
 };
 
 #endif

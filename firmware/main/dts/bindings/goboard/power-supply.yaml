@@ -58,3 +58,9 @@ properties:
       required: true
       description: |
         Discharge the second (high, connected to VBATT) battery.
+
+    usb-connected-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        Input which can be used to detect whether USB is connected.

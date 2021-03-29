@@ -36,6 +36,10 @@
 #define DISCHARGE_HIGH_PIN DT_GPIO_PIN(POWERSUPPLY, discharge_high_gpios)
 #define DISCHARGE_HIGH_FLAGS DT_GPIO_FLAGS(POWERSUPPLY, discharge_high_gpios)
 
+#define USB_CONNECTED_LABEL DT_GPIO_LABEL(POWERSUPPLY, usb_connected_gpios)
+#define USB_CONNECTED_PIN DT_GPIO_PIN(POWERSUPPLY, usb_connected_gpios)
+#define USB_CONNECTED_FLAGS DT_GPIO_FLAGS(POWERSUPPLY, usb_connected_gpios)
+
 #define ADC_CHANNEL_VMID 0
 #define ADC_CHANNEL_VBATT 1
 
@@ -47,22 +51,32 @@ PowerSupplyPins::PowerSupplyPins() {
 	// Configure the GPIOs.
 	// TODO: Should the GPIOs be encapsulated in a class to ensure proper
 	// deinitialization in case of exceptions?
-	vbatt_power_gpio = init_gpio(VBATT_POWER_LABEL,
-	                             VBATT_POWER_PIN,
-	                             VBATT_POWER_FLAGS);
+	vbatt_power_gpio = init_output_gpio(VBATT_POWER_LABEL,
+	                                    VBATT_POWER_PIN,
+	                                    VBATT_POWER_FLAGS);
 	gpio_pin_set(vbatt_power_gpio, VBATT_POWER_PIN, false);
-	charge_gpio = init_gpio(CHARGE_LABEL,
-	                        CHARGE_PIN,
-	                        CHARGE_FLAGS);
+	charge_gpio = init_output_gpio(CHARGE_LABEL,
+	                               CHARGE_PIN,
+	                               CHARGE_FLAGS);
 	gpio_pin_set(charge_gpio, CHARGE_PIN, false);
-	discharge_low_gpio = init_gpio(DISCHARGE_LOW_LABEL,
-	                               DISCHARGE_LOW_PIN,
-	                               DISCHARGE_LOW_FLAGS);
+	discharge_low_gpio = init_output_gpio(DISCHARGE_LOW_LABEL,
+	                                      DISCHARGE_LOW_PIN,
+	                                      DISCHARGE_LOW_FLAGS);
 	gpio_pin_set(discharge_low_gpio, DISCHARGE_LOW_PIN, false);
-	discharge_high_gpio = init_gpio(DISCHARGE_HIGH_LABEL,
-	                                DISCHARGE_HIGH_PIN,
-	                                DISCHARGE_HIGH_FLAGS);
+	discharge_high_gpio = init_output_gpio(DISCHARGE_HIGH_LABEL,
+	                                       DISCHARGE_HIGH_PIN,
+	                                       DISCHARGE_HIGH_FLAGS);
 	gpio_pin_set(discharge_high_gpio, DISCHARGE_HIGH_PIN, false);
+
+	usb_connected_gpio = device_get_binding(USB_CONNECTED_LABEL);
+	if (usb_connected_gpio == NULL) {
+		throw InitializationFailed("USB GPIO not found");
+	}
+	if (gpio_pin_configure(usb_connected_gpio,
+	                       USB_CONNECTED_PIN,
+	                       GPIO_INPUT | USB_CONNECTED_FLAGS) != 0) {
+		throw InitializationFailed("USB gpio_pin_configure failed");
+	}
 
 	// Configure the ADC channels.
 	struct adc_channel_cfg vmid_adc_cfg = {
@@ -111,7 +125,7 @@ PowerSupplyPins::~PowerSupplyPins() {
 	gpio_pin_set(discharge_low_gpio, DISCHARGE_LOW_PIN, false);
 	gpio_pin_set(discharge_high_gpio, DISCHARGE_HIGH_PIN, false);
 
-	// Enable a wakeup interrupt on USB connection.
+	// Enable a wakeup interrupt when USB is connected.
 	// TODO
 }
 
@@ -163,18 +177,20 @@ void PowerSupplyPins::configure_discharging(bool low, bool high) {
 }
 
 bool PowerSupplyPins::has_usb_connection(void) {
-	// TODO
-	return false;
+	int status = gpio_pin_get(usb_connected_gpio, USB_CONNECTED_PIN);
+	if (status < 0) {
+		throw HardwareError("failed to get USB connection GPIO status");
+	}
+	return status;
 }
 
-const struct device *PowerSupplyPins::init_gpio(const char *label,
-                                                gpio_pin_t pin,
-                                                gpio_flags_t flags) {
+const struct device *PowerSupplyPins::init_output_gpio(const char *label,
+                                                       gpio_pin_t pin,
+                                                       gpio_flags_t flags) {
 	const struct device *gpio = device_get_binding(label);
 	if (gpio == NULL) {
 		throw InitializationFailed("GPIO not found");
 	}
-	// TODO: Inactive?
 	if (gpio_pin_configure(gpio, pin,
 	                       GPIO_OUTPUT_INACTIVE | flags) != 0) {
 		throw InitializationFailed("gpio_pin_configure failed");
