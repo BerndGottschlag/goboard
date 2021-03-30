@@ -46,10 +46,10 @@ void power_supply_mode_switch_handler() {
 bool want_shutdown(PowerSupply<PowerSupplyPins> *power_supply,
                    ModeSwitch *mode_switch) {
 	if (power_supply->get_mode() == POWER_SUPPLY_LOW) {
-		printk("low power, shutting down.");
+		printk("low power, shutting down.\n");
 		return true;
 	} else if (!power_supply->has_usb_connection() && mode_switch->get_mode() == MODE_OFF_USB) {
-		printk("no USB connection, shutting down.");
+		printk("no USB connection, shutting down.\n");
 		return true;
 	} else {
 		return false;
@@ -74,7 +74,7 @@ PowerAction main_loop(KeyboardType *keyboard,
 			return SHUTDOWN;
 		}
 		if (mode_switch->get_mode() != mode) {
-			printk("selected mode changed from %d to %d, resetting...",
+			printk("selected mode changed from %d to %d, resetting...\n",
 			       mode,
 			       mode_switch->get_mode());
 			return REBOOT;

@@ -138,8 +138,10 @@ void PowerSupply<PowerSupplyPinType>::on_recovery_ended() {
 	// Measure the voltage.
 	uint32_t low_voltage, high_voltage;
 	pins->measure_battery_voltage(&low_voltage, &high_voltage);
+#ifdef CONFIG_BOARD_GOBOARD_NRF52840
 	printk("battery voltage: %dmV, %dmV\n", low_voltage, high_voltage);
 	printk("usb: %d\n", usb_connected);
+#endif
 	// TODO: Derive the state of charge from the lower voltage.
 
 	// Start charging or balancing.
@@ -147,19 +149,25 @@ void PowerSupply<PowerSupplyPinType>::on_recovery_ended() {
 	if (usb_connected) {
 		if (low_voltage < CHARGE_END_VOLTAGE &&
 				high_voltage < CHARGE_END_VOLTAGE) {
+#ifdef CONFIG_BOARD_GOBOARD_NRF52840
 			printk("charging.\n");
+#endif
 			pins->configure_charging(true);
 			new_mode = POWER_SUPPLY_CHARGING;
 		}
 		// Balancing counts as "charging", even if one battery is
 		// already full (the other will be charged when possible).
 		if (((int)high_voltage - (int)low_voltage) > 20) {
+#ifdef CONFIG_BOARD_GOBOARD_NRF52840
 			printk("discharging 1.\n");
+#endif
 			pins->configure_discharging(false, true);
 			new_mode = POWER_SUPPLY_CHARGING;
 		}
 		if (((int)low_voltage - (int)high_voltage) > 20) {
+#ifdef CONFIG_BOARD_GOBOARD_NRF52840
 			printk("discharging 2.\n");
+#endif
 			pins->configure_discharging(true, false);
 			new_mode = POWER_SUPPLY_CHARGING;
 		}
