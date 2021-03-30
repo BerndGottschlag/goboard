@@ -1,6 +1,5 @@
 #include "keys.hpp"
 
-#include "scan_code.hpp"
 #include "kernel.h"
 
 #define ROWS 6
@@ -355,6 +354,92 @@ namespace tests {
 		bitmap.clear_bit(100000);
 	}
 
+	struct SixKeyTest {
+		uint8_t pressed;
+		uint8_t released;
+		uint8_t expected[8];
+	};
+
+	static void six_key_set_test(void) {
+		// Test that keys are correctly collected from a bitmap.
+		KeyBitmap bitmap;
+		SixKeySet six_keys = bitmap.to_6kro();
+		uint8_t good[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.set_bit(KEY_X);
+		six_keys = bitmap.to_6kro();
+		good[2] = KEY_X;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.set_bit(KEY_ESCAPE);
+		bitmap.set_bit(KEY_A);
+		bitmap.set_bit(KEY_C);
+		six_keys = bitmap.to_6kro();
+		good[2] = KEY_A;
+		good[3] = KEY_C;
+		good[4] = KEY_X;
+		good[5] = KEY_ESCAPE;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.clear_bit(KEY_A);
+		bitmap.set_bit(KEY_D);
+		bitmap.set_bit(KEY_E);
+		bitmap.set_bit(KEY_F);
+		six_keys = bitmap.to_6kro();
+		good[2] = KEY_C;
+		good[3] = KEY_D;
+		good[4] = KEY_E;
+		good[5] = KEY_F;
+		good[6] = KEY_X;
+		good[7] = KEY_ESCAPE;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.set_bit(KEY_G);
+		six_keys = bitmap.to_6kro();
+		good[6] = KEY_G;
+		good[7] = KEY_X;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.clear_bit(KEY_D);
+		bitmap.clear_bit(KEY_E);
+		bitmap.clear_bit(KEY_F);
+		six_keys = bitmap.to_6kro();
+		good[2] = KEY_C;
+		good[3] = KEY_G;
+		good[4] = KEY_X;
+		good[5] = KEY_ESCAPE;
+		good[6] = 0;
+		good[7] = 0;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+
+		// Test that modifier keys are only collected as part of the
+		// modifier byte.
+		bitmap.set_bit(KEY_LCTRL);
+		six_keys = bitmap.to_6kro();
+		good[0] = 0x1;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.set_bit(KEY_RALT);
+		six_keys = bitmap.to_6kro();
+		good[0] = 0x41;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.set_bit(KEY_RMETA);
+		six_keys = bitmap.to_6kro();
+		good[0] = 0xC1;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+		bitmap.clear_bit(KEY_RMETA);
+		bitmap.clear_bit(KEY_RALT);
+		bitmap.clear_bit(KEY_LCTRL);
+		six_keys = bitmap.to_6kro();
+		good[0] = 0x0;
+		zassert_equal(memcmp(six_keys.data, good, 8), 0,
+		              "empty bitmap produced wrong SixKeySet");
+	}
+
 	static void assert_single_key_pressed(KeyBitmap *bitmap,
 	                                      ScanCode scan_code) {
 		for (size_t key = 0; key < sizeof(bitmap->keys) * 8; key++) {
@@ -521,6 +606,7 @@ namespace tests {
 	static void keys_tests() {
 		ztest_test_suite(keys,
 			ztest_unit_test(key_bitmap_test),
+			ztest_unit_test(six_key_set_test),
 			ztest_unit_test(key_mapping_test),
 			ztest_unit_test(key_debouncing_test),
 			ztest_unit_test(numpad_test)

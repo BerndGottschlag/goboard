@@ -1,10 +1,24 @@
 #ifndef KEYS_HPP_INCLUDED
 #define KEYS_HPP_INCLUDED
 
+#include "scan_code.hpp"
+
 #include <sys/util.h>
 
 #include <stdint.h>
 #include <stddef.h>
+
+/// Set of a modifier byte and up to 6 pressed scan codes as required for the
+/// HID boot protocol.
+class SixKeySet {
+public:
+	SixKeySet() {}
+
+	/// HID boot protocol report - the first byte contains the modifier
+	/// keys, the second byte is reserved and the remaining bytes contain
+	/// the pressed keys.
+	uint8_t data[8] = {0};
+};
 
 /// Bitmap containing the state of all keys indexed by HID scan code.
 class KeyBitmap {
@@ -60,6 +74,36 @@ public:
 			start = (word + 1) << 5;
 		}
 		return -1;
+	}
+
+	SixKeySet to_6kro() {
+		SixKeySet six_keys;
+		// The modifier byte is found at position 0xe0 (KEY_LCTRL) in
+		// the bitmap and can just be copied.
+		size_t mod_word = KEY_LCTRL >> 5;
+		size_t mod_bit = KEY_LCTRL & 0x1f;
+		six_keys.data[0] = (keys[mod_word] >> mod_bit) & 0xff;
+
+		// Scan the bitmap and return the first six keys.
+		unsigned int start = 0;
+		size_t count = 0;
+		while (true) {
+			int key = next_set_bit(start);
+			if (key == -1) {
+				break;
+			}
+			// Modifier keys shall not be included in the list.
+			if (key < KEY_LCTRL) {
+				six_keys.data[2 + count] = key;
+				count++;
+				if (count == 6) {
+					break;
+				}
+			}
+			start = key + 1;
+		}
+
+		return six_keys;
 	}
 
 	bool operator==(const KeyBitmap &other) {
