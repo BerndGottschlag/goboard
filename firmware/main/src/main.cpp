@@ -1,5 +1,7 @@
 
 #include "exception.hpp"
+#include "key_matrix.hpp"
+#include "keys.hpp"
 #include "mode_switch.hpp"
 #include "power_supply.hpp"
 #include "power_supply_pins.hpp"
@@ -115,14 +117,17 @@ static PowerAction run_keyboard() {
 	power_supply.set_callback(power_supply_mode_switch_handler);
 	mode_switch.set_callback(power_supply_mode_switch_handler);
 
-	// TODO: Initialize key matrix and mode LED.
+	// Initialize key matrix and mode LED.
+	KeyMatrix key_matrix;
+	Keys<KeyMatrix> keys(&key_matrix);
+	// TODO: Mode LED
 
 	// Run different initialization and main loop depending on the selected
 	// mode.
 	if (mode_switch.get_mode() == MODE_OFF_USB) {
 		printk("Initializing USB keyboard...\n");
 		// TODO: Pointers to key matrix and mode LED.
-		UsbKeyboard keyboard;
+		UsbKeyboard keyboard(&keys);
 		return main_loop<UsbKeyboard>(&keyboard,
 		                              MODE_OFF_USB,
 		                              &power_supply,
