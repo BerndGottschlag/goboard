@@ -15,7 +15,7 @@ public:
 	/// Marks a single key as pressed.
 	void set_bit(size_t scan_code) {
 		uint32_t word = scan_code >> 5;
-		if (word > ARRAY_SIZE(keys)) {
+		if (word >= ARRAY_SIZE(keys)) {
 			return;
 		}
 		uint32_t bit = scan_code & 0x1f;
@@ -25,25 +25,55 @@ public:
 	/// Marks a single key as released.
 	void clear_bit(size_t scan_code) {
 		uint32_t word = scan_code >> 5;
-		if (word > ARRAY_SIZE(keys)) {
+		if (word >= ARRAY_SIZE(keys)) {
 			return;
 		}
 		uint32_t bit = scan_code & 0x1f;
 		this->keys[word] &= ~(1 << bit);
 	}
 
+	/// Tests whether a single key is pressed.
 	bool bit_is_set(size_t scan_code) {
 		uint32_t word = scan_code >> 5;
-		if (word > ARRAY_SIZE(keys)) {
+		if (word >= ARRAY_SIZE(keys)) {
 			return false;
 		}
 		uint32_t bit = scan_code & 0x1f;
 		return (this->keys[word] & (1 << bit)) != 0;
 	}
 
-	///Bitmap containing the key state.
+	/// Finds the next pressed key, starting at the specified position.
 	///
-	///A set bit indicates a pressed key.
+	/// The position specified by `start` is included by the search. If no
+	/// pressed key is found, the function returns -1.
+	int next_set_bit(unsigned int start) {
+		while (start < sizeof(keys) * 8) {
+			uint32_t word = start >> 5;
+			uint32_t bit = start & 0x1f;
+			uint32_t mask = ~((1 << bit) - 1);
+			uint32_t bits = keys[word] & mask;
+			uint32_t set_bit = __builtin_ffs(bits);
+			if (set_bit != 0) {
+				return (word << 5) + set_bit - 1;
+			}
+			// No bit found in this word, try the next.
+			start = (word + 1) << 5;
+		}
+		return -1;
+	}
+
+	bool operator==(const KeyBitmap &other) {
+		for (size_t i = 0; i < ARRAY_SIZE(keys); i++) {
+			if (keys[i] != other.keys[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/// Bitmap containing the key state.
+	///
+	/// A set bit indicates a pressed key.
 	uint32_t keys[8] = {0};
 };
 
