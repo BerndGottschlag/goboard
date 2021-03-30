@@ -328,7 +328,23 @@ namespace tests {
 		zassert_equal(bitmap.next_set_bit(255), 255,
 		              "iterating over keys failed");
 
+		// Test bit_is_set().
+		zassert_equal(bitmap.bit_is_set(0), true, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(1), false, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(29), true, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(30), false, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(31), true, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(32), false, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(33), true, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(255), true, "bit_is_set failed");
+		zassert_equal(bitmap.bit_is_set(256), false, "bit_is_set failed");
+
 		// Test clearing bits.
+		bitmap.clear_bit(255);
+		zassert_true(bitmap.keys[7] == 0,
+		             "correct bit was cleared");
+		zassert_equal(bitmap.next_set_bit(34), -1,
+		              "iterating over keys failed");
 		bitmap.keys[1] = 0xdeadc0de;
 		bitmap.clear_bit(35);
 		zassert_true(bitmap.keys[1] == 0xdeadc0d6,
@@ -336,15 +352,7 @@ namespace tests {
 		bitmap.clear_bit(29);
 		zassert_true(bitmap.keys[0] == 0x80000001,
 		             "correct bit was cleared");
-		bitmap.set_bit(100000);
-		bitmap.clear_bit(255);
-		zassert_true(bitmap.keys[0] == 0x00000001,
-		             "correct bit was cleared");
-		zassert_equal(bitmap.next_set_bit(34), -1,
-		              "iterating over keys failed");
-
-		// Test bit_is_set().
-		// TODO
+		bitmap.clear_bit(100000);
 	}
 
 	static void assert_single_key_pressed(KeyBitmap *bitmap,
