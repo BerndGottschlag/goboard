@@ -68,11 +68,11 @@ public:
 	// deadlock.
 	void set_callback(void (*change_callback)());
 private:
-	static void static_set_callback_work(struct k_work *item);
+	static void static_set_callback_work(struct k_work *work);
 
-	static void static_on_charging_ended(struct k_work *item);
+	static void static_on_charging_ended(struct k_work *work);
 	void on_charging_ended();
-	static void static_on_recovery_ended(struct k_work *item);
+	static void static_on_recovery_ended(struct k_work *work);
 	void on_recovery_ended();
 
 
