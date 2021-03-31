@@ -23,6 +23,8 @@
 		caps-lock-led = &led0;
 		scroll-lock-led = &led1;
 		mode-pwm-led = &led2;
+		modesw0 = &button0;
+		modesw1 = &button1;
 	};
 
 
@@ -42,6 +44,18 @@
 		compatible = "pwm-leds";
 		led2: pwm_led_0 {
 			pwms = <&pwm0 35>;
+		};
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio0 9 0>;
+			label = "Mode switch (profile 1)";
+		};
+		button1: button_1 {
+			gpios = <&gpio0 10 0>;
+			label = "Mode switch (profile 2)";
 		};
 	};
 
