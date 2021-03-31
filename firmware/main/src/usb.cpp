@@ -115,6 +115,7 @@ void UsbKeyboard::on_sof() {
 	if (key_bitmap == prev_key_bitmap) {
 		return;
 	}
+	prev_key_bitmap = key_bitmap;
 
 	// Send a keyboard report.
 	if (boot_protocol) {
