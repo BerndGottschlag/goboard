@@ -114,7 +114,6 @@ PowerSupplyPins::PowerSupplyPins() {
 		if (adc_read(ADC, &adc_seq) != 0) {
 			throw HardwareError("failed to calibrate ADC");
 		}
-		printk("battery %d: %d\n", channel, raw_value);
 	}
 }
 

@@ -36,7 +36,6 @@ KeyMatrix::KeyMatrix() {
 
 	// Initialize SPI.
 	spi_dev = device_get_binding(SPI_LABEL);
-	printk("SPI: %s\n", SPI_LABEL);
 	if (spi_dev == NULL) {
 		throw InitializationFailed("SPI not found");
 	}
