@@ -56,6 +56,14 @@
 		discharge-high-gpios = <&gpio0 45 GPIO_ACTIVE_LOW>;
 		usb-connected-gpios = <&gpio0 23 GPIO_ACTIVE_LOW>;
 	};
+
+	keymatrix {
+		compatible = "key-matrix";
+		spi = <&spi1>;
+		power-gpios = <&gpio0 22 GPIO_ACTIVE_LOW>;
+		store-gpios = <&gpio0 12 0>;
+		load-gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
+	};
 };
 
 &adc {

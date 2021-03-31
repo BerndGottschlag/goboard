@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+#include <drivers/gpio.h>
+#include <drivers/spi.h>
+
 /// Class which reads the key matrix via shift registers.
 class KeyMatrix {
 public:
@@ -28,7 +31,19 @@ public:
 
 	/// SPI operation which writes the specified data into the row selection
 	/// shift register and returns the data from the input shift registers.
-	uint16_t transfer(uint16_t out);
+	uint16_t transfer(uint8_t out);
+private:
+	static const struct device *init_output_gpio(const char *label,
+	                                             gpio_pin_t pin,
+	                                             gpio_flags_t flags);
+
+	const struct device *power_gpio;
+	const struct device *load_gpio;
+	const struct device *store_gpio;
+
+	const struct device *spi_dev;
+	static const struct spi_config READ_SPI_CFG;
+	static const struct spi_config WRITE_SPI_CFG;
 };
 
 #endif

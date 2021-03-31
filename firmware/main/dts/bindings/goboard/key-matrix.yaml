@@ -1,0 +1,28 @@
+description: |
+    Goboard shift-register-based key matrix
+
+compatible: "key-matrix"
+
+include: base.yaml
+
+properties:
+    spi:
+      type: phandle
+      required: true
+      description: |
+        SPI to which the shift registers are connected.
+    power-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO which enables power to the key matrix.
+    store-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO which is used to load the row shift register's outputs.
+    load-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO which is used to load the column shift register's inputs.
