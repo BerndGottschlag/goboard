@@ -14,7 +14,7 @@ static const uint8_t hid_report_descriptor[] = HID_KEYBOARD_REPORT_DESC();
 
 // TODO: Keyboard LED support.
 
-UsbKeyboard::UsbKeyboard(Keys<KeyMatrix> *keys): keys(keys) {
+UsbKeyboard::UsbKeyboard(Keys<KeyMatrix> *keys, Leds *leds): keys(keys), leds(leds) {
 	k_sched_lock();
 	if (instance == NULL) {
 		instance = this;

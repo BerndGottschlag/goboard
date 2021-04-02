@@ -34,6 +34,8 @@ else()
 		${SRC}
 		src/key_matrix.cpp
 		src/key_matrix.hpp
+		src/leds.cpp
+		src/leds.hpp
 		src/main.cpp
 		src/power_supply_pins.hpp
 		src/power_supply_pins.cpp

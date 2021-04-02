@@ -8,11 +8,12 @@
 #include <usb/usb_device.h>
 #include <usb/class/usb_hid.h>
 
+class Leds;
 
 /// USB HID keyboard implementation.
 class UsbKeyboard {
 public:
-	UsbKeyboard(Keys<KeyMatrix> *keys);
+	UsbKeyboard(Keys<KeyMatrix> *keys, Leds *leds);
 	~UsbKeyboard();
 
 	KeyboardProfile get_profile();
@@ -32,6 +33,7 @@ private:
 	struct k_work_delayable poll_suspended;
 
 	Keys<KeyMatrix> *keys;
+	Leds *leds;
 
 	const struct device *hid_dev;
 
