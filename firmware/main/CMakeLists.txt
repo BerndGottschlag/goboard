@@ -32,6 +32,8 @@ else()
 	# Device-only files.
 	set(SRC
 		${SRC}
+		src/bluetooth.cpp
+		src/bluetooth.hpp
 		src/key_matrix.cpp
 		src/key_matrix.hpp
 		src/leds.cpp

@@ -1,4 +1,5 @@
 
+#include "bluetooth.hpp"
 #include "exception.hpp"
 #include "key_matrix.hpp"
 #include "keys.hpp"
@@ -11,6 +12,7 @@
 #include <init.h>
 #include <power/power.h>
 #include <power/reboot.h>
+#include <settings/settings.h>
 
 /*#include <device.h>
 #include <drivers/pwm.h>
@@ -114,6 +116,12 @@ static PowerAction run_keyboard() {
 		return SHUTDOWN;
 	}
 
+	// The profiles selected by the mode switch are configurable at runtime
+	// using FN key combinations and the selection is stored in flash, so we
+	// need to load the settings.
+	settings_subsys_init();
+	// TODO
+
 	// Register power supply and mode switch change listener.
 	power_supply.set_callback(power_supply_mode_switch_handler);
 	mode_switch.set_callback(power_supply_mode_switch_handler);
@@ -134,8 +142,11 @@ static PowerAction run_keyboard() {
 		                              &mode_switch);
 	} else if (mode_switch.get_mode() == MODE_BLUETOOTH) {
 		printk("Initializing bluetooth keyboard...\n");
-		// TODO
-		return SHUTDOWN;
+		BluetoothKeyboard keyboard(&keys, &leds);
+		return main_loop<BluetoothKeyboard>(&keyboard,
+		                                    MODE_BLUETOOTH,
+		                                    &power_supply,
+		                                    &mode_switch);
 	} else if (mode_switch.get_mode() == MODE_UNIFYING) {
 		printk("Initializing unifying keyboard...\n");
 		// TODO
