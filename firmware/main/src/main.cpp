@@ -7,6 +7,7 @@
 #include "mode_switch.hpp"
 #include "power_supply.hpp"
 #include "power_supply_pins.hpp"
+#include "unifying.hpp"
 #include "usb.hpp"
 
 #include <init.h>
@@ -149,8 +150,11 @@ static PowerAction run_keyboard() {
 		                                    &mode_switch);
 	} else if (mode_switch.get_mode() == MODE_UNIFYING) {
 		printk("Initializing unifying keyboard...\n");
-		// TODO
-		return SHUTDOWN;
+		UnifyingKeyboard keyboard(&keys, &leds);
+		return main_loop<UnifyingKeyboard>(&keyboard,
+		                                   MODE_UNIFYING,
+		                                   &power_supply,
+		                                   &mode_switch);
 	} else {
 		// This must never happen.
 		throw InvalidState("invalid mode");
