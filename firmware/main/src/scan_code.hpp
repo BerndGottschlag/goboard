@@ -154,6 +154,15 @@ enum ScanCode {
 	KEY_RSHIFT = 0xe5,
 	KEY_RALT = 0xe6,
 	KEY_RMETA = 0xe7,
+
+	// The following scan codes do not conform to HID and are used solely
+	// for FN key combinations and internal control flow within the
+	// keyboard firmware.
+	FN_KEY = 0xf0,
+	FN_KEY_PAIR = 0xf1,
+	FN_KEY_BLUETOOTH = 0xf2,
+	FN_KEY_UNIFYING = 0xf3,
+	FN_KEY_UNPAIR_ALL = 0xf4,
 };
 #endif
 

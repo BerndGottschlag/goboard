@@ -150,7 +150,9 @@ static PowerAction run_keyboard() {
 		                                    &mode_switch);
 	} else if (mode_switch.get_mode() == MODE_UNIFYING) {
 		printk("Initializing unifying keyboard...\n");
-		UnifyingKeyboard keyboard(&keys, &leds);
+		UnifyingKeyboard keyboard(&keys,
+		                          &leds,
+		                          mode_switch.get_profile());
 		return main_loop<UnifyingKeyboard>(&keyboard,
 		                                   MODE_UNIFYING,
 		                                   &power_supply,

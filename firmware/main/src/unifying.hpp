@@ -5,6 +5,8 @@
 #include "key_matrix.hpp"
 #include "keys.hpp"
 
+#include <kernel.h>
+
 class Leds;
 
 enum UnifyingState {
@@ -18,7 +20,9 @@ enum UnifyingState {
 /// Logitech Unifying keyboard implementation.
 class UnifyingKeyboard {
 public:
-	UnifyingKeyboard(Keys<KeyMatrix> *keys, Leds *leds);
+	UnifyingKeyboard(Keys<KeyMatrix> *keys,
+	                 Leds *leds,
+	                 KeyboardProfile profile);
 	~UnifyingKeyboard();
 
 	KeyboardProfile get_profile();
@@ -32,8 +36,23 @@ private:
 	UnifyingState reconnecting();
 	UnifyingState connected();
 
+	bool poll_keyboard(int timeout,
+	                   UnifyingState *next_state,
+	                   KeyBitmap *key_bitmap);
+	bool process_fn_keys(KeyBitmap *key_bitmap, UnifyingState *next_state);
+
 	Keys<KeyMatrix> *keys;
 	Leds *leds;
+
+	/// Profile as seen from the main thread (i.e., as returned by
+	/// `get_profile()`).
+	KeyboardProfile profile;
+	bool stop = false;
+
+	/// Semaphore to interrupt sleeping in the thread.
+	k_sem wakeup;
+	/// Profile used by the thread.
+	KeyboardProfile actual_profile;
 
 	struct k_thread thread;
 	k_tid_t tid;
@@ -46,5 +65,4 @@ private:
 };
 
 #endif
-
 
