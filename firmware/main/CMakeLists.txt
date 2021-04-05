@@ -13,8 +13,6 @@ set(SRC
 	src/exception.hpp
 	src/keys.cpp
 	src/keys.hpp
-	src/mode_switch.cpp
-	src/mode_switch.hpp
 	src/power_supply.cpp
 	src/power_supply.hpp
 	src/scan_code.hpp
@@ -39,6 +37,8 @@ else()
 		src/leds.cpp
 		src/leds.hpp
 		src/main.cpp
+		src/mode_switch.cpp
+		src/mode_switch.hpp
 		src/power_supply_pins.hpp
 		src/power_supply_pins.cpp
 		src/unifying.hpp
