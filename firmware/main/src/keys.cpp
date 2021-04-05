@@ -210,22 +210,30 @@ void Keys<KeyMatrixType>::poll(int interval_ms) {
 template<class KeyMatrixType>
 FunctionKeys<KeyMatrixType>::FunctionKeys(KeyMatrixType *key_matrix):
 		keys(key_matrix) {
-	// TODO
-}
-
-template<class KeyMatrixType>
-FunctionKeys<KeyMatrixType>::~FunctionKeys() {
-	// TODO
 }
 
 template<class KeyMatrixType>
 void FunctionKeys<KeyMatrixType>::get_state(KeyBitmap *state) {
-	// TODO
+	keys.get_state(state);
+	if (!state->bit_is_set(FN_KEY)) {
+		return;
+	}
+
+	// Translate the F keys.
+	for (int i = 0; i < ARRAY_SIZE(f_fn_mapping); i++) {
+		if (state->bit_is_set(KEY_F1 + i)) {
+			state->clear_bit(KEY_F1 + i);
+			state->set_bit(f_fn_mapping[i]);
+		}
+	}
+
+	// The FN key is never relevant for the caller.
+	state->clear_bit(FN_KEY);
 }
 
 template<class KeyMatrixType>
 void FunctionKeys<KeyMatrixType>::poll(int interval_ms) {
-	// TODO
+	keys.poll(interval_ms);
 }
 
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840
@@ -663,7 +671,7 @@ namespace tests {
 		}
 
 		// Test mapping of all FN key combinations.
-		static const size_t F_ROW = 0;
+		static const size_t F_ROW = 1;
 		static const size_t F_COLUMNS[12] = {
 			15, 13, 12, 11, 10, 9, 8, 6, 7, 5, 4, 2
 		};

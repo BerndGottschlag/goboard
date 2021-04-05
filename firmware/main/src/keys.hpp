@@ -166,7 +166,6 @@ private:
 template<class KeyMatrixType> class FunctionKeys {
 public:
 	FunctionKeys(KeyMatrixType *key_matrix);
-	~FunctionKeys();
 
 	/// Returns the current (debounced) state of all keys.
 	void get_state(KeyBitmap *state);
