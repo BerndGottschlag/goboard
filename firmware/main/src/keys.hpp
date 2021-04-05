@@ -125,6 +125,10 @@ public:
 ///
 /// This class collects all keys from the main key matrix and the numpad, and it
 /// implements 5ms switch debouncing for the former.
+///
+/// The output of this class should never be fed directly to the host as it
+/// lacks interpretation of FN key combinations and instead reports a raw
+/// non-standard FN key. Instead, `FunctionKeys` should be used.
 template<class KeyMatrixType> class Keys {
 public:
 	// TODO: Numpad connection.
@@ -152,6 +156,27 @@ private:
 	                                    keys_change3,
 	                                    keys_change4,
 	                                    keys_change5};
+};
+
+/// Wrapper around `Keys` which correctly interprets FN key combinations.
+///
+/// While the FN key is pressed, some of the F keys are mapped to different
+/// scan codes. Also, FN+F9 disables or re-enables the windows keys to prevent
+/// unwanted minimizing of games.
+template<class KeyMatrixType> class FunctionKeys {
+public:
+	FunctionKeys(KeyMatrixType *key_matrix);
+	~FunctionKeys();
+
+	/// Returns the current (debounced) state of all keys.
+	void get_state(KeyBitmap *state);
+
+	/// Polls all keys.
+	///
+	/// @param interval_ms Milliseconds since the last call to `poll()`.
+	void poll(int interval_ms);
+private:
+	Keys<KeyMatrixType> keys;
 };
 
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840

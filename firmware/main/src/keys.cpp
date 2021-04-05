@@ -5,7 +5,7 @@
 #define ROWS 6
 #define COLUMNS 16
 
-static ScanCode key_matrix_locations[ROWS][COLUMNS] = {
+static const ScanCode key_matrix_locations[ROWS][COLUMNS] = {
 	{
 		KEY_INSERT,
 		KEY_DELETE,
@@ -112,8 +112,23 @@ static ScanCode key_matrix_locations[ROWS][COLUMNS] = {
 		KEY_X,
 		KEY_Z,
 		KEY_LSHIFT,
-		KEY_INVALID, // TODO: Fn!
+		FN_KEY,
 	},
+};
+
+static const ScanCode f_fn_mapping[12] = {
+	FN_KEY_PAIR,
+	FN_KEY_BLUETOOTH,
+	FN_KEY_UNIFYING,
+	FN_KEY_UNPAIR_ALL,
+	KEY_F4,
+	KEY_F5,
+	KEY_F6,
+	KEY_F7,
+	FN_KEY_TOGGLE_GAME_MODE,
+	KEY_MUTE,
+	KEY_VOLUME_UP,
+	KEY_VOLUME_DOWN,
 };
 
 template<class KeyMatrixType>
@@ -192,6 +207,27 @@ void Keys<KeyMatrixType>::poll(int interval_ms) {
 	}
 }
 
+template<class KeyMatrixType>
+FunctionKeys<KeyMatrixType>::FunctionKeys(KeyMatrixType *key_matrix):
+		keys(key_matrix) {
+	// TODO
+}
+
+template<class KeyMatrixType>
+FunctionKeys<KeyMatrixType>::~FunctionKeys() {
+	// TODO
+}
+
+template<class KeyMatrixType>
+void FunctionKeys<KeyMatrixType>::get_state(KeyBitmap *state) {
+	// TODO
+}
+
+template<class KeyMatrixType>
+void FunctionKeys<KeyMatrixType>::poll(int interval_ms) {
+	// TODO
+}
+
 #ifdef CONFIG_BOARD_GOBOARD_NRF52840
 #include "key_matrix.hpp"
 template class Keys<KeyMatrix>;
@@ -220,6 +256,14 @@ namespace tests {
 			clear();
 			matrix_state[row1] = 1 << column1;
 			matrix_state[row2] = 1 << column2;
+		}
+
+		void set_key(int row, int column) {
+			matrix_state[row] = 1 << column;
+		}
+
+		void clear_key(int row, int column) {
+			matrix_state[row] &= ~(1 << column);
 		}
 
 		void clear() {
@@ -599,6 +643,65 @@ namespace tests {
 		assert_no_key_pressed(&pressed);
 	}
 
+	static void fn_key_test(void) {
+		// Test pass-through of all keys except for FN.
+		for (int row = 0; row < 6; row++) {
+			for (int column = 0; column < 16; column++) {
+				ScanCode scan_code = key_matrix_locations[row][column];
+				if (scan_code == KEY_INVALID ||
+						scan_code == FN_KEY) {
+					continue;
+				}
+				MockKeyMatrix key_matrix;
+				key_matrix.set_single_key(row, column);
+				FunctionKeys<MockKeyMatrix> keys(&key_matrix);
+				keys.poll(1);
+				KeyBitmap pressed;
+				keys.get_state(&pressed);
+				assert_single_key_pressed(&pressed, scan_code);
+			}
+		}
+
+		// Test mapping of all FN key combinations.
+		static const size_t F_ROW = 0;
+		static const size_t F_COLUMNS[12] = {
+			15, 13, 12, 11, 10, 9, 8, 6, 7, 5, 4, 2
+		};
+		static const size_t FN_ROW = 5;
+		static const size_t FN_COLUMN = 15;
+		for (int i = 0; i < 12; i++) {
+			MockKeyMatrix key_matrix;
+			key_matrix.set_two_keys(FN_ROW,
+			                        FN_COLUMN,
+			                        F_ROW,
+			                        F_COLUMNS[i]);
+			FunctionKeys<MockKeyMatrix> keys(&key_matrix);
+			keys.poll(1);
+			KeyBitmap pressed;
+			keys.get_state(&pressed);
+			assert_single_key_pressed(&pressed,
+			                          f_fn_mapping[i]);
+		}
+
+		// If multiple keys are pressed while FN is pressed, only the F
+		// keys may be modified.
+		static const size_t A_ROW = 3;
+		static const size_t A_COLUMN = 15;
+		MockKeyMatrix key_matrix;
+		key_matrix.clear();
+		key_matrix.set_key(FN_ROW, FN_COLUMN);
+		key_matrix.set_key(F_ROW, F_COLUMNS[0]);
+		key_matrix.set_key(A_ROW, A_COLUMN);
+		FunctionKeys<MockKeyMatrix> keys(&key_matrix);
+		keys.poll(1);
+		KeyBitmap pressed;
+		keys.get_state(&pressed);
+		zassert_true(pressed.bit_is_set(KEY_A), "A was not detected");
+		zassert_false(pressed.bit_is_set(KEY_F1), "F1 was detected");
+		zassert_true(pressed.bit_is_set(f_fn_mapping[0]),
+		            "FN+F1 was not translated");
+	}
+
 	static void numpad_test(void) {
 		// TODO
 	}
@@ -609,6 +712,7 @@ namespace tests {
 			ztest_unit_test(six_key_set_test),
 			ztest_unit_test(key_mapping_test),
 			ztest_unit_test(key_debouncing_test),
+			ztest_unit_test(fn_key_test),
 			ztest_unit_test(numpad_test)
 		);
 		ztest_run_test_suite(keys);

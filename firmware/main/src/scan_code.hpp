@@ -163,6 +163,7 @@ enum ScanCode {
 	FN_KEY_BLUETOOTH = 0xf2,
 	FN_KEY_UNIFYING = 0xf3,
 	FN_KEY_UNPAIR_ALL = 0xf4,
+	FN_KEY_TOGGLE_GAME_MODE = 0xf5, // Disable Windows keys.
 };
 #endif
 
