@@ -43,6 +43,8 @@ else()
 		src/power_supply_pins.cpp
 		src/unifying.hpp
 		src/unifying.cpp
+		src/unifying_radio.hpp
+		src/unifying_radio.cpp
 		src/usb.hpp
 		src/usb.cpp
 	)

@@ -180,6 +180,7 @@ void main(void) {
 		printk("Reboot failed.\n");
 	}
 	// Enter System OFF.
+	// TODO: Check again that everything was unpowered!
 	printk("Switching off...\n");
 	pm_power_state_force((struct pm_state_info){PM_STATE_SOFT_OFF, 0, 0});
 	k_sleep(K_SECONDS(1));

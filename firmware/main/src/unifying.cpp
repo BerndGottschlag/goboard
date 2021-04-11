@@ -2,10 +2,183 @@
 
 #include "leds.hpp"
 
+#include <settings/settings.h>
+#include <string.h>
+
 #define STACK_SIZE 1024
 #define PRIORITY -1
 
+static const uint8_t DEVICE_WPID[2] = {0x40, 0x03}; // K270
+
 K_THREAD_STACK_DEFINE(unifying_stack, STACK_SIZE);
+
+struct UnifyingDeviceInfo {
+	uint8_t valid;
+	uint8_t pairing_address[5];
+	uint8_t pseudo_device_address[5];
+	uint8_t device_serial[4];
+};
+
+struct UnifyingPairingInfo {
+	uint8_t valid;
+	uint8_t device_address[5];
+	uint8_t pairing_device_nonce[4];
+	uint8_t pairing_dongle_nonce[4];
+	uint8_t dongle_wpid[2];
+};
+
+static UnifyingDeviceInfo device_info[2] = {{0}};
+static UnifyingPairingInfo pairing_info[2] = {{0}};
+static uint8_t device_key[2][16] = {{0}};
+
+static void derive_device_key(int profile) {
+	UnifyingPairingInfo *info = &pairing_info[profile];
+	uint8_t material[16];
+	material[0] = info->device_address[4];
+	material[1] = info->device_address[3];
+	material[2] = info->device_address[2];
+	material[3] = info->device_address[1];
+	memcpy(&material[4], DEVICE_WPID, 2);
+	memcpy(&material[6], info->dongle_wpid, 2);
+	memcpy(&material[8], info->pairing_device_nonce, 4);
+	memcpy(&material[12], info->pairing_dongle_nonce, 4);
+
+	device_key[profile][2] = material[0];
+	device_key[profile][1] = material[1] ^ 0xff;
+	device_key[profile][5] = material[2] ^ 0xff;
+	device_key[profile][3] = material[3];
+	device_key[profile][14] = material[4];
+	device_key[profile][11] = material[5];
+	device_key[profile][9] = material[6];
+	device_key[profile][0] = material[7];
+	device_key[profile][8] = material[8];
+	device_key[profile][6] = material[9] ^ 0x55;
+	device_key[profile][4] = material[10];
+	device_key[profile][15] = material[11];
+	device_key[profile][10] = material[12] ^ 0xff;
+	device_key[profile][12] = material[13];
+	device_key[profile][7] = material[14];
+	device_key[profile][13] = material[15] ^ 0x55;
+}
+
+static int unifying_settings_get(const char *name,
+                                 char *val,
+                                 int val_len_max) {
+	static const char *names[2] = { "pairing_info_1", "pairing_info_2" };
+	for (int i = 0; i < 2; i++) {
+		const char *next;
+		if (settings_name_steq(name, names[i], &next) && !next) {
+			val_len_max = MIN(val_len_max,
+			                  (int)sizeof(pairing_info[i]));
+			memcpy(val, &pairing_info[i], val_len_max);
+			return val_len_max;
+		}
+	}
+
+	return -ENOENT;
+}
+
+static int unifying_profile_settings_set(int profile,
+                                         const char *name,
+                                         size_t len,
+                                         settings_read_cb read_cb,
+                                         void *cb_arg) {
+	const char *next;
+	size_t name_len = settings_name_next(name, &next);
+	if (next) {
+		return -ENOENT;
+	}
+	if (!strncmp(name, "pairing_info", name_len)) {
+		int ret = -EINVAL;
+		if (len == sizeof(pairing_info[profile])) {
+			ret = read_cb(cb_arg,
+			              &pairing_info[profile],
+			              sizeof(pairing_info[profile]));
+		}
+		if (ret >= 0) {
+			derive_device_key(i);
+			return 0;
+		} else {
+			// Error, reset the pairing info.
+			memset(&pairing_info[profile],
+			       0,
+			       sizeof(pairing_info[profile]));
+			memset(&device_key[profile],
+			       0,
+			       sizeof(device_key[profile]));
+			return ret;
+		}
+	}
+
+	return -ENOENT;
+}
+
+static int unifying_settings_set(const char *name,
+                                 size_t len,
+                                 settings_read_cb read_cb,
+                                 void *cb_arg) {
+	const char *next;
+	size_t name_len = settings_name_next(name, &next);
+	if (next) {
+		return -ENOENT;
+	}
+
+	static const char *names[2] = { "pairing_info_1", "pairing_info_2" };
+	for (int i = 0; i < 2; i++) {
+		if (!strncmp(name, names[i], name_len)) {
+			int ret = -EINVAL;
+			if (len == sizeof(pairing_info[i])) {
+				ret = read_cb(cb_arg,
+				              &pairing_info[i],
+				              sizeof(pairing_info[i]));
+			}
+			if (ret >= 0) {
+				derive_device_key(i);
+				return 0;
+			} else {
+				// Error, reset the pairing info.
+				memset(&pairing_info[i],
+				       0,
+				       sizeof(pairing_info[i]));
+				memset(&device_key[i],
+				       0,
+				       sizeof(device_key[i]));
+				return ret;
+			}
+		}
+	}
+
+	return -ENOENT;
+}
+
+static int unifying_settings_commit(void) {
+	return 0;
+}
+
+static int unifying_settings_export(int (*cb)(const char *name,
+                                              const void *value,
+                                              size_t val_len)) {
+	(void)cb("unifying/0/device_info",
+	         &device_info[0],
+	         sizeof(device_info[0]));
+	(void)cb("unifying/0/pairing_info",
+	         &pairing_info[0],
+	         sizeof(pairing_info[0]));
+	(void)cb("unifying/1/device_info",
+	         &device_info[1],
+	         sizeof(device_info[1]));
+	(void)cb("unifying/1/pairing_info",
+	         &pairing_info[1],
+	         sizeof(pairing_info[1]));
+	return 0;
+}
+
+SETTINGS_STATIC_HANDLER_DEFINE(beta,
+                               "unifying",
+                               unifying_settings_get,
+                               unifying_settings_set,
+                               unifying_settings_commit,
+                               unifying_settings_export);
 
 UnifyingKeyboard::UnifyingKeyboard(Keys<KeyMatrix> *keys,
                                    Leds *leds,
