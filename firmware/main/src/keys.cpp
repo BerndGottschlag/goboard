@@ -1,6 +1,7 @@
 #include "keys.hpp"
 
 #include "kernel.h"
+#include "string.h"
 
 #define ROWS 6
 #define COLUMNS 16
@@ -183,27 +184,33 @@ void Keys<KeyMatrixType>::poll(int interval_ms) {
 	}
 
 	uint8_t times_to_shift;
-	/*
+
+	for (uint8_t i = 0; i < 5; i++) {
+	}
 	// Perform debouncing:
+	memcpy(bitmap_debounced_old.keys, bitmap_debounced.keys, 8*4);
 	// Shift the changes.
 	if (interval_ms >= 5) {
-		times_to_shift = 4;
+		times_to_shift = 5;
+	} else {
+		times_to_shift = interval_ms;
 	}
-	else {
-		times_to_shift = interval_ms - 1;
-	}
-	for (i = times_to_shift; i > 0; i--)
-	{
+	for (uint8_t i = times_to_shift; i > 0; i--) {
+		for (uint8_t j = 4; j > 0; j--) {
+			memcpy(keys_changes[j], keys_changes[j-1], 8*4);
+		}
+		memset(keys_change0, 0, 8*4);
 	}
 
+	uint32_t temp[8];
 
-	for (i = 0; i < 8; i ++){
-		bitmap_debounced.keys
-	}
-	*/
 
-	for (uint8_t i = 0; i < 8; i++) {
-		bitmap_debounced.keys[i] = bitmap_temp.keys[i];
+	for (uint8_t i = 0; i < 8; i ++){
+		temp[i] = keys_change1[i] | keys_change2[i] | keys_change3[i] | keys_change4[i];
+
+		bitmap_debounced.keys[i] = (temp[i] & bitmap_debounced_old.keys[i]) | (~temp[i] & bitmap_temp.keys[i]);
+
+		keys_change0[i] = bitmap_debounced.keys[i] ^ bitmap_debounced_old.keys[i];
 	}
 }
 
@@ -641,9 +648,6 @@ namespace tests {
 		keys.get_state(&pressed);
 		assert_two_keys_pressed(&pressed, scan_code, scan_code2);
 		keys.poll(2);
-		keys.get_state(&pressed);
-		assert_single_key_pressed(&pressed, scan_code2);
-		keys.poll(1);
 		keys.get_state(&pressed);
 		assert_single_key_pressed(&pressed, scan_code2);
 		keys.poll(1);

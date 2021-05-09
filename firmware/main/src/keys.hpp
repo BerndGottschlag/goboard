@@ -142,20 +142,22 @@ public:
 	///
 	/// @param interval_ms Milliseconds since the last call to `poll()`.
 	void poll(int interval_ms);
+
 private:
 	KeyMatrixType *key_matrix;
+	KeyBitmap bitmap_debounced_old;
 	KeyBitmap bitmap_debounced;
 
-	uint32_t keys_change1[8];
-	uint32_t keys_change2[8];
-	uint32_t keys_change3[8];
-	uint32_t keys_change4[8];
-	uint32_t keys_change5[8];
-	uint32_t * const keys_changes[5] = {keys_change1,
+	uint32_t keys_change0[8] = {0};
+	uint32_t keys_change1[8] = {0};
+	uint32_t keys_change2[8] = {0};
+	uint32_t keys_change3[8] = {0};
+	uint32_t keys_change4[8] = {0};
+	uint32_t * const keys_changes[5] = {keys_change0,
+	                                    keys_change1,
 	                                    keys_change2,
 	                                    keys_change3,
-	                                    keys_change4,
-	                                    keys_change5};
+	                                    keys_change4};
 };
 
 /// Wrapper around `Keys` which correctly interprets FN key combinations.
