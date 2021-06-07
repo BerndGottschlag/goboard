@@ -1,9 +1,18 @@
 # Compiling
 
-Ensure that the NRF5 SDK (version 17) is placed at `../3rdparty/nrf5-sdk`, then
-execute the following:
+Install the nRF Connect SDK as described in the manual:
 
-    mkdir build
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=../Toolchain.cmake
-    make -j`nproc`
+https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/gs_installing.html
+
+At the time of writing, you need to install the `master` branch of the SDK. Once
+the SDK is installed, the following can be used to compile the firmware:
+
+```
+source <ZEPHYR_PATH>/env.sh
+./compile.sh
+```
+
+Executing `test.sh` instead compiles a debug version of the firmware and
+executes unit tests. Executing `openocd` in a different terminal and then
+executing `program.sh` flashes the firmware onto the target.
 
