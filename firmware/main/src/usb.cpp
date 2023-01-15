@@ -13,11 +13,14 @@
 static const uint8_t hid_report_descriptor[] = HID_KEYBOARD_REPORT_DESC();
 
 // TODO: Keyboard LED support.
+// TODO: Multimedia keys.
 
 UsbKeyboard::UsbKeyboard(Keys<KeyMatrix> *keys, Leds *leds): keys(keys), leds(leds) {
 	k_sched_lock();
 	if (instance == NULL) {
 		instance = this;
+	} else {
+		// TODO: Error handling?
 	}
 	k_sched_unlock();
 
@@ -160,6 +163,7 @@ void UsbKeyboard::on_protocol_change(const struct device *dev,
                                      uint8_t protocol) {
 	ARG_UNUSED(dev);
 
+	// TODO: Do we need to clear any output buffer?
 	instance->boot_protocol = protocol == HID_PROTOCOL_BOOT;
 }
 

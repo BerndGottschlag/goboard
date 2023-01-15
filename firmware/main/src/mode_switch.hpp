@@ -16,6 +16,10 @@ enum KeyboardProfile {
 	PROFILE_2,
 };
 
+static inline int profile_index(KeyboardProfile profile) {
+	return (int)profile;
+}
+
 /// Switch to switch between the three main modes of the device.
 class ModeSwitch {
 public:
