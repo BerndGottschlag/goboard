@@ -1,4 +1,6 @@
-///Modifier bits in the HID modifier byte.
+use defmt::Format;
+
+/// Modifier bits in the HID modifier byte.
 pub enum ModifierKey {
     /// Left control key.
     LeftControl = 0x1,
@@ -20,7 +22,7 @@ pub enum ModifierKey {
 
 /// HID key scan codes.
 #[repr(u8)]
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug, Format)]
 pub enum ScanCode {
     Invalid = 0x0,
     A = 0x4,

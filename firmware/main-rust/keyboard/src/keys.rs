@@ -55,7 +55,7 @@ impl<'a, KeyMatrix: KeyMatrixHardware> Keys<'a, KeyMatrix> {
         events_in: Receiver<'a, NoopRawMutex, KeysInEvent, 1>,
         events_out: Sender<'a, NoopRawMutex, KeysOutEvent, 1>,
     ) -> Keys<'a, KeyMatrix> {
-        key_matrix.enable();
+        key_matrix.enable().await;
         Keys {
             key_matrix,
             events_in,
@@ -320,6 +320,7 @@ const F_FN_MAPPING: [ScanCode; 12] = [
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::MockTimer;
 
     use embassy_sync::channel::Channel;
 
@@ -358,11 +359,6 @@ mod tests {
         fn set_key(&self, row: usize, column: u16) {
             let mut data = self.data.lock().unwrap();
             data.matrix_state[row] = 1 << column;
-        }
-
-        fn clear_key(&self, row: usize, column: u16) {
-            let mut data = self.data.lock().unwrap();
-            data.matrix_state[row] &= !(1 << column);
         }
 
         fn clear(&self) {
@@ -404,17 +400,17 @@ mod tests {
         }
     }
 
-    fn expect_no_key_event(output: &Channel<NoopRawMutex, Event, 1>) {
+    fn expect_no_key_event(output: &Channel<NoopRawMutex, KeysOutEvent, 1>) {
         if output.try_recv().is_ok() {
             panic!("received key state change event, but no key changed");
         }
     }
 
-    fn expect_key_event(output: &Channel<NoopRawMutex, Event, 1>, keys: &[ScanCode]) {
+    fn expect_key_event(output: &Channel<NoopRawMutex, KeysOutEvent, 1>, keys: &[ScanCode]) {
         let event = output
             .try_recv()
             .expect("did not generate key change event");
-        if let Event::KeysChanged(key_state) = event {
+        if let KeysOutEvent::KeysChanged(key_state) = event {
             assert_eq!(
                 &key_state.into_iter().collect::<Vec<_>>(),
                 keys,
@@ -580,35 +576,16 @@ mod tests {
         // TODO
     }
 
-    struct MockTimer {
-        call_start: Channel<NoopRawMutex, (), 1>,
-        expected_durations: Channel<NoopRawMutex, Duration, 1>,
-    }
-
-    impl MockTimer {
-        fn new() -> Self {
-            Self {
-                call_start: Channel::new(),
-                expected_durations: Channel::new(),
-            }
-        }
-    }
-
-    impl Timer for MockTimer {
-        async fn after(&self, duration: Duration) {
-            self.call_start.send(()).await;
-            let expected = self.expected_durations.recv().await;
-            assert_eq!(duration, expected);
-        }
-    }
-
-    fn expect_power_transition_done(output: &Channel<NoopRawMutex, Event, 1>, level: PowerLevel) {
+    fn expect_power_transition_done(
+        output: &Channel<NoopRawMutex, KeysOutEvent, 1>,
+        level: PowerLevel,
+    ) {
         let event = output
             .try_recv()
             .expect("did not generate key change event");
         assert_eq!(
             event,
-            Event::PowerTransitionDone(level),
+            KeysOutEvent::PowerTransitionDone(level),
             "expected power transition done event"
         );
     }
@@ -642,7 +619,7 @@ mod tests {
 
             // Test that run() sleeps for the correct durations.
             input
-                .send(Event::PowerTransition(PowerLevel::LowPower))
+                .send(KeysInEvent::PowerTransition(PowerLevel::LowPower))
                 .await;
             // This sleep is still 1ms long, but the next should be 10ms long.
             timer
@@ -656,7 +633,9 @@ mod tests {
                 .send(Duration::from_millis(10))
                 .await;
             timer.call_start.recv().await;
-            input.send(Event::PowerTransition(PowerLevel::Normal)).await;
+            input
+                .send(KeysInEvent::PowerTransition(PowerLevel::Normal))
+                .await;
             timer
                 .expected_durations
                 .send(Duration::from_millis(10))
@@ -671,7 +650,7 @@ mod tests {
             // Test that run() disables the key matrix on shutdown.
             timer.call_start.recv().await;
             input
-                .send(Event::PowerTransition(PowerLevel::Shutdown))
+                .send(KeysInEvent::PowerTransition(PowerLevel::Shutdown))
                 .await;
             timer
                 .expected_durations
