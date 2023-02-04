@@ -1,6 +1,5 @@
 use keyboard::keys::KeyMatrixHardware;
 
-use defmt::info;
 use embassy_embedded_hal::SetConfig;
 use embassy_nrf::gpio::{Level, Output, OutputDrive};
 use embassy_nrf::peripherals::{P0_04, P0_05, P0_07, P0_12, P0_22, P1_00, SPI3};
@@ -67,7 +66,7 @@ impl KeyMatrixHardware for KeyMatrix {
 
     async fn read_row(&mut self, row_bitmap: u8) -> u16 {
         // The row selection lines are active-low.
-        let row_bitmap = !row_bitmap;
+        let row_bitmap = !row_bitmap << 1;
         // Write the row to the output shift register.
         // The two shift registers use different SPI modes, so we cannot use one transfer to
         // read/write both at the same time.
@@ -75,7 +74,7 @@ impl KeyMatrixHardware for KeyMatrix {
         config.frequency = spim::Frequency::M2;
         config.mode = spis::Mode {
             polarity: spis::Polarity::IdleHigh,
-            phase: spis::Phase::CaptureOnFirstTransition,
+            phase: spis::Phase::CaptureOnSecondTransition,
         };
         self.spi.set_config(&config);
         let mut rx = [0];
@@ -100,38 +99,12 @@ impl KeyMatrixHardware for KeyMatrix {
         config.frequency = spim::Frequency::M2;
         config.mode = spis::Mode {
             polarity: spis::Polarity::IdleHigh,
-            phase: spis::Phase::CaptureOnSecondTransition,
+            phase: spis::Phase::CaptureOnFirstTransition,
         };
+        self.spi.set_config(&config);
         let mut rx = [0, 0];
         let tx = [0, 0];
         self.spi.transfer(&mut rx, &tx).await.unwrap();
-        info!("transfer result: {}", rx);
-        !rx[0] as u16 | (!rx[1] as u16 >> 16)
+        !rx[1] as u16 | ((!rx[0] as u16) << 8)
     }
-
-    /*async fn transfer(&mut self, out: u8) -> u16 {
-        // TODO
-        /*uint16_t in = 0;
-        struct spi_buf buf = {
-            .buf = &in,
-            .len = sizeof(in),
-        };
-        struct spi_buf_set buf_set = {
-            .buffers = &buf,
-            .count = 1,
-        };
-        if (spi_read(spi_dev, &READ_SPI_CFG, &buf_set) != 0) {
-            throw HardwareError("spi_read failed");
-        }
-        // The row selection lines are active-low.
-        out = ~out << 1;
-        buf.buf = &out;
-        buf.len = sizeof(out);
-        if (spi_write(spi_dev, &WRITE_SPI_CFG, &buf_set) != 0) {
-            throw HardwareError("spi_write failed");
-        }
-        // The keys are active-low.
-        in = ~in;
-        return (in >> 8) | (in << 8);*/
-    }*/
 }
