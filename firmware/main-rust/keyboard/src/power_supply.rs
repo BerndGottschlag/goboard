@@ -8,12 +8,16 @@ use embassy_futures::join::join;
 use embassy_futures::select::select;
 use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::channel::{Receiver, Sender};
+use embassy_sync::mutex::Mutex;
 use embassy_time::Duration;
 
-use super::Timer;
+use super::{debug, Timer};
 
 const CHARGING_PERIOD: Duration = Duration::from_secs(10);
 const RECOVERY_PERIOD: Duration = Duration::from_secs(3);
+
+const CHARGE_END_VOLTAGE: u32 = 1380;
+const DISCHARGED_VOLTAGE: u32 = 1100;
 
 #[derive(Clone, Copy)]
 pub struct BatteryVoltage {
@@ -68,27 +72,31 @@ pub struct PowerSupply<'a, ChargingHw: ChargingHardware, UsbConn: UsbConnection>
     output: Sender<'a, NoopRawMutex, PowerSupplyState, 1>,
     charging_hw: ChargingHw,
     usb_conn: UsbConn,
+    state: Mutex<NoopRawMutex, PowerSupplyState>,
 }
 
 impl<'a, ChargingHw: ChargingHardware, UsbConn: UsbConnection>
     PowerSupply<'a, ChargingHw, UsbConn>
 {
-    pub fn new(
+    pub async fn new(
         stop: Receiver<'a, NoopRawMutex, (), 1>,
         output: Sender<'a, NoopRawMutex, PowerSupplyState, 1>,
-        charging_hw: ChargingHw,
-        usb_conn: UsbConn,
-    ) -> Self {
+        mut charging_hw: ChargingHw,
+        mut usb_conn: UsbConn,
+    ) -> PowerSupply<'a, ChargingHw, UsbConn> {
         // Read the inputs and configure the initial charging state.
-        // TODO
+        let usb_connected = usb_conn.connected();
+        let initial_state = Self::configure_charging(&mut charging_hw, usb_connected).await;
+
         // We send the first state so that the remaining firmware immediately has usable data.
-        // TODO
+        output.send(initial_state).await;
 
         PowerSupply {
             stop,
             output,
             charging_hw,
             usb_conn,
+            state: Mutex::new(initial_state),
         }
     }
 
@@ -97,11 +105,41 @@ impl<'a, ChargingHw: ChargingHardware, UsbConn: UsbConnection>
         // so that state changes are quickly (faster than the charge delays) propagated to the rest
         // of the firmware.
         let usb_connection_function = async {
-            // TODO
+            loop {
+                self.usb_conn.wait_for_change().await;
+                // TODO: Implement debouncing?
+
+                // The charging function receives the information via the state variable. We also
+                // want to send an event if the state changed so that the rest of the firmware is
+                // immediately notified.
+                let mut state = self.state.lock().await;
+                let prev_connected = state.usb_connected;
+                state.usb_connected = self.usb_conn.connected();
+                if prev_connected != state.usb_connected {
+                    self.output.send(*state).await;
+                }
+            }
         };
 
         let charging_function = async {
-            // TODO
+            loop {
+                // We start with the charging period because the constructor already configured the
+                // charging hardware.
+                sleep.after(CHARGING_PERIOD).await;
+
+                self.charging_hw.configure_discharging(false, false);
+                self.charging_hw.configure_charging(false);
+
+                sleep.after(RECOVERY_PERIOD).await;
+
+                let mut state = self.state.lock().await;
+                let new_state =
+                    Self::configure_charging(&mut self.charging_hw, state.usb_connected).await;
+                if *state != new_state {
+                    *state = new_state;
+                    self.output.send(*state).await;
+                }
+            }
         };
 
         select(
@@ -110,14 +148,59 @@ impl<'a, ChargingHw: ChargingHardware, UsbConn: UsbConnection>
         )
         .await;
     }
+
+    async fn configure_charging(
+        charging_hw: &mut ChargingHw,
+        usb_connected: bool,
+    ) -> PowerSupplyState {
+        let voltage = charging_hw.measure_battery_voltage().await;
+        debug!("battery voltage: {}mV, {}mV", voltage.low, voltage.high);
+        debug!("usb: {}", usb_connected);
+
+        // We derive the state of charge from the battery with the lower voltage. It does not
+        // matter if the other battery would be able to provide more charge as the batteries are
+        // connected in series.
+        // TODO
+
+        let mut mode = PowerSupplyMode::Normal;
+        if usb_connected {
+            if voltage.low < CHARGE_END_VOLTAGE && voltage.high < CHARGE_END_VOLTAGE {
+                debug!("charging.");
+                charging_hw.configure_charging(true);
+                mode = PowerSupplyMode::Charging;
+            }
+            // Balancing counts as "charging", even if one battery is
+            // already full (the other will be charged when possible).
+            let difference = voltage.high as i32 - voltage.low as i32;
+            if difference > 20 {
+                debug!("discharging 1.");
+                charging_hw.configure_discharging(false, true);
+                mode = PowerSupplyMode::Charging;
+            } else if difference < -20 {
+                debug!("discharging 2.");
+                charging_hw.configure_discharging(true, false);
+                mode = PowerSupplyMode::Charging;
+            }
+        } else {
+            if voltage.low < DISCHARGED_VOLTAGE || voltage.high < DISCHARGED_VOLTAGE {
+                mode = PowerSupplyMode::Low;
+            }
+        }
+        PowerSupplyState {
+            mode,
+            battery_charge: 0, // TODO
+            usb_connected,
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{MockTimer, NopMockTimer};
+    use crate::test_utils::MockTimer;
 
     use embassy_sync::channel::Channel;
+    use embassy_time::with_timeout;
 
     use std::sync::atomic::{AtomicBool, Ordering};
     use std::sync::Mutex;
@@ -168,11 +251,6 @@ mod tests {
     }
 
     impl MockUsbConnection {
-        // Read the inputs and configure the initial charging state.
-        // TODO
-        // We send the first state so that the remaining firmware immediately has usable data.
-        // TODO
-
         fn new(connected: bool) -> Self {
             MockUsbConnection {
                 connected: AtomicBool::new(connected),
@@ -190,12 +268,16 @@ mod tests {
     }
 
     impl UsbConnection for &MockUsbConnection {
-        async fn wait_for_change(&mut self) {}
+        async fn wait_for_change(&mut self) {
+            self.change.recv().await;
+        }
+
         fn connected(&mut self) -> bool {
             self.connected.load(Ordering::SeqCst)
         }
     }
 
+    #[derive(Debug)]
     struct ChargingTest {
         low_voltage: u32,
         high_voltage: u32,
@@ -217,11 +299,16 @@ mod tests {
             // We only expect an event if the power supply state changed.
             let expected_state = PowerSupplyState {
                 mode: self.expected_mode,
-                battery_charge: 100, // TODO
+                battery_charge: 0, // TODO
                 usb_connected: self.usb_connected,
             };
             let state = if expected_state != prev_state {
-                let state = output.recv().await;
+                let state = with_timeout(Duration::from_secs(1), output.recv())
+                    .await
+                    .expect(&std::format!(
+                        "waiting for state update failed, test: {:?}",
+                        self
+                    ));
                 assert_eq!(state, expected_state);
                 state
             } else {
@@ -229,9 +316,15 @@ mod tests {
             };
 
             let hw_data = hw.data.lock().unwrap();
-            assert_eq!(hw_data.charging, self.should_charge);
-            assert_eq!(hw_data.discharging_low, self.should_discharge_low);
-            assert_eq!(hw_data.discharging_high, self.should_discharge_high);
+            assert_eq!(hw_data.charging, self.should_charge, "charging wrong");
+            assert_eq!(
+                hw_data.discharging_low, self.should_discharge_low,
+                "discharging_low wrong"
+            );
+            assert_eq!(
+                hw_data.discharging_high, self.should_discharge_high,
+                "discharging_high wrong"
+            );
 
             state
         }
@@ -239,6 +332,8 @@ mod tests {
 
     #[futures_test::test]
     async fn test_charging() {
+        env_logger::init();
+
         let tests = [
             // Both batteries low.
             ChargingTest {
@@ -356,16 +451,17 @@ mod tests {
         let mut state = PowerSupplyState {
             mode: PowerSupplyMode::Normal,
             battery_charge: 42,
-            usb_connected: false,
+            usb_connected: false, // Needs to match the first test
         };
 
         // We configure the first test and immediately read a result as the initial iteration is
         // executed directly in the constructor.
-        let test = &tests[0];
-        usb_connection.set_connected(test.usb_connected);
-        let mut charging_data = charging_hardware.data.lock().unwrap();
-        charging_data.voltage.low = test.low_voltage;
-        charging_data.voltage.high = test.high_voltage;
+        usb_connection.set_connected(tests[0].usb_connected);
+        {
+            let mut charging_data = charging_hardware.data.lock().unwrap();
+            charging_data.voltage.low = tests[0].low_voltage;
+            charging_data.voltage.high = tests[0].high_voltage;
+        }
 
         let stop = Channel::new();
         let output = Channel::new();
@@ -374,7 +470,8 @@ mod tests {
             output.sender(),
             &charging_hardware,
             &usb_connection,
-        );
+        )
+        .await;
 
         let ps_function = async {
             ps.run(&timer).await;
@@ -382,12 +479,31 @@ mod tests {
 
         let test_function = async {
             for i in 0..tests.len() {
+                println!("Test {}: {:?}", i, tests[i]);
                 // From this point on, we first expect a charging period, then a recovery period, then a
                 // charging period again, ...
-                timer.call_start.recv().await;
-                state = tests[0].verify(&output, &charging_hardware, state).await;
+
+                // Whenever the USB connection state changes, we get a second event before the
+                // charging period starts.
+                if i != 0 && tests[i - 1].usb_connected != tests[i].usb_connected {
+                    state.usb_connected = tests[i].usb_connected;
+                    let new_state = with_timeout(Duration::from_secs(1), output.recv())
+                        .await
+                        .expect(&std::format!(
+                            "waiting for USB update failed during test {}",
+                            i
+                        ));
+                    assert_eq!(state, new_state);
+                }
+
+                with_timeout(Duration::from_secs(1), timer.call_start.recv())
+                    .await
+                    .expect("charging period timer was not called, is run() stuck?");
+                state = tests[i].verify(&output, &charging_hardware, state).await;
                 timer.expected_durations.send(CHARGING_PERIOD).await;
-                timer.call_start.recv().await;
+                with_timeout(Duration::from_secs(1), timer.call_start.recv())
+                    .await
+                    .expect("recovery period timer was not called, is run() stuck?");
                 {
                     // In the recovery period, we must not charge the battery.
                     let hw_data = charging_hardware.data.lock().unwrap();
@@ -398,12 +514,13 @@ mod tests {
                 if i == tests.len() - 1 {
                     stop.send(()).await;
                 } else {
-                    usb_connection.set_connected(test.usb_connected);
+                    usb_connection.set_connected(tests[i + 1].usb_connected);
+                    usb_connection.notify();
                     let mut charging_data = charging_hardware.data.lock().unwrap();
-                    charging_data.voltage.low = test.low_voltage;
-                    charging_data.voltage.high = test.high_voltage;
+                    charging_data.voltage.low = tests[i + 1].low_voltage;
+                    charging_data.voltage.high = tests[i + 1].high_voltage;
+                    timer.expected_durations.send(RECOVERY_PERIOD).await;
                 }
-                timer.expected_durations.send(RECOVERY_PERIOD).await;
 
                 if i == tests.len() - 1 {
                     break;
@@ -411,7 +528,12 @@ mod tests {
             }
         };
 
-        futures::future::join(ps_function, test_function).await;
+        with_timeout(
+            Duration::from_secs(5),
+            futures::future::join(ps_function, test_function),
+        )
+        .await
+        .expect("run() did not stop");
     }
 
     #[futures_test::test]

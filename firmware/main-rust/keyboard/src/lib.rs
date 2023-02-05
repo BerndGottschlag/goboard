@@ -20,6 +20,12 @@ pub use key_state::*;
 #[macro_use]
 extern crate std;
 
+// defmt does not work on Linux, so we use log for the tests.
+#[cfg(not(test))]
+pub use defmt::{debug, error, info, trace, warn};
+#[cfg(test)]
+pub use log::{debug, error, info, trace, warn};
+
 /*#[derive(Debug, PartialEq, Clone, Format)]
 pub enum LedEvent {
     PowerTransition(PowerLevel),

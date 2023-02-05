@@ -1,7 +1,7 @@
 use super::scancode::ScanCode;
-use super::{Bitmap, KeyState, PowerLevel, Timer};
+use super::{warn, Bitmap, KeyState, PowerLevel, Timer};
 
-use defmt::{warn, Format};
+use defmt::Format;
 use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::channel::{Receiver, Sender};
 use embassy_time::Duration;
