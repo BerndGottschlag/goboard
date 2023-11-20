@@ -26,6 +26,29 @@ pub use defmt::{debug, error, info, trace, warn};
 #[cfg(test)]
 pub use log::{debug, error, info, trace, warn};
 
+#[cfg(not(target_os = "none"))]
+#[defmt::panic_handler]
+fn defmt_panic() -> ! {
+    panic!("defmt panic");
+}
+
+#[cfg(not(target_os = "none"))]
+#[defmt::global_logger]
+struct Logger;
+
+#[cfg(not(target_os = "none"))]
+unsafe impl defmt::Logger for Logger {
+    fn acquire() {}
+    unsafe fn flush() {}
+    unsafe fn release() {}
+    unsafe fn write(_bytes: &[u8]) {
+        panic!("did not expect defmt output");
+    }
+}
+
+#[cfg(not(target_os = "none"))]
+defmt::timestamp!("{=usize}", 0);
+
 /*#[derive(Debug, PartialEq, Clone, Format)]
 pub enum LedEvent {
     PowerTransition(PowerLevel),
