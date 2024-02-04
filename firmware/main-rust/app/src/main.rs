@@ -21,7 +21,7 @@
 #![macro_use]
 
 mod key_matrix;
-//mod power;
+mod power;
 //mod usb;
 
 use defmt_rtt as _; // global logger
@@ -44,7 +44,9 @@ use static_cell::StaticCell;
 use key_matrix::KeyMatrix;
 use keyboard::dispatcher::{RadioInEvent, RadioOutEvent};
 use keyboard::keys::{Keys, KeysOutEvent};
+use keyboard::power_supply::{ChargingHardware, PowerSupply};
 use keyboard::Timer;
+use power::Battery;
 
 struct EmbassyTimer;
 
@@ -95,6 +97,15 @@ async fn run_main(
         let key_matrix =
             KeyMatrix::new(p.P0_22, p.P0_12, p.P0_07, p.SPI3, p.P1_00, p.P0_05, p.P0_04);
         let mut keys = Keys::new(key_matrix, input.receiver(), output.sender()).await;
+
+        //let power_supply_input = Channel::new();
+        //let power_supply_output = Channel::new();
+        let mut battery = Battery::new(
+            p.SAADC, p.P0_28, p.P1_11, p.P1_13, p.P0_30, p.P0_31, p.P0_02,
+        );
+        let voltages = battery.measure_battery_voltage().await;
+        info!("voltages: {}mV/{}mV", voltages.low, voltages.high);
+        //let mut power_supply = PowerSupply::new(power_supply_input, power_supply_output, battery, usb_conn).await;
 
         let keys_function = async {
             keys.run(&EmbassyTimer {}).await;

@@ -21,8 +21,8 @@ const DISCHARGED_VOLTAGE: u32 = 1100;
 
 #[derive(Clone, Copy)]
 pub struct BatteryVoltage {
-    low: u32,
-    high: u32,
+    pub low: u32,
+    pub high: u32,
 }
 
 #[allow(async_fn_in_trait)]
