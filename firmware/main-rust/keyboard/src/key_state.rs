@@ -102,13 +102,6 @@ impl<'a> Iterator for KeyIter<'a> {
 pub type SixKeySet = [u8; 8];
 
 #[derive(Debug, PartialEq, Clone, Format)]
-pub enum PowerLevel {
-    Normal,
-    LowPower,
-    Shutdown,
-}
-
-#[derive(Debug, PartialEq, Clone, Format)]
 pub(crate) struct Bitmap<const SIZE: usize>
 where
     [u32; (SIZE + 31) / 32]: Sized,

@@ -51,9 +51,9 @@ pub enum PowerSupplyMode {
 
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub struct PowerSupplyState {
-    mode: PowerSupplyMode,
-    battery_charge: u8,
-    usb_connected: bool,
+    pub mode: PowerSupplyMode,
+    pub battery_charge: u8,
+    pub usb_connected: bool,
 }
 
 /// Power supply and battery management.

@@ -8,11 +8,13 @@
 #![feature(async_fn_in_trait, generic_const_exprs, async_closure)]
 #![no_std]
 
+pub mod dispatcher;
 mod key_state;
 pub mod keys;
 pub mod mode_switch;
 pub mod power_supply;
 pub mod scancode;
+mod select6;
 
 pub use key_state::*;
 
@@ -49,6 +51,13 @@ unsafe impl defmt::Logger for Logger {
 #[cfg(not(target_os = "none"))]
 defmt::timestamp!("{=usize}", 0);
 
+#[derive(Debug, PartialEq, Clone, defmt::Format)]
+pub enum PowerLevel {
+    Normal,
+    LowPower,
+    Shutdown,
+}
+
 /*#[derive(Debug, PartialEq, Clone, Format)]
 pub enum LedEvent {
     PowerTransition(PowerLevel),
@@ -66,7 +75,6 @@ pub enum ConnectionStatus {
     Reconnecting, // Slower blinking.
     Connected,
 }*/
-
 #[cfg(test)]
 mod test_utils {
     use super::Timer;
