@@ -18,6 +18,7 @@ pub enum SwitchPosition {
     Profile2,
 }
 
+#[allow(async_fn_in_trait)]
 pub trait ModeSwitchPins {
     async fn wait_for_change(&mut self);
     fn position(&mut self) -> SwitchPosition;
@@ -56,7 +57,7 @@ impl<'a, Pins: ModeSwitchPins> ModeSwitch<'a, Pins> {
             }
         };
 
-        select(switch_function, self.stop.recv()).await;
+        select(switch_function, self.stop.receive()).await;
     }
 }
 
@@ -81,6 +82,7 @@ mod tests {
                 change: Channel::new(),
             }
         }
+
         fn set_position(&self, position: SwitchPosition) {
             let mut data = self.data.lock().unwrap();
             data.position = position;

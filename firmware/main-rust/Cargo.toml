@@ -6,11 +6,12 @@ members = [
 ]
 
 [patch.crates-io]
-embassy-futures = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
-embassy-embedded-hal = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
-embassy-executor = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
-embassy-time = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
-embassy-sync = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
-embassy-nrf = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
-embassy-macros = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
-embassy-usb = { git = "https://github.com/embassy-rs/embassy", tag = "embassy-executor-v0.1.1" }
+embassy-futures = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-embedded-hal = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-executor = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-time = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-time-driver = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-sync = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-nrf = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-executor-macros = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }
+embassy-usb = { git = "https://github.com/embassy-rs/embassy", rev = "871d82d" }

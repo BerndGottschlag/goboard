@@ -1,7 +1,7 @@
 #![no_std]
 #![no_main]
 #![allow(incomplete_features)]
-#![feature(type_alias_impl_trait, async_fn_in_trait)]
+#![feature(type_alias_impl_trait)]
 #![macro_use]
 
 mod key_matrix;
@@ -14,11 +14,11 @@ use core::mem;
 
 use cortex_m_rt::entry;
 use defmt::{info, unwrap};
-use embassy_executor::Executor;
-use embassy_nrf::executor::InterruptExecutor;
-use embassy_nrf::interrupt::{self, InterruptExt};
 use embassy_nrf::{pwm, Peripherals};
 use embassy_sync::channel::Channel;
+use embassy_executor::{Executor, InterruptExecutor};
+use embassy_nrf::interrupt;
+use embassy_nrf::interrupt::InterruptExt;
 use nrf_softdevice::{raw, Softdevice};
 use static_cell::StaticCell;
 
@@ -82,8 +82,13 @@ async fn run_main(p: Peripherals) {
     embassy_futures::join::join(keys_function, print_function).await;
 }
 
-static ESB_EXECUTOR: StaticCell<InterruptExecutor<interrupt::SWI1_EGU1>> = StaticCell::new();
+static ESB_EXECUTOR: InterruptExecutor = InterruptExecutor::new();
 static NORMAL_EXECUTOR: StaticCell<Executor> = StaticCell::new();
+
+#[interrupt]
+unsafe fn SWI1_EGU1() {
+    ESB_EXECUTOR.on_interrupt()
+}
 
 #[entry]
 fn main() -> ! {
@@ -130,16 +135,14 @@ fn main() -> ! {
         }),
         ..Default::default()
     };
-    let sd = Softdevice::enable(&config);
+    let _sd = Softdevice::enable(&config);
 
     // As softdevice is always active, ESB RF code (e.g., Unifying) needs to use the timeslot API.
     // As that API has strict realtime requirements, we run it in a separate executor with a higher
-    // priority. The softdevice uses IRQ priorities 0, 1, and 4, so we run this code at priority 3.
-    let irq = interrupt::take!(SWI1_EGU1);
-    irq.set_priority(interrupt::Priority::P3);
-    let executor = ESB_EXECUTOR.init(InterruptExecutor::new(irq));
-    let spawner = executor.start();
-    unwrap!(spawner.spawn(run_esb()));
+    // priority. The softdevice uses IRQ priorities 0, 1, and 4, so we run this code at priority 5.
+    interrupt::SWI1_EGU1.set_priority(interrupt::Priority::P5);
+    let spawner = ESB_EXECUTOR.start(interrupt::SWI1_EGU1);
+    unwrap!(spawner.spawn(run_esb(UNIFYING_INPUT.receiver(), UNIFYING_OUTPUT.sender())));
 
     // Everything else is executed in thread mode.
     let executor = NORMAL_EXECUTOR.init(Executor::new());

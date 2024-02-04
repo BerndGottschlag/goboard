@@ -3,7 +3,11 @@ use keyboard::keys::KeyMatrixHardware;
 use embassy_embedded_hal::SetConfig;
 use embassy_nrf::gpio::{Level, Output, OutputDrive};
 use embassy_nrf::peripherals::{P0_04, P0_05, P0_07, P0_12, P0_22, P1_00, SPI3};
-use embassy_nrf::{interrupt, spim, spis};
+use embassy_nrf::{spim, spis, bind_interrupts};
+
+bind_interrupts!(struct Irqs {
+    SPIM3 => spim::InterruptHandler<SPI3>;
+});
 
 pub struct KeyMatrix {
     n_power: Output<'static, P0_22>,
@@ -30,8 +34,7 @@ impl KeyMatrix {
         // The shift registers are driven via SPI.
         let mut config = spim::Config::default();
         config.frequency = spim::Frequency::M2;
-        let irq = interrupt::take!(SPIM3);
-        let spi = spim::Spim::new(spi, irq, sck_pin, miso_pin, mosi_pin, config);
+        let spi = spim::Spim::new(spi, Irqs, sck_pin, miso_pin, mosi_pin, config);
 
         KeyMatrix {
             n_power,

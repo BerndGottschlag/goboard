@@ -6,6 +6,7 @@ use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::channel::{Receiver, Sender};
 use embassy_time::Duration;
 
+#[allow(async_fn_in_trait)]
 pub trait KeyMatrixHardware {
     /// Enables the key matrix.
     ///
@@ -154,7 +155,7 @@ impl<'a, KeyMatrix: KeyMatrixHardware> Keys<'a, KeyMatrix> {
             // poll() is not cancel-safe, so we only check the power state inbetween invocations.
             self.poll(1).await;
 
-            while let Ok(event) = self.events_in.try_recv() {
+            while let Ok(event) = self.events_in.try_receive() {
                 match event {
                     KeysInEvent::PowerTransition(power_level) => match power_level {
                         PowerLevel::Normal => {

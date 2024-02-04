@@ -226,6 +226,7 @@ where
     }
 }
 
+#[allow(async_fn_in_trait)]
 pub trait Timer {
     async fn after(&self, duration: embassy_time::Duration);
 }

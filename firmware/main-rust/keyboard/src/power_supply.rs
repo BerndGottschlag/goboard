@@ -25,12 +25,14 @@ pub struct BatteryVoltage {
     high: u32,
 }
 
+#[allow(async_fn_in_trait)]
 pub trait ChargingHardware {
     async fn measure_battery_voltage(&mut self) -> BatteryVoltage;
     fn configure_charging(&mut self, active: bool);
     fn configure_discharging(&mut self, low: bool, high: bool);
 }
 
+#[allow(async_fn_in_trait)]
 pub trait UsbConnection {
     async fn wait_for_change(&mut self);
     fn connected(&mut self) -> bool;
@@ -144,7 +146,7 @@ impl<'a, ChargingHw: ChargingHardware, UsbConn: UsbConnection>
 
         select(
             join(usb_connection_function, charging_function),
-            self.stop.recv(),
+            self.stop.receive(),
         )
         .await;
     }
