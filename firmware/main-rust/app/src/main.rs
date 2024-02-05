@@ -44,9 +44,9 @@ use static_cell::StaticCell;
 use key_matrix::KeyMatrix;
 use keyboard::dispatcher::{RadioInEvent, RadioOutEvent};
 use keyboard::keys::{Keys, KeysOutEvent};
-use keyboard::power_supply::{ChargingHardware, PowerSupply};
+use keyboard::power_supply::{ChargingHardware, PowerSupply, UsbConnection};
 use keyboard::Timer;
-use power::Battery;
+use power::{Battery, UsbVoltage};
 
 struct EmbassyTimer;
 
@@ -80,7 +80,7 @@ async fn run_main(
 ) {
     // We want a watchdog timer here that resets the system when there is a panic.
     // TODO: Actually feed the watchdog!
-    let mut config = wdt::Config::default();
+    /*let mut config = wdt::Config::default();
     config.timeout_ticks = 2 << 16; // The watchdog should be fed once per two seconds.
     config.run_during_debug_halt = false;
     let (_wdt, [_handle]) = match wdt::Watchdog::try_new(p.WDT, config) {
@@ -89,7 +89,7 @@ async fn run_main(
             error!("Watchdog already active with wrong config.");
             loop {}
         }
-    };
+    };*/
 
     {
         let input = Channel::new();
@@ -107,8 +107,17 @@ async fn run_main(
         info!("voltages: {}mV/{}mV", voltages.low, voltages.high);
         //let mut power_supply = PowerSupply::new(power_supply_input, power_supply_output, battery, usb_conn).await;
 
+        let mut usb_voltage = UsbVoltage::new(p.P0_23);
+
         let keys_function = async {
             keys.run(&EmbassyTimer {}).await;
+        };
+
+        let usb_function = async {
+            loop {
+                usb_voltage.wait_for_change().await;
+                info!("USB connected: {}", usb_voltage.connected());
+            }
         };
 
         // TODO: Experimental code.
@@ -151,7 +160,11 @@ async fn run_main(
             }
         };
 
-        embassy_futures::join::join(keys_function, print_function).await;
+        embassy_futures::join::join(
+            embassy_futures::join::join(keys_function, usb_function),
+            print_function,
+        )
+        .await;
     }
 
     // When we reach this point, the keyboard is supposed to be shut down (either because the

@@ -1,11 +1,9 @@
-use defmt::{error, info, unwrap};
-
 use embassy_nrf::bind_interrupts;
-use embassy_nrf::gpio::{Level, Output, OutputDrive};
-use embassy_nrf::peripherals::{P0_02, P0_28, P0_30, P0_31, P1_11, P1_13, SAADC};
+use embassy_nrf::gpio::{Input, Level, Output, OutputDrive, Pull};
+use embassy_nrf::peripherals::{P0_02, P0_23, P0_28, P0_30, P0_31, P1_11, P1_13, SAADC};
 use embassy_nrf::saadc::{self, ChannelConfig, Config, Saadc};
 
-use keyboard::power_supply::{BatteryVoltage, ChargingHardware};
+use keyboard::power_supply::{BatteryVoltage, ChargingHardware, UsbConnection};
 
 bind_interrupts!(struct Irqs {
     SAADC => saadc::InterruptHandler;
@@ -99,5 +97,38 @@ impl ChargingHardware for Battery {
         } else {
             self.n_balance_high.set_high();
         }
+    }
+}
+
+pub struct UsbVoltage {
+    n_usb_conn: Input<'static, P0_23>,
+    current_value: bool,
+}
+
+impl UsbVoltage {
+    pub fn new(n_usb_conn: P0_23) -> UsbVoltage {
+        let n_usb_conn = Input::new(n_usb_conn, Pull::None);
+        let current_value = n_usb_conn.is_high();
+        UsbVoltage {
+            n_usb_conn,
+            current_value,
+        }
+    }
+}
+
+impl UsbConnection for UsbVoltage {
+    async fn wait_for_change(&mut self) {
+        if self.current_value {
+            self.n_usb_conn.wait_for_low().await;
+        } else {
+            self.n_usb_conn.wait_for_high().await;
+        }
+        self.current_value = !self.current_value;
+    }
+
+    fn connected(&mut self) -> bool {
+        let current_value = self.n_usb_conn.is_high();
+        self.current_value = current_value;
+        !current_value // The input is inverted.
     }
 }
