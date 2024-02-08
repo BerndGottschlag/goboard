@@ -21,6 +21,7 @@
 #![macro_use]
 
 mod key_matrix;
+mod mode_switch;
 mod power;
 //mod usb;
 

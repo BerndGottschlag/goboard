@@ -45,8 +45,6 @@ impl<'a, Pins: ModeSwitchPins> ModeSwitch<'a, Pins> {
             // We send the initial position, as otherwise there is no way to get this state.
             self.output.send(position).await;
             loop {
-                // TODO: Race condition - wait_for_change should receive the expected state and
-                // should watch for differences.
                 self.pins.wait_for_change().await;
                 sleep.after(Duration::from_millis(100)).await;
                 let new_position = self.pins.position();
