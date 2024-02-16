@@ -3,7 +3,7 @@ use keyboard::keys::KeyMatrixHardware;
 use embassy_embedded_hal::SetConfig;
 use embassy_nrf::gpio::{Level, Output, OutputDrive};
 use embassy_nrf::peripherals::{P0_04, P0_05, P0_07, P0_12, P0_22, P1_00, SPI3};
-use embassy_nrf::{spim, spis, bind_interrupts};
+use embassy_nrf::{bind_interrupts, spim, spis};
 
 bind_interrupts!(struct Irqs {
     SPIM3 => spim::InterruptHandler<SPI3>;

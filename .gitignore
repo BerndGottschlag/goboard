@@ -9,6 +9,9 @@ firmware/3rdparty/nrf5-sdk
 firmware/main/build
 firmware/main/build_testing
 firmware/main/documentation/html
+firmware/main-rust/target
+firmware/main-rust/keyboard/target
+firmware/main-rust/app/target
 .gdb_history
 
 # ignore kicad bom files and associated files:
