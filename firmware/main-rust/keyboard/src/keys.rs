@@ -402,14 +402,14 @@ mod tests {
     }
 
     fn expect_no_key_event(output: &Channel<NoopRawMutex, KeysOutEvent, 1>) {
-        if output.try_recv().is_ok() {
+        if output.try_receive().is_ok() {
             panic!("received key state change event, but no key changed");
         }
     }
 
     fn expect_key_event(output: &Channel<NoopRawMutex, KeysOutEvent, 1>, keys: &[ScanCode]) {
         let event = output
-            .try_recv()
+            .try_receive()
             .expect("did not generate key change event");
         if let KeysOutEvent::KeysChanged(key_state) = event {
             assert_eq!(
@@ -582,7 +582,7 @@ mod tests {
         level: PowerLevel,
     ) {
         let event = output
-            .try_recv()
+            .try_receive()
             .expect("did not generate key change event");
         assert_eq!(
             event,
@@ -607,7 +607,7 @@ mod tests {
 
         let test_function = async {
             // Test that run() causes key state updates to be emitted.
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             let a_row = 3;
             let a_column = 15;
             key_matrix.set_single_key(a_row, a_column as u16);
@@ -615,7 +615,7 @@ mod tests {
                 .expected_durations
                 .send(Duration::from_millis(1))
                 .await;
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             expect_key_event(&output, &[ScanCode::A]);
 
             // Test that run() sleeps for the correct durations.
@@ -627,13 +627,13 @@ mod tests {
                 .expected_durations
                 .send(Duration::from_millis(1))
                 .await;
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             expect_power_transition_done(&output, PowerLevel::LowPower);
             timer
                 .expected_durations
                 .send(Duration::from_millis(10))
                 .await;
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             input
                 .send(KeysInEvent::PowerTransition(PowerLevel::Normal))
                 .await;
@@ -641,7 +641,7 @@ mod tests {
                 .expected_durations
                 .send(Duration::from_millis(10))
                 .await;
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             expect_power_transition_done(&output, PowerLevel::Normal);
             timer
                 .expected_durations
@@ -649,7 +649,7 @@ mod tests {
                 .await;
 
             // Test that run() disables the key matrix on shutdown.
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             input
                 .send(KeysInEvent::PowerTransition(PowerLevel::Shutdown))
                 .await;

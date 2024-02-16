@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+#![allow(unused)]
 use embassy_sync::blocking_mutex::raw::{CriticalSectionRawMutex, NoopRawMutex, RawMutex};
 use embassy_sync::channel::{Receiver, Sender};
 use embassy_time::Duration;
@@ -19,6 +21,7 @@ pub enum UsbInEvent {
 #[derive(PartialEq, Debug)]
 pub enum UsbOutEvent {
     PowerTransitionDone(PowerLevel),
+    ChargingAllowed(bool),
 }
 
 #[derive(PartialEq, Debug)]
@@ -110,7 +113,7 @@ mod tests {
         output: &Channel<NoopRawMutex, UsbInEvent, 1>,
         keys: &[ScanCode],
     ) {
-        let event = with_timeout(Duration::from_secs(1), output.recv())
+        let event = with_timeout(Duration::from_secs(1), output.receive())
             .await
             .expect("did not generate key change event");
         if let UsbInEvent::KeysChanged(key_state) = event {
@@ -128,7 +131,7 @@ mod tests {
         output: &Channel<NoopRawMutex, RadioInEvent, 1>,
         keys: &[ScanCode],
     ) {
-        let event = with_timeout(Duration::from_secs(1), output.recv())
+        let event = with_timeout(Duration::from_secs(1), output.receive())
             .await
             .expect("did not generate key change event");
         if let RadioInEvent::KeysChanged(key_state) = event {
@@ -146,7 +149,7 @@ mod tests {
         output: &Channel<M, EventType, 1>,
         expected: EventType,
     ) {
-        let event = with_timeout(Duration::from_secs(1), output.recv())
+        let event = with_timeout(Duration::from_secs(1), output.receive())
             .await
             .expect("did not generate event"); // TODO: Receive with timeout
         assert_eq!(event, expected, "wrong event received");
@@ -205,7 +208,8 @@ mod tests {
             // TODO: Other sinks
 
             // Test that mode switches select a different sink. The previous sink must not send
-            // further key presses, but the new sink must be notified of the keyboard state.
+            // further key presses and all currently pressed keys must be released. The new sink
+            // must be notified of the keyboard state.
             mode_switch_out.send(SwitchPosition::Profile1).await;
             usb_expect_key_event(&usb_in, &[]).await;
             // TODO: Notification to bluetooth sink that it became active?
@@ -251,7 +255,7 @@ mod tests {
 
             // Test that the low power mode is also entered when there have not been any key state
             // changes for an extended period of time and when USB is not connected.
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             timer.expected_durations.send(POWER_SAVING_TIMEOUT).await;
             expect_event(&keys_in, KeysInEvent::PowerTransition(PowerLevel::LowPower)).await;
             keys_out

@@ -5,7 +5,7 @@
 //! - Therefore: weak coupling via cancel-safe channels and asynchronous tasks
 
 #![allow(incomplete_features)]
-#![feature(async_fn_in_trait, generic_const_exprs, async_closure)]
+#![feature(generic_const_exprs, async_closure)]
 #![no_std]
 
 pub mod dispatcher;
@@ -100,7 +100,7 @@ mod test_utils {
     impl Timer for MockTimer {
         async fn after(&self, duration: Duration) {
             self.call_start.send(()).await;
-            let expected = self.expected_durations.recv().await;
+            let expected = self.expected_durations.receive().await;
             assert_eq!(duration, expected);
         }
     }

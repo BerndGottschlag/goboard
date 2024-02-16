@@ -93,7 +93,7 @@ mod tests {
 
     impl ModeSwitchPins for &MockModeSwitchPins {
         async fn wait_for_change(&mut self) {
-            self.change.recv().await;
+            self.change.receive().await;
         }
         fn position(&mut self) -> SwitchPosition {
             let data = self.data.lock().unwrap();
@@ -119,7 +119,7 @@ mod tests {
         };
 
         let test_function = async {
-            let event = output.recv().await;
+            let event = output.receive().await;
             assert_eq!(
                 event,
                 SwitchPosition::Profile1,
@@ -132,7 +132,7 @@ mod tests {
             ] {
                 pins.set_position(position);
                 pins.notify();
-                let event = output.recv().await;
+                let event = output.receive().await;
                 assert_eq!(event, position, "unexpected position returned");
             }
             stop.send(()).await;
@@ -155,7 +155,7 @@ mod tests {
         };
 
         let test_function = async {
-            let event = output.recv().await;
+            let event = output.receive().await;
             assert_eq!(
                 event,
                 SwitchPosition::OffUsb,
@@ -165,13 +165,13 @@ mod tests {
             // ignored, as it may be the result of switch bouncing.
             pins.set_position(SwitchPosition::Profile1);
             pins.notify();
-            timer.call_start.recv().await;
+            timer.call_start.receive().await;
             pins.set_position(SwitchPosition::Profile2);
             timer
                 .expected_durations
                 .send(Duration::from_millis(100))
                 .await;
-            let event = output.recv().await;
+            let event = output.receive().await;
             assert_eq!(
                 event,
                 SwitchPosition::Profile2,

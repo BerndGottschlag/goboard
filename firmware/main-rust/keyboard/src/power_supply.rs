@@ -271,7 +271,7 @@ mod tests {
 
     impl UsbConnection for &MockUsbConnection {
         async fn wait_for_change(&mut self) {
-            self.change.recv().await;
+            self.change.receive().await;
         }
 
         fn connected(&mut self) -> bool {
@@ -305,7 +305,7 @@ mod tests {
                 usb_connected: self.usb_connected,
             };
             let state = if expected_state != prev_state {
-                let state = with_timeout(Duration::from_secs(1), output.recv())
+                let state = with_timeout(Duration::from_secs(1), output.receive())
                     .await
                     .expect(&std::format!(
                         "waiting for state update failed, test: {:?}",
@@ -489,7 +489,7 @@ mod tests {
                 // charging period starts.
                 if i != 0 && tests[i - 1].usb_connected != tests[i].usb_connected {
                     state.usb_connected = tests[i].usb_connected;
-                    let new_state = with_timeout(Duration::from_secs(1), output.recv())
+                    let new_state = with_timeout(Duration::from_secs(1), output.receive())
                         .await
                         .expect(&std::format!(
                             "waiting for USB update failed during test {}",
@@ -498,12 +498,12 @@ mod tests {
                     assert_eq!(state, new_state);
                 }
 
-                with_timeout(Duration::from_secs(1), timer.call_start.recv())
+                with_timeout(Duration::from_secs(1), timer.call_start.receive())
                     .await
                     .expect("charging period timer was not called, is run() stuck?");
                 state = tests[i].verify(&output, &charging_hardware, state).await;
                 timer.expected_durations.send(CHARGING_PERIOD).await;
-                with_timeout(Duration::from_secs(1), timer.call_start.recv())
+                with_timeout(Duration::from_secs(1), timer.call_start.receive())
                     .await
                     .expect("recovery period timer was not called, is run() stuck?");
                 {
