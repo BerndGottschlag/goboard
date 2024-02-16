@@ -20,13 +20,16 @@
 #![feature(type_alias_impl_trait)]
 #![macro_use]
 
+mod bluetooth;
 mod key_matrix;
 mod mode_switch;
 mod power;
+mod unifying;
 mod usb;
 
 use defmt_rtt as _; // global logger
-use embassy_nrf as _; // time driver
+use embassy_nrf as _;
+use keyboard::mode_switch::ModeSwitch;
 use panic_probe as _;
 
 use core::mem;
@@ -43,11 +46,13 @@ use nrf_softdevice::{raw, RawError, SocEvent, Softdevice};
 use static_cell::StaticCell;
 
 use key_matrix::KeyMatrix;
-use keyboard::dispatcher::{RadioInEvent, RadioOutEvent};
-use keyboard::keys::{Keys, KeysOutEvent};
-use keyboard::power_supply::{ChargingHardware, PowerSupply, UsbConnection};
+use keyboard::dispatcher::{Dispatcher, RadioInEvent, RadioOutEvent};
+use keyboard::keys::Keys;
+use keyboard::power_supply::PowerSupply;
 use keyboard::Timer;
 use power::{Battery, UsbVoltage};
+
+use crate::mode_switch::ModeSwitchHardware;
 
 struct EmbassyTimer;
 
@@ -77,21 +82,20 @@ async fn run_esb(
 async fn run_main(
     sd: &'static Softdevice,
     p: Peripherals,
-    unifying_input: Sender<'static, CriticalSectionRawMutex, RadioInEvent, 1>,
-    unifying_output: Receiver<'static, CriticalSectionRawMutex, RadioOutEvent, 1>,
+    unifying_in: Sender<'static, CriticalSectionRawMutex, RadioInEvent, 1>,
+    unifying_out: Receiver<'static, CriticalSectionRawMutex, RadioOutEvent, 1>,
 ) {
     // We want a watchdog timer here that resets the system when there is a panic.
-    // TODO: Actually feed the watchdog!
-    /*let mut config = wdt::Config::default();
-    config.timeout_ticks = 2 << 16; // The watchdog should be fed once per two seconds.
+    let mut config = wdt::Config::default();
+    config.timeout_ticks = 2 << 16; // The watchdog must be fed once per two seconds.
     config.run_during_debug_halt = false;
-    let (_wdt, [_handle]) = match wdt::Watchdog::try_new(p.WDT, config) {
+    let (_wdt, [mut handle]) = match wdt::Watchdog::try_new(p.WDT, config) {
         Ok(x) => x,
         Err(_) => {
             error!("Watchdog already active with wrong config.");
             loop {}
         }
-    };*/
+    };
 
     // USB and radio functionality all needs the HF clock.
     unwrap!(RawError::convert(unsafe { raw::sd_clock_hfclk_request() }));
@@ -104,66 +108,59 @@ async fn run_main(
     info!("hfclk_running: {}", hfclk_running);
 
     {
-        let key_matrix_input = Channel::new();
-        let key_matrix_output = Channel::new();
+        // Initialize the hardware as well as the corresponding types from the keyboard library.
+        let keys_in = Channel::new();
+        let keys_out = Channel::new();
         let key_matrix =
             KeyMatrix::new(p.P0_22, p.P0_12, p.P0_07, p.SPI3, p.P1_00, p.P0_05, p.P0_04);
-        let mut keys = Keys::new(
-            key_matrix,
-            key_matrix_input.receiver(),
-            key_matrix_output.sender(),
-        )
-        .await;
+        let mut keys = Keys::new(key_matrix, keys_in.receiver(), keys_out.sender()).await;
 
-        let power_supply_input = Channel::new();
-        let power_supply_output = Channel::new();
-        let mut battery = Battery::new(
+        let power_supply_in = Channel::new();
+        let power_supply_out = Channel::new();
+        let battery = Battery::new(
             p.SAADC, p.P0_28, p.P1_11, p.P1_13, p.P0_30, p.P0_31, p.P0_02,
         );
-        let voltages = battery.measure_battery_voltage().await;
-        info!("voltages: {}mV/{}mV", voltages.low, voltages.high);
         let usb_voltage = UsbVoltage::new(p.P0_23);
         let mut power_supply = PowerSupply::new(
-            power_supply_input.receiver(),
-            power_supply_output.sender(),
+            power_supply_in.receiver(),
+            power_supply_out.sender(),
             battery,
             usb_voltage,
         )
         .await;
 
         let vbus_detect = embassy_nrf::usb::vbus_detect::SoftwareVbusDetect::new(false, false);
-        let usb_input = Channel::new();
-        let usb_output = Channel::new();
-        let mut usb_keyboard = usb::Usb::new(usb_input.receiver(), usb_output.sender());
+        let usb_in = Channel::new();
+        let usb_out = Channel::new();
+        let mut usb_keyboard = usb::Usb::new(usb_in.receiver(), usb_out.sender());
 
-        let keys_function = async {
-            keys.run(&EmbassyTimer {}).await;
-        };
+        let mode_switch_in = Channel::new();
+        let mode_switch_out = Channel::new();
+        let mode_switch_pins = ModeSwitchHardware::new(p.P0_09, p.P0_10);
+        let mut mode_switch = ModeSwitch::new(
+            mode_switch_pins,
+            mode_switch_in.receiver(),
+            mode_switch_out.sender(),
+        );
 
-        let power_supply_function = async {
-            power_supply.run(&EmbassyTimer {}).await;
-        };
+        let bluetooth_in = Channel::new();
+        let bluetooth_out = Channel::new();
 
-        let usb_function = async {
-            usb_keyboard.run(p.USBD, &vbus_detect).await;
-        };
-
-        let vbus_detect_function = async {
-            unwrap!(RawError::convert(unsafe {
-                raw::sd_power_usbdetected_enable(1)
-            }));
-            sd.run_with_callback(|event: SocEvent| {
-                info!("SoftDevice event: {:?}", event);
-
-                match event {
-                    SocEvent::PowerUsbRemoved => vbus_detect.detected(false),
-                    SocEvent::PowerUsbDetected => vbus_detect.detected(true),
-                    SocEvent::PowerUsbPowerReady => vbus_detect.ready(),
-                    _ => {}
-                };
-            })
-            .await;
-        };
+        // Initialize the dispatcher that connects all pieces.
+        let mut dispatcher = Dispatcher::new(
+            keys_in.sender(),
+            keys_out.receiver(),
+            mode_switch_in.sender(),
+            mode_switch_out.receiver(),
+            power_supply_in.sender(),
+            power_supply_out.receiver(),
+            usb_in.sender(),
+            usb_out.receiver(),
+            bluetooth_in.sender(),
+            bluetooth_out.receiver(),
+            unifying_in,
+            unifying_out,
+        );
 
         // TODO: Experimental code.
         //let seq_words: [u16; 8] = [0, 500, 750, 875, 932, 875, 750, 500];
@@ -187,7 +184,7 @@ async fn run_main(
         let sequencer = pwm::SingleSequencer::new(&mut pwm, &seq_words, seq_config);
         unwrap!(sequencer.start(pwm::SingleSequenceMode::Infinite));
 
-        let print_function = async {
+        /*let print_function = async {
             loop {
                 let event = key_matrix_output.receive().await;
                 match event {
@@ -203,19 +200,60 @@ async fn run_main(
                     }
                 }
             }
+        };*/
+
+        // We need to use the softdevice method to listen for vbus changes as directly accessing
+        // the hardware results in a crash: https://github.com/embassy-rs/nrf-softdevice/issues/194
+        let vbus_detect_function = async {
+            unwrap!(RawError::convert(unsafe {
+                raw::sd_power_usbdetected_enable(1)
+            }));
+            sd.run_with_callback(|event: SocEvent| {
+                info!("SoftDevice event: {:?}", event);
+
+                match event {
+                    SocEvent::PowerUsbRemoved => vbus_detect.detected(false),
+                    SocEvent::PowerUsbDetected => vbus_detect.detected(true),
+                    SocEvent::PowerUsbPowerReady => vbus_detect.ready(),
+                    _ => {}
+                };
+            })
+            .await;
         };
 
-        embassy_futures::join::join(
-            print_function,
+        // Pet the watchdog from time to time so that it does not become angry.
+        let watchdog_function = async {
+            loop {
+                handle.pet();
+                embassy_time::Timer::after(embassy_time::Duration::from_secs(1)).await;
+            }
+        };
+
+        // All these functions are supposed to run either endlessly or until they are signalled by
+        // the dispatcher to stop. The dispatcher is an exception, as its run() method returns as
+        // soon as the conditions for shutdown are met.
+        //
+        // We therefore join all tasks together, except for the dispatcher which is added via
+        // select() so that all other tasks are aborted when the dispatcher quits.
+        embassy_futures::select::select(
             embassy_futures::join::join(
-                keys_function,
                 embassy_futures::join::join(
-                    usb_function,
-                    embassy_futures::join::join(power_supply_function, vbus_detect_function),
+                    embassy_futures::join::join(
+                        keys.run(&EmbassyTimer {}),
+                        power_supply.run(&EmbassyTimer {}),
+                    ),
+                    embassy_futures::join::join(
+                        usb_keyboard.run(p.USBD, &vbus_detect),
+                        mode_switch.run(&EmbassyTimer {}),
+                    ),
                 ),
+                embassy_futures::join::join(vbus_detect_function, watchdog_function),
             ),
+            dispatcher.run(&EmbassyTimer {}),
         )
         .await;
+
+        // TODO: Feed the watchdog!
     }
 
     // When we reach this point, the keyboard is supposed to be shut down (either because the
@@ -243,17 +281,6 @@ async fn run_main(
     // If for some reason we cannot switch to system OFF mode, we use the watchdog timer to perform
     // a system reset. One exception is debug mode in which case we do not want the watchdog to
     // fire but instead want to block the whole system here so that the debugger remains attached.
-
-    /*let mut config = wdt::Config::default();
-    config.timeout_ticks = 1; // The actual timeout will be slightly higher.
-    config.run_during_debug_halt = false;
-    let (_wdt, [_handle]) = match wdt::Watchdog::try_new(p.WDT, config) {
-        Ok(x) => x,
-        Err(_) => {
-            error!("Watchdog already active with wrong config.");
-            loop {}
-        }
-    };*/
     loop {}
 }
 
