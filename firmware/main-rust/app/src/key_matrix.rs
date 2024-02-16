@@ -79,7 +79,7 @@ impl KeyMatrixHardware for KeyMatrix {
             polarity: spis::Polarity::IdleHigh,
             phase: spis::Phase::CaptureOnSecondTransition,
         };
-        self.spi.set_config(&config);
+        self.spi.set_config(&config).unwrap();
         let mut rx = [0];
         let tx = [row_bitmap];
         self.spi.transfer(&mut rx, &tx).await.unwrap();
@@ -104,7 +104,7 @@ impl KeyMatrixHardware for KeyMatrix {
             polarity: spis::Polarity::IdleHigh,
             phase: spis::Phase::CaptureOnFirstTransition,
         };
-        self.spi.set_config(&config);
+        self.spi.set_config(&config).unwrap();
         let mut rx = [0, 0];
         let tx = [0, 0];
         self.spi.transfer(&mut rx, &tx).await.unwrap();

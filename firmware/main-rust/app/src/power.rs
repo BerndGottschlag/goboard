@@ -15,9 +15,6 @@ pub struct Battery {
     n_balance_high: Output<'static, P1_13>,
     n_measurement_power: Output<'static, P0_30>,
     adc: Saadc<'static, 2>,
-    //measurement_pin: P0_31,
-    //mid_voltage_pin: P0_02,
-    // TODO
 }
 
 impl Battery {
@@ -39,7 +36,7 @@ impl Battery {
         let config = Config::default();
         let vbatt = ChannelConfig::single_ended(measurement_pin);
         let vmid = ChannelConfig::single_ended(mid_voltage_pin);
-        let mut adc = Saadc::new(saadc, Irqs, config, [vbatt, vmid]);
+        let adc = Saadc::new(saadc, Irqs, config, [vbatt, vmid]);
 
         Battery {
             charge,

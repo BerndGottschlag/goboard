@@ -4,7 +4,6 @@ use defmt::*;
 use embassy_futures::join::join;
 use embassy_futures::select::{select, Either};
 use embassy_nrf::peripherals::USBD;
-use embassy_nrf::usb::vbus_detect::HardwareVbusDetect;
 use embassy_nrf::usb::{self, Driver};
 use embassy_nrf::{bind_interrupts, peripherals};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;

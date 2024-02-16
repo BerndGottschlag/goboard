@@ -10,7 +10,7 @@ pub struct ModeSwitchHardware {
     sw_2_current: bool,
 }
 
-fn inputToPosition(sw_1: bool, sw_2: bool) -> SwitchPosition {
+fn input_to_position(sw_1: bool, sw_2: bool) -> SwitchPosition {
     if sw_2 {
         SwitchPosition::Profile2
     } else if sw_1 {
@@ -65,6 +65,6 @@ impl ModeSwitchPins for ModeSwitchHardware {
     fn position(&mut self) -> SwitchPosition {
         self.sw_1_current = self.sw_1.is_high();
         self.sw_2_current = self.sw_2.is_high();
-        inputToPosition(self.sw_1_current, self.sw_2_current)
+        input_to_position(self.sw_1_current, self.sw_2_current)
     }
 }
