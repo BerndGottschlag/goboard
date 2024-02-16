@@ -23,7 +23,7 @@
 mod key_matrix;
 mod mode_switch;
 mod power;
-//mod usb;
+mod usb;
 
 use defmt_rtt as _; // global logger
 use embassy_nrf as _; // time driver
@@ -39,7 +39,7 @@ use embassy_nrf::interrupt::InterruptExt;
 use embassy_nrf::{pwm, wdt, Peripherals};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::channel::{Channel, Receiver, Sender};
-use nrf_softdevice::{raw, Softdevice};
+use nrf_softdevice::{raw, RawError, SocEvent, Softdevice};
 use static_cell::StaticCell;
 
 use key_matrix::KeyMatrix;
@@ -75,6 +75,7 @@ async fn run_esb(
 
 #[embassy_executor::task]
 async fn run_main(
+    sd: &'static Softdevice,
     p: Peripherals,
     unifying_input: Sender<'static, CriticalSectionRawMutex, RadioInEvent, 1>,
     unifying_output: Receiver<'static, CriticalSectionRawMutex, RadioOutEvent, 1>,
@@ -92,33 +93,76 @@ async fn run_main(
         }
     };*/
 
+    // USB and radio functionality all needs the HF clock.
+    unwrap!(RawError::convert(unsafe { raw::sd_clock_hfclk_request() }));
+    let mut hfclk_running = 0;
+    while hfclk_running == 0 {
+        unwrap!(RawError::convert(unsafe {
+            raw::sd_clock_hfclk_is_running(&mut hfclk_running)
+        }));
+    }
+    info!("hfclk_running: {}", hfclk_running);
+
     {
-        let input = Channel::new();
-        let output = Channel::new();
+        let key_matrix_input = Channel::new();
+        let key_matrix_output = Channel::new();
         let key_matrix =
             KeyMatrix::new(p.P0_22, p.P0_12, p.P0_07, p.SPI3, p.P1_00, p.P0_05, p.P0_04);
-        let mut keys = Keys::new(key_matrix, input.receiver(), output.sender()).await;
+        let mut keys = Keys::new(
+            key_matrix,
+            key_matrix_input.receiver(),
+            key_matrix_output.sender(),
+        )
+        .await;
 
-        //let power_supply_input = Channel::new();
-        //let power_supply_output = Channel::new();
+        let power_supply_input = Channel::new();
+        let power_supply_output = Channel::new();
         let mut battery = Battery::new(
             p.SAADC, p.P0_28, p.P1_11, p.P1_13, p.P0_30, p.P0_31, p.P0_02,
         );
         let voltages = battery.measure_battery_voltage().await;
         info!("voltages: {}mV/{}mV", voltages.low, voltages.high);
-        //let mut power_supply = PowerSupply::new(power_supply_input, power_supply_output, battery, usb_conn).await;
+        let usb_voltage = UsbVoltage::new(p.P0_23);
+        let mut power_supply = PowerSupply::new(
+            power_supply_input.receiver(),
+            power_supply_output.sender(),
+            battery,
+            usb_voltage,
+        )
+        .await;
 
-        let mut usb_voltage = UsbVoltage::new(p.P0_23);
+        let vbus_detect = embassy_nrf::usb::vbus_detect::SoftwareVbusDetect::new(false, false);
+        let usb_input = Channel::new();
+        let usb_output = Channel::new();
+        let mut usb_keyboard = usb::Usb::new(usb_input.receiver(), usb_output.sender());
 
         let keys_function = async {
             keys.run(&EmbassyTimer {}).await;
         };
 
+        let power_supply_function = async {
+            power_supply.run(&EmbassyTimer {}).await;
+        };
+
         let usb_function = async {
-            loop {
-                usb_voltage.wait_for_change().await;
-                info!("USB connected: {}", usb_voltage.connected());
-            }
+            usb_keyboard.run(p.USBD, &vbus_detect).await;
+        };
+
+        let vbus_detect_function = async {
+            unwrap!(RawError::convert(unsafe {
+                raw::sd_power_usbdetected_enable(1)
+            }));
+            sd.run_with_callback(|event: SocEvent| {
+                info!("SoftDevice event: {:?}", event);
+
+                match event {
+                    SocEvent::PowerUsbRemoved => vbus_detect.detected(false),
+                    SocEvent::PowerUsbDetected => vbus_detect.detected(true),
+                    SocEvent::PowerUsbPowerReady => vbus_detect.ready(),
+                    _ => {}
+                };
+            })
+            .await;
         };
 
         // TODO: Experimental code.
@@ -145,7 +189,7 @@ async fn run_main(
 
         let print_function = async {
             loop {
-                let event = output.receive().await;
+                let event = key_matrix_output.receive().await;
                 match event {
                     KeysOutEvent::KeysChanged(keys) => {
                         info!("keys pressed:");
@@ -162,8 +206,14 @@ async fn run_main(
         };
 
         embassy_futures::join::join(
-            embassy_futures::join::join(keys_function, usb_function),
             print_function,
+            embassy_futures::join::join(
+                keys_function,
+                embassy_futures::join::join(
+                    usb_function,
+                    embassy_futures::join::join(power_supply_function, vbus_detect_function),
+                ),
+            ),
         )
         .await;
     }
@@ -187,6 +237,7 @@ async fn run_main(
     // TODO: Configure the GPIOs.
 
     // Switch to system OFF mode.
+    unwrap!(RawError::convert(unsafe { raw::sd_clock_hfclk_request() }));
     //unsafe { nrf_softdevice_s140::sd_power_system_off() };
 
     // If for some reason we cannot switch to system OFF mode, we use the watchdog timer to perform
@@ -259,7 +310,7 @@ fn main() -> ! {
         }),
         ..Default::default()
     };
-    let _sd = Softdevice::enable(&config);
+    let sd = Softdevice::enable(&config);
 
     static UNIFYING_INPUT: Channel<CriticalSectionRawMutex, RadioInEvent, 1> = Channel::new();
     static UNIFYING_OUTPUT: Channel<CriticalSectionRawMutex, RadioOutEvent, 1> = Channel::new();
@@ -275,6 +326,7 @@ fn main() -> ! {
     let executor = NORMAL_EXECUTOR.init(Executor::new());
     executor.run(|spawner| {
         unwrap!(spawner.spawn(run_main(
+            sd,
             peripherals,
             UNIFYING_INPUT.sender(),
             UNIFYING_OUTPUT.receiver()

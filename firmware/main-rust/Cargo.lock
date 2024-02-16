@@ -469,6 +469,7 @@ name = "embassy-usb"
 version = "0.1.0"
 source = "git+https://github.com/embassy-rs/embassy?rev=871d82d#871d82de7165781ca6164de72664c9a6a90b3e66"
 dependencies = [
+ "defmt",
  "embassy-futures",
  "embassy-net-driver-channel",
  "embassy-sync",
