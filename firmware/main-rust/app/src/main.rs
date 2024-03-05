@@ -222,6 +222,7 @@ async fn run_main(
         };
 
         // Pet the watchdog from time to time so that it does not become angry.
+        // TODO: This should be done in the dispatcher.
         let watchdog_function = async {
             loop {
                 handle.pet();
@@ -254,8 +255,6 @@ async fn run_main(
             ),
         )
         .await;
-
-        // TODO: Feed the watchdog!
     }
 
     // When we reach this point, the keyboard is supposed to be shut down (either because the
@@ -274,10 +273,31 @@ async fn run_main(
 
     // TODO: Stop the ESB task. May not actually be needed, see above.
 
-    // TODO: Configure the GPIOs.
+    let p0_register_block = embassy_nrf::pac::P0::ptr();
+    //let p1_register_block = embassy_nrf::pac::P1::ptr();
+    // The keyboard shall wake up when either...
+    // ... USB is connected...
+    unsafe { &(*p0_register_block).pin_cnf[23] }.modify(|_, w| {
+        w.dir().input();
+        w.input().connect();
+        w.pull().disabled();
+        w.drive().s0s1();
+        w.sense().low();
+        w
+    });
+    // ... or the mode switch is moved away from the "OffUsb" position (unless the battery is low).
+    // TODO
+
+    /*unsafe { &(*p1_register_block).detectmode }.write(|w| {
+        w.detectmode().ldetect();
+        w
+    });
+    unsafe { &(*p1_register_block).latch }.write(|w| {
+        w.pin2().not_latched();
+        w
+    });*/
 
     // Switch to system OFF mode.
-    //unwrap!(RawError::convert(unsafe { raw::sd_clock_hfclk_request() }));
     unsafe { nrf_softdevice_s140::sd_power_system_off() };
 
     // If for some reason we cannot switch to system OFF mode, we use the watchdog timer to perform
