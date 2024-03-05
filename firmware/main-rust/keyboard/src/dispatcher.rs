@@ -1,8 +1,11 @@
 #![allow(dead_code)]
 #![allow(unused)]
+use defmt::{debug, info, Format};
 use embassy_sync::blocking_mutex::raw::{CriticalSectionRawMutex, NoopRawMutex, RawMutex};
 use embassy_sync::channel::{Receiver, Sender};
 use embassy_time::Duration;
+
+use crate::select6::Either6;
 
 use super::keys::{KeysInEvent, KeysOutEvent};
 use super::mode_switch::SwitchPosition;
@@ -18,7 +21,7 @@ pub enum UsbInEvent {
     PowerTransition(PowerLevel),
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Format)]
 pub enum UsbOutEvent {
     PowerTransitionDone(PowerLevel),
     ChargingAllowed(bool),
@@ -30,7 +33,7 @@ pub enum RadioInEvent {
     PowerTransition(PowerLevel),
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Format)]
 pub enum RadioOutEvent {
     PowerTransitionDone(PowerLevel),
 }
@@ -84,15 +87,107 @@ impl<'a> Dispatcher<'a> {
         }
     }
 
+    /// Run the dispatcher task until the code detects that the device should shut down.
     pub async fn run<Sleep: Timer>(&mut self, sleep: &Sleep) {
+        let mut switch_pos = self.mode_switch_out.receive().await;
+        let mut usb_connected = true; // TODO: Initial info? For now, assume an initial connection so that we do not shut down again.
+
+        loop {
+            match select6(
+                self.keys_out.receive(),
+                self.mode_switch_out.receive(),
+                self.power_supply_out.receive(),
+                self.usb_out.receive(),
+                self.bluetooth_out.receive(),
+                self.unifying_out.receive(),
+            )
+            .await
+            {
+                Either6::First(key_event) => {
+                    debug!("key event: {}", key_event);
+                    match key_event {
+                        KeysOutEvent::KeysChanged(keys) => {
+                            // TODO: We need to determine the current profile and whether that profile is
+                            // bluetooth or unifying, and forward the key to the correct sink.
+                            self.usb_in.send(UsbInEvent::KeysChanged(keys)).await;
+                        }
+                        _ => {
+                            // TODO
+                        }
+                    }
+                }
+                Either6::Second(mode_switch_event) => {
+                    debug!("mode switch event: {}", mode_switch_event);
+                    switch_pos = mode_switch_event;
+                    if !usb_connected && switch_pos == SwitchPosition::OffUsb {
+                        info!("shutting down due to mode switch change");
+                        // We need to shutdown.
+                        self.keys_in
+                            .send(KeysInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        self.mode_switch_stop.send(()).await;
+                        self.power_supply_stop.send(()).await;
+                        self.usb_in
+                            .send(UsbInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        self.bluetooth_in
+                            .send(RadioInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        self.unifying_in
+                            .send(RadioInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        return;
+                    }
+                    // TODO
+                }
+                Either6::Third(power_supply_event) => {
+                    debug!("power supply event: {}", power_supply_event);
+                    if power_supply_event.mode == PowerSupplyMode::Low
+                        || (!power_supply_event.usb_connected
+                            && switch_pos == SwitchPosition::OffUsb)
+                    {
+                        info!("shutting down due to power event");
+                        // We need to shutdown.
+                        self.keys_in
+                            .send(KeysInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        self.mode_switch_stop.send(()).await;
+                        self.power_supply_stop.send(()).await;
+                        self.usb_in
+                            .send(UsbInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        self.bluetooth_in
+                            .send(RadioInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        self.unifying_in
+                            .send(RadioInEvent::PowerTransition(PowerLevel::Shutdown))
+                            .await;
+                        return;
+                    }
+                }
+                Either6::Fourth(usb_event) => {
+                    debug!("usb event: {}", usb_event);
+                    // TODO
+                }
+                Either6::Fifth(bluetooth_event) => {
+                    debug!("bluetooth event: {}", bluetooth_event);
+                    // TODO
+                }
+                Either6::Sixth(unifying_event) => {
+                    debug!("unifying event: {}", unifying_event);
+                    // TODO
+                }
+            }
+        }
+
         // The timeout for low-power modes is processed in a different function because the timeout
         // is not cancel-safe.
-        let timeout_func = async || {
+        /*let timeout_func = async || {
             // TODO
         };
         let state_func = async || {
             // TODO
-        };
+        };*/
         // TODO
     }
 }
@@ -205,7 +300,6 @@ mod tests {
             keys.set_key(ScanCode::Escape);
             keys_out.send(KeysOutEvent::KeysChanged(keys)).await;
             usb_expect_key_event(&usb_in, &[ScanCode::Escape]).await;
-            // TODO: Other sinks
 
             // Test that mode switches select a different sink. The previous sink must not send
             // further key presses and all currently pressed keys must be released. The new sink
@@ -216,6 +310,11 @@ mod tests {
             radio_expect_key_event(&bluetooth_in, &[ScanCode::Escape]).await;
             // TODO: Unifying? We need to mock persistent storage.
             // TODO: Switching between the two profiles? Should we just have one radio sink?
+
+            // Test that special key combinations are handled correctly:
+            // - Switch between bluetooth and unifying for the current profile
+            // - Enter pairing mode.
+            // TODO
 
             // Test that power mode changes are forwarded to all sinks.
             // TODO: The following code is wrong. PowerSupplyMode::Low means that the device shuts
@@ -247,42 +346,66 @@ mod tests {
             //    .await;
             // TODO: Revert power level to normal.
 
-            // Test that the low power mode is also entered when no USB connection is present and
-            // when the USB profile is selected.
-            // TODO
-            // TODO: Also test the two ways to exit the low power mode (USB connection, different
-            // profile).
-
-            // Test that the low power mode is also entered when there have not been any key state
+            // Test that the low power mode is entered when there have not been any key state
             // changes for an extended period of time and when USB is not connected.
             timer.call_start.receive().await;
             timer.expected_durations.send(POWER_SAVING_TIMEOUT).await;
             expect_event(&keys_in, KeysInEvent::PowerTransition(PowerLevel::LowPower)).await;
-            keys_out
-                .send(KeysOutEvent::PowerTransitionDone(PowerLevel::LowPower))
-                .await;
+            //keys_out
+            //    .send(KeysOutEvent::PowerTransitionDone(PowerLevel::LowPower))
+            //    .await;
             expect_event(&usb_in, UsbInEvent::PowerTransition(PowerLevel::LowPower)).await;
-            usb_out
-                .send(UsbOutEvent::PowerTransitionDone(PowerLevel::LowPower))
-                .await;
+            //usb_out
+            //    .send(UsbOutEvent::PowerTransitionDone(PowerLevel::LowPower))
+            //    .await;
             expect_event(
                 &bluetooth_in,
                 RadioInEvent::PowerTransition(PowerLevel::LowPower),
             )
             .await;
-            bluetooth_out
-                .send(RadioOutEvent::PowerTransitionDone(PowerLevel::LowPower))
-                .await;
+            //bluetooth_out
+            //    .send(RadioOutEvent::PowerTransitionDone(PowerLevel::LowPower))
+            //    .await;
             expect_event(
                 &unifying_in,
                 RadioInEvent::PowerTransition(PowerLevel::LowPower),
             )
             .await;
-            unifying_out
-                .send(RadioOutEvent::PowerTransitionDone(PowerLevel::LowPower))
-                .await;
+            //unifying_out
+            //    .send(RadioOutEvent::PowerTransitionDone(PowerLevel::LowPower))
+            //    .await;
 
             // Any key press shall cause the device to return to the normal power mode.
+            let mut keys = KeyState::new();
+            keys.set_key(ScanCode::M);
+            keys_out.send(KeysOutEvent::KeysChanged(keys)).await;
+            radio_expect_key_event(&bluetooth_in, &[ScanCode::M]).await;
+
+            expect_event(&keys_in, KeysInEvent::PowerTransition(PowerLevel::Normal)).await;
+            //keys_out
+            //    .send(KeysOutEvent::PowerTransitionDone(PowerLevel::Normal))
+            //    .await;
+            expect_event(&usb_in, UsbInEvent::PowerTransition(PowerLevel::Normal)).await;
+            //usb_out
+            //    .send(UsbOutEvent::PowerTransitionDone(PowerLevel::Normal))
+            //    .await;
+            expect_event(
+                &bluetooth_in,
+                RadioInEvent::PowerTransition(PowerLevel::Normal),
+            )
+            .await;
+            //bluetooth_out
+            //    .send(RadioOutEvent::PowerTransitionDone(PowerLevel::Normal))
+            //    .await;
+            expect_event(
+                &unifying_in,
+                RadioInEvent::PowerTransition(PowerLevel::Normal),
+            )
+            .await;
+            //unifying_out
+            //    .send(RadioOutEvent::PowerTransitionDone(PowerLevel::Normal))
+            //    .await;
+
             // TODO
 
             // Test that shutdown power state events are forwarded to all sinks and to key matrix

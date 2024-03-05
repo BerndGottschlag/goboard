@@ -233,10 +233,14 @@ async fn run_main(
         // the dispatcher to stop. The dispatcher is an exception, as its run() method returns as
         // soon as the conditions for shutdown are met.
         //
-        // We therefore join all tasks together, except for the dispatcher which is added via
-        // select() so that all other tasks are aborted when the dispatcher quits.
+        // We want everything to finish that is instructed by the dispatcher to finish, but the
+        // functions defined above are just aborted.
         embassy_futures::select::select(
+            // This stuff is aborted when the select() returns.
+            embassy_futures::join::join(vbus_detect_function, watchdog_function),
+            // This stuff will exit properly.
             embassy_futures::join::join(
+                dispatcher.run(&EmbassyTimer {}),
                 embassy_futures::join::join(
                     embassy_futures::join::join(
                         keys.run(&EmbassyTimer {}),
@@ -247,9 +251,7 @@ async fn run_main(
                         mode_switch.run(&EmbassyTimer {}),
                     ),
                 ),
-                embassy_futures::join::join(vbus_detect_function, watchdog_function),
             ),
-            dispatcher.run(&EmbassyTimer {}),
         )
         .await;
 
@@ -275,8 +277,8 @@ async fn run_main(
     // TODO: Configure the GPIOs.
 
     // Switch to system OFF mode.
-    unwrap!(RawError::convert(unsafe { raw::sd_clock_hfclk_request() }));
-    //unsafe { nrf_softdevice_s140::sd_power_system_off() };
+    //unwrap!(RawError::convert(unsafe { raw::sd_clock_hfclk_request() }));
+    unsafe { nrf_softdevice_s140::sd_power_system_off() };
 
     // If for some reason we cannot switch to system OFF mode, we use the watchdog timer to perform
     // a system reset. One exception is debug mode in which case we do not want the watchdog to

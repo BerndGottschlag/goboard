@@ -105,49 +105,47 @@ impl<'a> Usb<'a> {
         // Do stuff with the class!
         let in_fut = async {
             loop {
-                Timer::after_secs(1).await;
-                //button.wait_for_low().await;
-                info!("PRESSED");
-
-                if SUSPENDED.load(Ordering::Acquire) {
-                    info!("Triggering remote wakeup");
-                    remote_wakeup.signal(());
-                } else {
-                    let report = KeyboardReport {
-                        keycodes: [4, 0, 0, 0, 0, 0],
-                        leds: 0,
-                        modifier: 0,
-                        reserved: 0,
-                    };
-                    match writer.write_serialize(&report).await {
-                        Ok(()) => {}
-                        Err(e) => warn!("Failed to send report: {:?}", e),
-                    };
+                let event = self.usb_in.receive().await;
+                match event {
+                    UsbInEvent::KeysChanged(keys) => {
+                        if SUSPENDED.load(Ordering::Acquire) {
+                            info!("triggering remote wakeup");
+                            remote_wakeup.signal(());
+                        } else {
+                            let keys = keys.to_6kro();
+                            let report = KeyboardReport {
+                                keycodes: keys[2..].try_into().unwrap(),
+                                leds: 0,
+                                modifier: keys[0],
+                                reserved: 0,
+                            };
+                            match writer.write_serialize(&report).await {
+                                Ok(()) => {}
+                                Err(e) => warn!("failed to send report: {:?}", e),
+                            };
+                        }
+                    }
+                    UsbInEvent::PowerTransition(power_level) => {
+                        debug!("usb power transition: {}", power_level);
+                        match power_level {
+                            PowerLevel::Shutdown => break,
+                            _ => {}
+                        }
+                        // TODO
+                    }
                 }
-
-                //button.wait_for_high().await;
-                Timer::after_secs(1).await;
-                info!("RELEASED");
-                let report = KeyboardReport {
-                    keycodes: [0, 0, 0, 0, 0, 0],
-                    leds: 0,
-                    modifier: 0,
-                    reserved: 0,
-                };
-                match writer.write_serialize(&report).await {
-                    Ok(()) => {}
-                    Err(e) => warn!("Failed to send report: {:?}", e),
-                };
             }
+            debug!("A")
         };
 
         let out_fut = async {
             reader.run(false, &request_handler).await;
         };
 
-        // Run everything concurrently.
-        // If we had made everything `'static` above instead, we could do this using separate tasks instead.
-        join(usb_fut, join(in_fut, out_fut)).await;
+        // When the "in" future exits (because we were instructed to shut down), everything else
+        // shall be cancelled.
+        select(in_fut, join(usb_fut, out_fut)).await;
+        debug!("B")
     }
 }
 

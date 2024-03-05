@@ -4,6 +4,7 @@
 //! for charger detection. It therefore always charges with that current whenever 5V from USB are
 //! connected. This design is not compliant to the standard.
 
+use defmt::Format;
 use embassy_futures::join::join;
 use embassy_futures::select::select;
 use embassy_sync::blocking_mutex::raw::NoopRawMutex;
@@ -38,7 +39,7 @@ pub trait UsbConnection {
     fn connected(&mut self) -> bool;
 }
 
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug, Format)]
 pub enum PowerSupplyMode {
     /// The batteries are not low, and we are not charging the batteries.
     Normal,
@@ -49,7 +50,7 @@ pub enum PowerSupplyMode {
     Low,
 }
 
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug, Format)]
 pub struct PowerSupplyState {
     pub mode: PowerSupplyMode,
     pub battery_charge: u8,
