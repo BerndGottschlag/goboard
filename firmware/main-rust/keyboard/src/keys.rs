@@ -270,7 +270,7 @@ const KEY_MATRIX_LOCATIONS: [[ScanCode; COLUMNS]; ROWS] = [
         ScanCode::Down,
         ScanCode::RightControl,
         ScanCode::Left,
-        ScanCode::LeftMeta,
+        ScanCode::Application,
         ScanCode::RightAlt,
         ScanCode::Invalid,
         ScanCode::Invalid,
